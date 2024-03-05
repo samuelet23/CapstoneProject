@@ -6,7 +6,7 @@ import it.epicode.capstone.Models.Enums.Role;
 import jakarta.persistence.*;
 import jdk.jfr.Unsigned;
 import lombok.*;
-import org.apache.coyote.BadRequestException;
+import it.epicode.capstone.Exceptions.BadRequestException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
