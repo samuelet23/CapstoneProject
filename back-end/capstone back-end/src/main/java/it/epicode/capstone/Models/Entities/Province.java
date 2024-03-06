@@ -23,4 +23,7 @@ public class Province {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "province")
     private List<Town> towns;
 
+
+
+
 }
