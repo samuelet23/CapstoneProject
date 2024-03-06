@@ -27,6 +27,8 @@ public class Team {
     private String logo;
     private String name;
 
+    @OneToOne
+    @JoinColumn(name = "captain_fk")
     private Player captain;
 
     @ManyToOne(fetch = FetchType.EAGER)

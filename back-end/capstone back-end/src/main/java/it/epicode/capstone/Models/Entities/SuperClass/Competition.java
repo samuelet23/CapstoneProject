@@ -43,15 +43,6 @@ public abstract class Competition {
 
     private int numMaxTeams = 16;
 
-    @OneToOne
-    @JoinColumn(name = "rankingPointsScored")
-    private Ranking pointsScored;
-
-    @OneToOne
-    @JoinColumn(name = "rankingAssists")
-    private Ranking assists;
-
-
     @OneToMany(mappedBy = "tournament")
     private List<Game> games;
 
@@ -63,16 +54,14 @@ public abstract class Competition {
     @Transient
     private List<Person> players;
 
-    public Competition(LocalDate startDate, LocalDate endDate, String coverUrl, String name, List<Referee> referees, Set<Team> teams, int numMaxTeams, Ranking pointsScored, Ranking assists, List<Game> games, Place place, List<Person> players) {
+    public Competition(LocalDate startDate,  String coverUrl, String name, List<Referee> referees, Set<Team> teams, int numMaxTeams, List<Game> games, Place place, List<Person> players) {
         this.startDate = startDate;
-        this.endDate = endDate;
+        this.endDate = startDate.plusDays(1);
         this.coverUrl = coverUrl;
         this.name = name;
         this.referees = referees;
         this.teams = teams;
         this.numMaxTeams = numMaxTeams;
-        this.pointsScored = pointsScored;
-        this.assists = assists;
         this.games = games;
         this.place = place;
         this.players = players;
