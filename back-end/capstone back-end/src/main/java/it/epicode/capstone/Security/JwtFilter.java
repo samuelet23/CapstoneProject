@@ -63,7 +63,15 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         return new AntPathMatcher().match("/api/auth/**", request.getServletPath())
-                | new AntPathMatcher().match("/api/province/**", request.getServletPath())
-                || new AntPathMatcher().match("/api/comuni/**", request.getServletPath());
+                || new AntPathMatcher().match("/swagger-ui/**", request.getServletPath())
+                || new AntPathMatcher().match("/v2/api-docs", request.getServletPath())
+                || new AntPathMatcher().match("/v3/api-docs", request.getServletPath())
+                || new AntPathMatcher().match("/v3/api-docs/**", request.getServletPath())
+                || new AntPathMatcher().match("/swagger-resources", request.getServletPath())
+                || new AntPathMatcher().match("/swagger-resources/**", request.getServletPath())
+                || new AntPathMatcher().match("/configuration/ui", request.getServletPath())
+                || new AntPathMatcher().match("/configuration/security", request.getServletPath())
+                || new AntPathMatcher().match("/webjars/**", request.getServletPath())
+                || new AntPathMatcher().match("/swagger-ui.html", request.getServletPath());
     }
 }
