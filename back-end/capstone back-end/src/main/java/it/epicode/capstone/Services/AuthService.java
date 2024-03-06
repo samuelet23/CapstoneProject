@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,7 +23,7 @@ public class AuthService {
 
     @Autowired
     private UserRepository userRep;
-
+    @Autowired
     private PasswordEncoder encoder;
     @Autowired
     private JwtTools jwtTools;
@@ -32,15 +33,19 @@ public class AuthService {
     }
 
     public User register(UserDTO userDTO) throws BadRequestException, InternalServerErrorException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         User u = new User(
                 userDTO.name(),
                 userDTO.surname(),
-                LocalDate.parse(userDTO.dateOfBirth()),
+                LocalDate.parse(userDTO.dateOfBirth(), formatter),
                 userDTO.username(),
                 userDTO.email(),
                 encoder.encode(userDTO.password()),
                 encoder.encode(userDTO.confirmPassword())
         );
+        if (!encoder.encode(u.getPassword()).matches(encoder.encode(userDTO.confirmPassword()))) {
+            throw new BadRequestException("Passwords don't match");
+        }
         try{
             return userRep.save(u);
         }catch (DataIntegrityViolationException e){
@@ -64,4 +69,6 @@ public class AuthService {
         }
         return new AccessTokenRes(jwtTools.createToken(u));
     }
+
+
 }

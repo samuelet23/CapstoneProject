@@ -13,7 +13,7 @@ public record UserDTO (
         String surname,
         @NotBlank(message = "The username field cannot be empty/null")
         String username,
-        @NotBlank(message = "The date Of Birth field cannot be empty/null")
+        @NotBlank(message = "The date Of Birth field cannot be empty/null, the date must be dd/MM/yyyy")
         String dateOfBirth,
         @Email(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "not valid email")
         String email,

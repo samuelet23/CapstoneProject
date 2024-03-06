@@ -48,6 +48,7 @@ public class SecurityChain {
                 .authorizeHttpRequests(
                         authorize-> authorize.anyRequest().permitAll()
                 );
+
         httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();

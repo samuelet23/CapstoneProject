@@ -16,6 +16,7 @@ import java.util.Properties;
 @PropertySource("application.properties")
 public class AppConfig {
 
+    @Bean
     public PasswordEncoder encoder(){
         return new BCryptPasswordEncoder();
     }
