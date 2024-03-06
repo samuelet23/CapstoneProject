@@ -2,7 +2,6 @@ package it.epicode.capstone.Models.Entities;
 
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
 import it.epicode.capstone.Models.Entities.SuperClass.Person;
-import it.epicode.capstone.Models.Enums.LevelReferee;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,16 +19,13 @@ public class Referee extends Person {
     @JoinColumn(name = "referee_id")
     private Competition tournament;
 
-    @Enumerated(EnumType.STRING)
-    private LevelReferee level;
 
     public Referee(String name, String surname, LocalDate dateOfBirth) {
         super(name, surname, dateOfBirth);
     }
-    public Referee(String name, String surname, LocalDate dateOfBirth, Competition tournament, LevelReferee level) {
+    public Referee(String name, String surname, LocalDate dateOfBirth, Competition tournament) {
         super(name, surname, dateOfBirth);
         this.tournament = tournament;
-        this.level = level;
     }
 
 }
