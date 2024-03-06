@@ -24,6 +24,18 @@ public class Province {
     private List<Town> towns;
 
 
+    public Province(String sigla, String name, String region) {
+        this.sigla = sigla;
+        this.name = name;
+        this.region = region;
+    }
 
-
+    @Override
+    public String toString() {
+        return "Province{" +
+                "sigla='" + sigla + '\'' +
+                ", region='" + region + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
