@@ -18,6 +18,7 @@ import java.util.*;
 
 //@EqualsAndHashCode(callSuper = true)
 @Entity
+@NoArgsConstructor
 @Data
 @Table(name = "users")
 public class User extends Person implements UserDetails {
@@ -39,6 +40,7 @@ public class User extends Person implements UserDetails {
 
     private Timestamp createdAt;
 
+    @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
     public User(String name, String surname, LocalDate dateOfBirth, String username, String email, String password, String confirmPassword) throws BadRequestException {
@@ -50,13 +52,6 @@ public class User extends Person implements UserDetails {
         createdAt = Timestamp.valueOf(LocalDateTime.now());
     }
 
-
-    public boolean confirmPassword(){
-        if (password.equals(confirmPassword)) {
-            return true;
-        }
-        return false;
-    }
 
 
     @Override

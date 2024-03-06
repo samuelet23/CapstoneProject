@@ -5,6 +5,7 @@ import io.jsonwebtoken.security.Keys;
 import it.epicode.capstone.Exceptions.UnauthorizedException;
 import it.epicode.capstone.Models.Entities.User;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
@@ -23,6 +24,7 @@ public class JwtTools {
     @Value("${access_token.secret}")
     private String secret;
     @Value(("${access_token.expires}"))
+    @Getter
     private String expiration;
 
     public String createToken(User u){

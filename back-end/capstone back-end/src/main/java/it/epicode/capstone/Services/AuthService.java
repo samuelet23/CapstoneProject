@@ -43,7 +43,7 @@ public class AuthService {
                 encoder.encode(userDTO.password()),
                 encoder.encode(userDTO.confirmPassword())
         );
-        if (!encoder.encode(u.getPassword()).matches(encoder.encode(userDTO.confirmPassword()))) {
+        if (encoder.matches(userDTO.password(), userDTO.confirmPassword())) {
             throw new BadRequestException("Passwords don't match");
         }
         try{
