@@ -29,4 +29,8 @@ public class Town {
     @OneToMany(mappedBy = "town")
     List<Address> addresses;
 
+    public Town(String name, Province province) {
+        this.name = name;
+        this.province = province;
+    }
 }

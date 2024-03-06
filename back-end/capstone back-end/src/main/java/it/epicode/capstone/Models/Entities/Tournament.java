@@ -2,7 +2,6 @@ package it.epicode.capstone.Models.Entities;
 
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
 import it.epicode.capstone.Models.Entities.SuperClass.Person;
-import it.epicode.capstone.Models.Entities.SuperClass.Ranking;
 import it.epicode.capstone.Models.Enums.TournamentLevel;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,7 +13,6 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -25,11 +23,11 @@ public class Tournament extends Competition {
     @Enumerated(EnumType.STRING)
     private TournamentLevel level;
 
-    public Tournament(LocalDate startDate, LocalDate endDate, String coverUrl, String name, List<Referee> referees, Set<Team> teams, int numMaxTeams, Ranking pointsScored, Ranking assists, List<Game> games, Place place, List<Person> players) {
-        super(startDate, endDate, coverUrl, name, referees, teams, numMaxTeams, pointsScored, assists, games, place, players);
+    public Tournament(LocalDate startDate, String coverUrl, String name, List<Referee> referees, Set<Team> teams, int numMaxTeams, List<Game> games, Place place, List<Person> players) {
+        super(startDate, coverUrl, name, referees, teams, numMaxTeams, games, place, players);
     }
-    public Tournament(LocalDate startDate, LocalDate endDate, String coverUrl, String name, List<Referee> referees, Set<Team> teams, int numMaxTeams, Ranking pointsScored, Ranking assists, List<Game> games, Place place, List<Person> players, TournamentLevel level) {
-        super(startDate, endDate, coverUrl, name, referees, teams, numMaxTeams, pointsScored, assists, games, place, players);
+    public Tournament(LocalDate startDate, String coverUrl, String name, List<Referee> referees, Set<Team> teams, int numMaxTeams, List<Game> games, Place place, List<Person> players, TournamentLevel level) {
+        super(startDate, coverUrl, name, referees, teams, numMaxTeams, games, place, players);
         this.level = level;
     }
 
