@@ -16,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, PagingAndSort
     public Optional<User> findByEmail(String email);
     public Optional<User> findByUsername(String username);
     @Query("SELECT u.email FROM User u")
-    public List<String> getAllEmail();
+    public List<String> getAllEmails();
     @Query("SELECT u.username FROM User u")
     public List<String> getAllUsernames();
 }
