@@ -22,13 +22,14 @@ public abstract class Person {
     String name;
     String surname;
     LocalDate dateOfBirth;
-    int age;
+
+    @Setter(AccessLevel.NONE)
+    int age = calculateAge();
 
     public Person(String name, String surname, LocalDate dateOfBirth){
         this.name = name;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
-        this.age = calculateAge();
     }
 
     public int calculateAge()  {
