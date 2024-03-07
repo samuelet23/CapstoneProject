@@ -34,7 +34,6 @@ public abstract class Competition {
 
     private String name;
 
-
     @OneToMany(mappedBy = "tournament")
     private List<Referee> referees;
 

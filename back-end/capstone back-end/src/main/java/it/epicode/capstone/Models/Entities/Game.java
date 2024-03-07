@@ -27,38 +27,21 @@ public class Game {
     @JoinColumn(name = "away_team_id")
     private Team awayTeam;
 
-    private LocalTime startTime;
-
-    public Game(Team homeTeam, Team awayTeam, LocalTime startTime, int homePoints, int awayPoints) {
-        this.homeTeam = homeTeam;
-        this.awayTeam = awayTeam;
-        this.startTime = startTime;
-        this.homePoints = homePoints;
-        this.awayPoints = awayPoints;
-    }
-
-    public Game(Team homeTeam, Team awayTeam, int homePoints, int awayPoints) {
-        this.homeTeam = homeTeam;
-        this.awayTeam = awayTeam;
-        this.startTime = getStartTime();
-        this.endTime = startTime.plusMinutes(10);
-        this.homePoints = homePoints;
-        this.awayPoints = awayPoints;
-    }
-
-    private LocalTime endTime;
-
     private int homePoints;
 
     private int awayPoints;
 
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "game_id")
+    @JoinColumn(name = "tournament_id")
     private Competition tournament;
 
-
-
+    public Game(Team homeTeam, Team awayTeam, int homePoints, int awayPoints) {
+        this.homeTeam = homeTeam;
+        this.awayTeam = awayTeam;
+        this.homePoints = homePoints;
+        this.awayPoints = awayPoints;
+    }
 
     public Team whoWinTheMatch(){
         if (homePoints > awayPoints) {
