@@ -31,6 +31,8 @@ public class Game {
 
     private int awayPoints;
 
+    @Transient
+    private Team winner;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tournament_id")
@@ -43,13 +45,4 @@ public class Game {
         this.awayPoints = awayPoints;
     }
 
-    public Team whoWinTheMatch(){
-        if (homePoints > awayPoints) {
-            return homeTeam;
-        } else if (homePoints < awayPoints) {
-            return awayTeam;
-        } else {
-            throw new RuntimeException("La partita è finita in parità, fate i supplementari");
-        }
-    }
 }
