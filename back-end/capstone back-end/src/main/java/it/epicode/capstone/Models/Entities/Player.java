@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "players")
 public class Player extends Person {
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -13,10 +13,11 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "referees")
 public class Referee extends Person {
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "referee_id")
+    @JoinColumn(name = "tournament_id")
     private Competition tournament;
 
 

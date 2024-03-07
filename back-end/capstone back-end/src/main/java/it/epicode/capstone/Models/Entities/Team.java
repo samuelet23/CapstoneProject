@@ -28,11 +28,11 @@ public class Team {
     private String name;
 
     @OneToOne
-    @JoinColumn(name = "captain_fk")
+    @JoinColumn(name = "captain_id")
     private Player captain;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "team_id")
+    @JoinColumn(name = "tournament_id")
     private Competition tournament;
 
     public Team(String name){

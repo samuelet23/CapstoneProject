@@ -10,6 +10,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "addresses")
 public class Address {
 
     @Id

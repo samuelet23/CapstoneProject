@@ -6,6 +6,7 @@ import it.epicode.capstone.Models.Enums.TournamentLevel;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,6 +19,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "tournaments")
 public class Tournament extends Competition {
 
     @Enumerated(EnumType.STRING)
