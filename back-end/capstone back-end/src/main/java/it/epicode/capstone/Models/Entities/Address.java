@@ -35,4 +35,12 @@ public class Address {
     @Transient
     private String  siglaProvince;
 
+
+    public Address(String via, String civico, int cap, String townName, String siglaProvince) {
+        this.via = via;
+        this.civico = civico;
+        this.cap = cap;
+        this.townName = townName;
+        this.siglaProvince = siglaProvince;
+    }
 }

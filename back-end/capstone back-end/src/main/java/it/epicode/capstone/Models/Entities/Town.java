@@ -30,8 +30,12 @@ public class Town {
     @OneToMany(mappedBy = "town")
     List<Address> addresses;
 
-    public Town(String name, Province province) {
+    @JsonIgnore
+    @Transient
+    String nameProvince = this.province.getSigla();
+
+    public Town(String name, String siglaProvince) {
         this.name = name;
-        this.province = province;
+        nameProvince = siglaProvince;
     }
 }
