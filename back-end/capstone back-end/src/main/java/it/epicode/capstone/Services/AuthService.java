@@ -49,7 +49,7 @@ public class AuthService {
         try{
             return userRep.save(u);
         }catch (DataIntegrityViolationException e){
-            if (userRep.getAllEmail().contains(u.getEmail())) {
+            if (userRep.getAllEmails().contains(u.getEmail())) {
                 throw new BadRequestException("email already exists, cannot be created an account");
         }
         if (userRep.getAllUsernames().contains(u.getUsername())){

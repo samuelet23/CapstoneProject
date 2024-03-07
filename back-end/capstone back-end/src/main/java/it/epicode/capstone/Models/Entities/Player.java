@@ -28,13 +28,13 @@ public class Player extends Person {
 
     @Transient
     @JsonIgnore
-    String teamName =this.team.getName();
+    String teamName;
     public Player(String name, String surname, LocalDate dateOfBirth) {
         super(name, surname, dateOfBirth);
     }
-    public Player(String name, String surname, LocalDate dateOfBirth,String teamName, int point,  int gamesPlayed) {
+    public Player(String name, String surname, LocalDate dateOfBirth,Team teamName, int point,  int gamesPlayed) {
         super(name, surname, dateOfBirth);
-        this.teamName  = teamName;
+        this.teamName  = teamName.getName();
         this.point = point;
         this.gamesPlayed = gamesPlayed;
     }

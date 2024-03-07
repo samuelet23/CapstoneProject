@@ -32,10 +32,14 @@ public class Town {
 
     @JsonIgnore
     @Transient
-    String nameProvince = this.province.getSigla();
+    String nameProvince ;
 
-    public Town(String name, String siglaProvince) {
+    public Town(String name, Province province) {
         this.name = name;
-        nameProvince = siglaProvince;
+        this.province = province;
+    }
+    public Town(Province siglaProvince, String name) {
+        this.name = name;
+        nameProvince = siglaProvince.getSigla();
     }
 }
