@@ -1,7 +1,6 @@
 package it.epicode.capstone.Models.Entities;
 
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
-import it.epicode.capstone.Models.Entities.SuperClass.Person;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,11 +27,14 @@ public class Team {
     private String name;
 
     @OneToOne
-    @JoinColumn(name = "captain_fk")
+    @JoinColumn(name = "captain_id")
     private Player captain;
 
+    @OneToMany(mappedBy = "winner")
+    private Set<Game> wonGames = new HashSet<>();
+
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "team_id")
+    @JoinColumn(name = "tournament_id")
     private Competition tournament;
 
     public Team(String name){
@@ -49,6 +51,16 @@ public class Team {
             throw new IllegalArgumentException("A team cannot have more than 5 players.");
         }
         players.add(player);
+    }
+
+    public boolean hasPlayerWithSigla(char sigla) {
+        char upperCaseSigla = Character.toUpperCase(sigla);
+        for (Player player : players) {
+            if (player.getSigla() == upperCaseSigla) {
+                return false;
+            }
+        }
+        return true;
     }
     public void setCaptain(Player player) throws IllegalArgumentException {
         if (!players.contains(player)) {

@@ -1,10 +1,7 @@
 package it.epicode.capstone.Models.Entities.SuperClass;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import it.epicode.capstone.Models.Entities.Game;
-import it.epicode.capstone.Models.Entities.Place;
-import it.epicode.capstone.Models.Entities.Referee;
-import it.epicode.capstone.Models.Entities.Team;
+import it.epicode.capstone.Models.Entities.*;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,6 +29,7 @@ public abstract class Competition {
 
     private String coverUrl;
 
+    @Column(unique = true)
     private String name;
 
     @OneToMany(mappedBy = "tournament")
@@ -40,8 +38,6 @@ public abstract class Competition {
     @OneToMany(mappedBy = "tournament")
     private Set<Team> teams = new HashSet<Team>();
 
-    private int numMaxTeams = 16;
-
     @OneToMany(mappedBy = "tournament")
     private List<Game> games;
 
@@ -49,18 +45,17 @@ public abstract class Competition {
     @JoinColumn(name = "place_id")
     private Place place;
 
-    @JsonIgnore
-    @Transient
-    private List<Person> players;
 
-    public Competition(LocalDate startDate,  String coverUrl, String name, List<Referee> referees, Set<Team> teams, int numMaxTeams, List<Game> games, Place place, List<Person> players) {
+    @Transient
+    private List<Player> players;
+
+    public Competition(LocalDate startDate,  String coverUrl, String name, List<Referee> referees, Set<Team> teams, List<Game> games, Place place, List<Player> players) {
         this.startDate = startDate;
         this.endDate = startDate.plusDays(1);
         this.coverUrl = coverUrl;
         this.name = name;
         this.referees = referees;
         this.teams = teams;
-        this.numMaxTeams = numMaxTeams;
         this.games = games;
         this.place = place;
         this.players = players;

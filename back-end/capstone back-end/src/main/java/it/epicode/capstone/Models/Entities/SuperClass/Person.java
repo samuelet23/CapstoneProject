@@ -22,6 +22,8 @@ public abstract class Person {
     String name;
     String surname;
     LocalDate dateOfBirth;
+
+    @Setter(AccessLevel.NONE)
     int age;
 
     public Person(String name, String surname, LocalDate dateOfBirth){
@@ -30,7 +32,9 @@ public abstract class Person {
         this.dateOfBirth = dateOfBirth;
         this.age = calculateAge();
     }
-
+    public Person (String name){
+        this.name = name;
+    }
     public int calculateAge()  {
         LocalDate now = LocalDate.now();
         if (dateOfBirth == null) {

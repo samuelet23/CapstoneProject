@@ -6,6 +6,7 @@ import it.epicode.capstone.Models.Enums.TournamentLevel;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,21 +19,23 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "tournaments")
 public class Tournament extends Competition {
 
     @Enumerated(EnumType.STRING)
     private TournamentLevel level;
 
-    public Tournament(LocalDate startDate, String coverUrl, String name, List<Referee> referees, Set<Team> teams, int numMaxTeams, List<Game> games, Place place, List<Person> players) {
-        super(startDate, coverUrl, name, referees, teams, numMaxTeams, games, place, players);
+    private int initialRound;
+    public Tournament(LocalDate startDate, String coverUrl, String name, List<Referee> referees, Set<Team> teams, List<Game> games, Place place, List<Player> players) {
+        super(startDate, coverUrl, name, referees, teams, games, place, players);
     }
-    public Tournament(LocalDate startDate, String coverUrl, String name, List<Referee> referees, Set<Team> teams, int numMaxTeams, List<Game> games, Place place, List<Person> players, TournamentLevel level) {
-        super(startDate, coverUrl, name, referees, teams, numMaxTeams, games, place, players);
+    public Tournament(LocalDate startDate, String coverUrl, String name, List<Referee> referees, Set<Team> teams, List<Game> games, Place place, List<Player> players, TournamentLevel level) {
+        super(startDate, coverUrl, name, referees, teams, games, place, players);
         this.level = level;
     }
 
 
-    public void setNumOfRefereeForTournament(List<Referee> referees) throws Exception {
+    public void setNumOfRefereeForTournament(List<Referee> referees, TournamentLevel level) throws Exception {
         int maxReferees = getMaxRefereesForLevel(level);
         if (referees.size() == maxReferees) {
             setReferees(referees);
@@ -41,6 +44,7 @@ public class Tournament extends Competition {
             throw new Exception("Invalid number of referees for the tournament level");
         }
     }
+
     private int getMaxRefereesForLevel(TournamentLevel level) {
         return switch (level) {
             case JUNIOR -> 1;

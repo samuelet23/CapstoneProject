@@ -2,6 +2,7 @@ package it.epicode.capstone.Models.Entities;
 
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
 import it.epicode.capstone.Models.Entities.SuperClass.Person;
+import it.epicode.capstone.Models.Enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,12 +14,14 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "referees")
 public class Referee extends Person {
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "referee_id")
+    @JoinColumn(name = "tournament_id")
     private Competition tournament;
 
+    private Role role = Role.REFEREE;
 
     public Referee(String name, String surname, LocalDate dateOfBirth) {
         super(name, surname, dateOfBirth);

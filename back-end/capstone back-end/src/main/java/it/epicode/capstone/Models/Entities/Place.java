@@ -11,6 +11,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "places")
 public class Place {
 
     @Id
@@ -31,4 +32,8 @@ public class Place {
     @OneToMany(mappedBy = "place")
     private List<Competition> tournaments;
 
+    public Place(Address address, String courtName) {
+        this.address = address;
+        this.courtName = courtName;
+    }
 }

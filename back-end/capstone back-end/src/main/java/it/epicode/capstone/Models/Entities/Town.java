@@ -12,6 +12,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "towns")
 public class Town {
 
     @Id
@@ -29,8 +30,16 @@ public class Town {
     @OneToMany(mappedBy = "town")
     List<Address> addresses;
 
+    @JsonIgnore
+    @Transient
+    String nameProvince ;
+
     public Town(String name, Province province) {
         this.name = name;
         this.province = province;
+    }
+    public Town(Province siglaProvince, String name) {
+        this.name = name;
+        nameProvince = siglaProvince.getSigla();
     }
 }

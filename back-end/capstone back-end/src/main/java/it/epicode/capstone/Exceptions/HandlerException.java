@@ -52,7 +52,42 @@ public class HandlerException {
         return new ErrorResponse(HttpStatus.UNAUTHORIZED,
                 "Unauthorized", "You don't have permissions to access this resource");
     }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(TournamentNotReadyException.class)
+    public ErrorResponse tournamentNotReadyHandler(TournamentNotReadyException e) {
+        return new ErrorResponse(HttpStatus.BAD_REQUEST,
+                "Tournament Not Ready", "The tournament is not ready to proceed to the next round");
+    }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(TournamentDataException.class)
+    public ErrorResponse tournamentDataHandler(TournamentDataException e) {
+        return new ErrorResponse(HttpStatus.BAD_REQUEST,
+                "ERROR:", "Error in handling tournament data: " + e.getMessage());
+    }
 
+
+
+
+
+
+    public static void tournamentNotReadyException(BindingResult bindingResult) throws TournamentNotReadyException {
+        if (bindingResult.hasErrors()) {
+            throw new TournamentNotReadyException(bindingResult.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toList()
+                    .toString());
+        }
+    }
+    public static void tournamentDataException(BindingResult bindingResult) throws TournamentDataException {
+        if (bindingResult.hasErrors()) {
+            throw new TournamentDataException(bindingResult.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toList()
+                    .toString());
+        }
+    }
     public static void exception(BindingResult bindingResult) throws BadRequestException {
         if (bindingResult.hasErrors()) {
             throw new BadRequestException(bindingResult.getAllErrors()
