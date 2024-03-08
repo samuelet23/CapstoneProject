@@ -27,7 +27,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/player")
-@Tag(name = "Player")
+@Tag(name = "Player Api")
 public class PlayerController {
 
     @Autowired

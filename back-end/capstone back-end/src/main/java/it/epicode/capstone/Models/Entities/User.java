@@ -22,7 +22,6 @@ import java.util.*;
 @NoArgsConstructor
 @Data
 @Table(name = "users")
-@Hidden
 public class User extends Person implements UserDetails {
 
     @Id

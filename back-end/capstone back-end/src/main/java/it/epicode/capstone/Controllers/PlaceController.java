@@ -26,7 +26,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/place")
-@Tag(name = "Town/Province/Region")
+@Tag(name = "Town/Province/Region Api")
 public class PlaceController {
 
     @Autowired

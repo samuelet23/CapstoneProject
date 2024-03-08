@@ -13,7 +13,6 @@ import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
 
-@Tag(name = "Place")
 public record PlaceDTO(
             @NotBlank(message = "The address field cannot be empty/null")
             @NotEmpty(message = "This field must contain via, civico,cap, town name and sigla province ")

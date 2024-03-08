@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Size;
 
 import java.util.UUID;
 
-@Tag(name = "Referee")
 public record RefereeDTO (
         @NotBlank(message = "The name field cannot be empty/null")
         @Size(min = 3, message = "Name must be of 3 characters")

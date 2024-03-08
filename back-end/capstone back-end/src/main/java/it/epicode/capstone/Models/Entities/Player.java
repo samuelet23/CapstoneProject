@@ -15,7 +15,6 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @Table(name = "players ")
-@Hidden
 public class Player extends Person {
 
     @ManyToOne(fetch = FetchType.EAGER)

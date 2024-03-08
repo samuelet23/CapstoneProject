@@ -21,7 +21,6 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Table(name = "tournaments")
-@Hidden
 public class Tournament extends Competition {
 
     @Enumerated(EnumType.STRING)

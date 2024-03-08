@@ -13,7 +13,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "provinces")
-@Hidden
 public class Province {
 
     @Id

@@ -16,7 +16,6 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @Table(name = "referees")
-@Hidden
 public class Referee extends Person {
 
     @ManyToOne(fetch = FetchType.EAGER)

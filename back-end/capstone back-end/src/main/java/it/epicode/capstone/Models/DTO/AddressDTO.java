@@ -10,7 +10,6 @@ import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-@Tag(name = "Address")
 public record AddressDTO(
         @NotBlank(message = "The via field cannot be empty/null")
         String via,

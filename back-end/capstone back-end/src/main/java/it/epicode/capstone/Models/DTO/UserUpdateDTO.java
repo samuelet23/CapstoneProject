@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-@Tag(name = "User Update")
 public record UserUpdateDTO(
         @NotBlank(message = "The username field cannot be empty/null")
         @Size(min = 5, message = "Username must be of 5 characters")

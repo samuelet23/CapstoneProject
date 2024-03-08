@@ -15,7 +15,6 @@ import jakarta.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-@Tag(name = "Team")
 public record TeamDTO(
         @NotEmpty(message = "The team must have players")
         @Size(min = 3, max = 5, message = "The team must have between 3 and 5 players")

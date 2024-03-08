@@ -12,7 +12,6 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 import java.util.Set;
 
-@Tag(name = "Tournament")
 public record TournamentDTO (
          @NotBlank(message = "The name field cannot be empty/null")
          String name,

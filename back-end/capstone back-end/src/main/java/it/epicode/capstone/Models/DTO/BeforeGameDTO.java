@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-@Tag(name = "Before Starting Game")
 public record BeforeGameDTO(
         @NotBlank(message = "home team field cannot be empty/null")
         String homeTeam,
