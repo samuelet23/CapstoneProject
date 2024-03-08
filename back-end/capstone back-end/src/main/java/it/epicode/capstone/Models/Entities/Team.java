@@ -30,6 +30,9 @@ public class Team {
     @JoinColumn(name = "captain_id")
     private Player captain;
 
+    @OneToMany(mappedBy = "winner")
+    private Set<Game> wonGames = new HashSet<>();
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tournament_id")
     private Competition tournament;

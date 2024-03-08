@@ -39,6 +39,9 @@ public class Player extends Person {
         this.gamesPlayed = gamesPlayed;
     }
 
+    public Player(String name){
+        super(name);
+    }
     public void setSigla(char sigla) {
         if (sigla >= 'A' && sigla <= 'E') {
             this.sigla = Character.toUpperCase(sigla);

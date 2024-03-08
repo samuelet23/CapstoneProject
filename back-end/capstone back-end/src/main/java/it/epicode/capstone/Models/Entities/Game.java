@@ -1,16 +1,17 @@
 package it.epicode.capstone.Models.Entities;
 
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
+import it.epicode.capstone.Models.Enums.GameStatus;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalTime;
 import java.util.UUID;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "games")
 public class Game {
 
@@ -31,8 +32,17 @@ public class Game {
 
     private int awayPoints;
 
-    @Transient
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "winner_team_id")
     private Team winner;
+
+    @Enumerated(EnumType.STRING)
+    private GameStatus status;
+
+    private int round;
+
+    private String phase;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tournament_id")
