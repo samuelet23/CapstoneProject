@@ -1,5 +1,6 @@
 package it.epicode.capstone.Models.DTO;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Models.Entities.Player;
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
 import jakarta.persistence.FetchType;
@@ -14,7 +15,7 @@ import jakarta.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-
+@Tag(name = "Team")
 public record TeamDTO(
         @NotEmpty(message = "The team must have players")
         @Size(min = 3, max = 5, message = "The team must have between 3 and 5 players")

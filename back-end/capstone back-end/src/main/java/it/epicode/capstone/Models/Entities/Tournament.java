@@ -1,5 +1,6 @@
 package it.epicode.capstone.Models.Entities;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
 import it.epicode.capstone.Models.Entities.SuperClass.Person;
 import it.epicode.capstone.Models.Enums.TournamentLevel;
@@ -20,6 +21,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Table(name = "tournaments")
+@Hidden
 public class Tournament extends Competition {
 
     @Enumerated(EnumType.STRING)

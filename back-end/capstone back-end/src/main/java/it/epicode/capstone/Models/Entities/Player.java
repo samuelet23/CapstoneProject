@@ -1,6 +1,7 @@
 package it.epicode.capstone.Models.Entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.Hidden;
 import it.epicode.capstone.Models.Entities.SuperClass.Person;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @Table(name = "players ")
+@Hidden
 public class Player extends Person {
 
     @ManyToOne(fetch = FetchType.EAGER)

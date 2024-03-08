@@ -1,6 +1,7 @@
 package it.epicode.capstone.Models.DTO;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Models.Entities.Town;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -9,7 +10,7 @@ import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-
+@Tag(name = "Address")
 public record AddressDTO(
         @NotBlank(message = "The via field cannot be empty/null")
         String via,

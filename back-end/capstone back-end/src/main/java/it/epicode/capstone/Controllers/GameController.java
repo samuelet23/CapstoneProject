@@ -38,10 +38,6 @@ public class GameController {
     private PlayerService playerSv;
     @Autowired
     private TournamentService tournamentSv;
-    @Autowired
-    private ConfirmRes confirmRes;
-
-
 
     @GetMapping("/get/all")
     public Page<Game> getGameAll(Pageable pageable){

@@ -1,5 +1,6 @@
 package it.epicode.capstone.Models.ResponsesDTO;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
+@Tag(name = "Player And Points Response")
 public class PlayerPointRes {
 
     private String message;

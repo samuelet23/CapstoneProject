@@ -1,5 +1,6 @@
 package it.epicode.capstone.Models.DTO;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Models.Entities.Game;
 import it.epicode.capstone.Models.Entities.Place;
 import it.epicode.capstone.Models.Entities.Team;
@@ -11,6 +12,7 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 import java.util.Set;
 
+@Tag(name = "Tournament")
 public record TournamentDTO (
          @NotBlank(message = "The name field cannot be empty/null")
          String name,

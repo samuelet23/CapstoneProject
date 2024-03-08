@@ -1,5 +1,6 @@
 package it.epicode.capstone.Models.DTO;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -7,6 +8,7 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
+@Tag(name = "User")
 public record UserDTO (
         @NotBlank(message = "The name field cannot be empty/null")
         @Size(min = 3, message = "Name must be of 3 characters")

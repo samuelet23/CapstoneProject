@@ -1,5 +1,6 @@
 package it.epicode.capstone.Models.Entities;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "places")
+@Hidden
 public class Place {
 
     @Id

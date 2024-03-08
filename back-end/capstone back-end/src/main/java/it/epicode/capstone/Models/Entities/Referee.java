@@ -1,5 +1,6 @@
 package it.epicode.capstone.Models.Entities;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
 import it.epicode.capstone.Models.Entities.SuperClass.Person;
 import it.epicode.capstone.Models.Enums.Role;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @Table(name = "referees")
+@Hidden
 public class Referee extends Person {
 
     @ManyToOne(fetch = FetchType.EAGER)
