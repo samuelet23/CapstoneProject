@@ -106,5 +106,14 @@ public class HandlerException {
                     .toString());
         }
     }
+    public static void badRequestException(BindingResult bindingResult) throws BadRequestException {
+        if (bindingResult.hasErrors()) {
+            throw new BadRequestException(bindingResult.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toList()
+                    .toString());
+        }
+    }
 
 }

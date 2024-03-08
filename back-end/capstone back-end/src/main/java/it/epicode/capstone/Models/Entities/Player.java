@@ -42,6 +42,8 @@ public class Player extends Person {
     public Player(String name){
         super(name);
     }
+
+
     public void setSigla(char sigla) {
         if (sigla >= 'A' && sigla <= 'E') {
             this.sigla = Character.toUpperCase(sigla);
@@ -55,10 +57,5 @@ public class Player extends Person {
         this.point += pointsToAdd;
     }
 
-    public double calculatePointsPerGameAverage() {
-        if (gamesPlayed == 0) {
-            return 0;
-        }
-        return (double) point / gamesPlayed;
-    }
+
 }
