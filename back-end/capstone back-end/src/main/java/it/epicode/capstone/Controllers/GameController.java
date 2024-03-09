@@ -16,6 +16,7 @@ import it.epicode.capstone.Services.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -50,28 +51,33 @@ public class GameController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public Game createGame(@RequestBody @Validated BeforeGameDTO beforeGameDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         return gameSv.createGame(beforeGameDTO);
     }
 
     @PutMapping("/update/{id}/homePoints")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public Game updateHomePoints(@PathVariable UUID id,@RequestBody @Validated AddPointsDTO addPointsDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         return gameSv.updateHomePoints(id, addPointsDTO.pointToAdd(), addPointsDTO.siglaPlayer());
     }
     @PutMapping("/update/{id}/awayPoints")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public Game updateAwayPoints(@PathVariable UUID id, @RequestBody @Validated AddPointsDTO addPointsDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         return gameSv.updateAwayPoints(id, addPointsDTO.pointToAdd(), addPointsDTO.siglaPlayer());
     }
     @PostMapping("/finish/{id}")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public Team finishedGame(@PathVariable UUID id, @RequestBody @Validated DuringGameDTO gameDTO, BindingResult bindingResult)throws Exception{
         HandlerException.exception(bindingResult);
         return gameSv.finishedGame(id, gameDTO);
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public DeleteRes deleteById(@PathVariable UUID id)throws BadRequestException{
         gameSv.delete(id);
         return new DeleteRes("game was successfully deleted");

@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -64,12 +65,14 @@ public class PlaceController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public Place createPlace(@RequestBody @Validated PlaceDTO placeDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         return placeSv.save(placeDTO) ;
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updatePlaceById(@RequestBody @Validated PlaceDTO placeDTO,@PathVariable UUID id,BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         placeSv.updateById(placeDTO, id);
@@ -79,6 +82,7 @@ public class PlaceController {
          );
     }
     @PutMapping("/update/court-name")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updatePlaceByCourtName(@RequestBody PlaceDTO placeDTO, @RequestParam("court-name") String courtName,BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         placeSv.updateByCourtName(placeDTO, courtName);
@@ -88,6 +92,7 @@ public class PlaceController {
          );
     }
     @PatchMapping("/update/id/court-name")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updateCourtName(@RequestParam UUID id, @RequestBody @Validated PlaceDTO placeDTO,BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         placeSv.updateCourtName(id, placeDTO.courtName());
@@ -98,6 +103,7 @@ public class PlaceController {
     }
 
     @PatchMapping("/update/id/address")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updateAddress(@RequestParam UUID id,@RequestBody @Validated AddressDTO address, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         Address a = new Address(
@@ -114,6 +120,7 @@ public class PlaceController {
         );
     }
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public DeleteRes deletePlace (@PathVariable UUID id)throws BadRequestException{
         placeSv.delete(id);
         return new DeleteRes(

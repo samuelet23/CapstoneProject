@@ -10,6 +10,7 @@ import it.epicode.capstone.Models.ResponsesDTO.UploadConfirm;
 import it.epicode.capstone.Services.TeamService;
 import it.epicode.capstone.Services.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,8 +32,8 @@ public class UploadImgController {
     @Autowired
     private Cloudinary cloudinary;
 
-
     @PatchMapping("/logo-team/{name-team}")
+    @PreAuthorize("hasAuthority('CAPTAIN')")
     public UploadConfirm uploadLogoTeam(@RequestParam("file") MultipartFile file, @PathVariable("name-team") String nameTeam, BindingResult bindingResult) throws IOException, BadRequestException {
         HandlerException.badRequestException(bindingResult);
         HandlerException.ioException(bindingResult);
@@ -45,6 +46,7 @@ public class UploadImgController {
         );
     }
     @PatchMapping("/cover-tournament/{tournament-name}")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public UploadConfirm uploadCoverTournament(@RequestParam("file") MultipartFile file,@PathVariable("tournament-name") String tournamentName, BindingResult bindingResult) throws IOException, BadRequestException {
         HandlerException.ioException(bindingResult);
         HandlerException.badRequestException(bindingResult);

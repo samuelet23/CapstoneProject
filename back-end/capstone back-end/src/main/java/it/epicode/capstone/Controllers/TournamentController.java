@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -82,11 +83,13 @@ public class TournamentController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public Tournament createTournament(@RequestBody @Validated  TournamentDTO dto)throws Exception{
         return tournamentSv.createTournament(dto);
     }
 
     @PatchMapping("/update/level/junior/tournament-name")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updateLevelToJunior(@RequestParam("tournament-name") String tournamentName, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         tournamentSv.updateLevelToJunior(tournamentName);
@@ -96,6 +99,7 @@ public class TournamentController {
         );
     }
     @PatchMapping("/update/level/rising-stars/tournament-name")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updateLevelToRisingStars(@RequestParam("tournament-name")String tournamentName, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         tournamentSv.updateLevelToRisingStars(tournamentName);
@@ -105,6 +109,7 @@ public class TournamentController {
         );
     }
     @PatchMapping("/update/level/elite/tournament-name")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updateLevelToElite(@RequestParam("tournament-name")String tournamentName, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         tournamentSv.updateLevelToElite(tournamentName);
@@ -114,6 +119,7 @@ public class TournamentController {
         );
     }
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public DeleteRes deleteTournamentById(@PathVariable UUID id)throws BadRequestException{
         tournamentSv.deleteById(id);
         return new DeleteRes(
@@ -121,6 +127,7 @@ public class TournamentController {
         );
     }
     @DeleteMapping("/delete/{name}")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public DeleteRes deleteTournamentByName(@PathVariable String name)throws BadRequestException{
         tournamentSv.deleteByName(name);
         return new DeleteRes(

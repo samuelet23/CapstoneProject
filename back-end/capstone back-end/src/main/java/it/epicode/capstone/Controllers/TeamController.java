@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.ErrorResponseException;
@@ -61,16 +62,25 @@ public class TeamController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('CAPTAIN')")
     public Team createTeam(@RequestBody @Validated TeamDTO teamDTO, BindingResult bindingResult ){
         HandlerException.illegalArgumentException(bindingResult);
-        return teamSv.saveTeam(teamDTO);
+        return teamSv.createTeam(teamDTO);
     }
-    @PutMapping("/update/{id}")
-    public Team updateTeam(@PathVariable UUID id, @RequestBody @Validated TeamDTO teamDTO, BindingResult bindingResult)throws BadRequestException{
+    @PutMapping("/update/name/{id}")
+    @PreAuthorize("hasAuthority('CAPTAIN')")
+    public Team updateName(@PathVariable UUID id, @RequestBody @Validated TeamDTO teamDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
-        return teamSv.update(id, teamDTO);
+        return teamSv.updateName(id, teamDTO);
+    }
+    @PutMapping("/update/player/{id}")
+    @PreAuthorize("hasAuthority('CAPTAIN')")
+    public Team updatePlayer(@PathVariable UUID id, @RequestBody @Validated TeamDTO teamDTO, BindingResult bindingResult)throws BadRequestException{
+        HandlerException.badRequestException(bindingResult);
+        return teamSv.updatePlayers(id, teamDTO);
     }
     @PatchMapping("/update/captain/team-name")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updateCaptainFromTeam(@RequestParam("team-name") String teamName, @RequestBody @Validated  PlayerDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         teamSv.updateCaptain(teamName, playerDTO.name());
@@ -81,6 +91,7 @@ public class TeamController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public DeleteRes deleteById(@PathVariable UUID id)throws BadRequestException{
         teamSv.deleteById(id);
         return new DeleteRes(
@@ -88,6 +99,7 @@ public class TeamController {
         );
     }
     @DeleteMapping("/delete/{name}")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public DeleteRes deleteByName(@PathVariable String name)throws BadRequestException{
         teamSv.deleteByName(name);
         return new DeleteRes(

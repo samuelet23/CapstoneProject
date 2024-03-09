@@ -10,6 +10,7 @@ import it.epicode.capstone.Models.ResponsesDTO.DeleteRes;
 import it.epicode.capstone.Services.RefereeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -42,12 +43,14 @@ public class RefereeController {
         return refereeSv.getAllRefereeFromTournament(name);
     }
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public Referee createReferee(@RequestBody @Validated RefereeDTO refereeDTO, BindingResult bindingResult) throws BadRequestException {
         HandlerException.badRequestException(bindingResult);
-        return refereeSv.save(refereeDTO);
+        return refereeSv.createReferee(refereeDTO);
     }
 
     @PutMapping("update/{id}")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes update(@PathVariable UUID id,@RequestBody @Validated RefereeDTO refereeDTO, BindingResult bindingResult )throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         refereeSv.update(id, refereeDTO);
@@ -57,6 +60,7 @@ public class RefereeController {
         );
     }
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public DeleteRes deleteById(@PathVariable UUID id)throws BadRequestException{
         refereeSv.deleteById(id);
         return new DeleteRes(
@@ -64,6 +68,7 @@ public class RefereeController {
         );
     }
     @DeleteMapping("/delete/{name}")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public DeleteRes deleteByName(String name)throws BadRequestException{
         refereeSv.deleteByName(name);
         return new DeleteRes(

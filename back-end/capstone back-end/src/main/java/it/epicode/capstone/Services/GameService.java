@@ -67,7 +67,6 @@ public class GameService {
         for (Player player : game.getHomeTeam().getPlayers()) {
             if (player.getSigla() == sigla) {
                 player.addPoints(pointsToAdd);
-                player.setGamesPlayed(player.getGamesPlayed() + 1);
             }
         }
 
@@ -88,7 +87,6 @@ public class GameService {
         for (Player player : game.getAwayTeam().getPlayers()) {
             if (player.getSigla() == sigla) {
                 player.addPoints(pointsToAdd);
-                player.setGamesPlayed(player.getGamesPlayed() + 1);
             }
         }
 
@@ -122,10 +120,19 @@ public class GameService {
                throw new Exception(e.getMessage());
             }
         }
+        for (Player player : game.getHomeTeam().getPlayers()) {
+            player.setGamesPlayed(player.getGamesPlayed() + 1);
+        }
+        for (Player player : game.getAwayTeam().getPlayers()) {
+            player.setGamesPlayed(player.getGamesPlayed() + 1);
+
+        }
 
         game = gameRp.save(game);
         return game.getWinner();
     }
+
+
 
     public double averagePointPerGame(Player player){
             if (player.getGamesPlayed() == 0) {

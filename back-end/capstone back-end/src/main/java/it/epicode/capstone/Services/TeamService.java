@@ -26,6 +26,8 @@ public class TeamService {
 
     @Autowired
     private PlayerRepository playerRp;
+    @Autowired
+    private PlayerService playerSv;
 
     public Page<Team> getAll(Pageable pageable) {
         return teamRp.findAll(pageable);
@@ -54,55 +56,59 @@ public class TeamService {
         return teamRp.findByCaptainIsNull();
     }
     @Transactional
-    public Team saveTeam(TeamDTO teamDTO) {
+    public Team createTeam(TeamDTO teamDTO) {
         Team team = new Team();
         team.setName(teamDTO.name());
 
         Set<Player> players = new HashSet<>();
+        Set<Character> usedSiglas = new HashSet<>();
+
         for (PlayerDTO playerDTO : teamDTO.players()) {
-            Player player = new Player();
-            player.setName(playerDTO.name());
+            Player player = playerSv.create(playerDTO);
+            if (!usedSiglas.contains(playerDTO.sigla()) && usedSiglas.size() < 5) {
+                player.setSigla(playerDTO.sigla());
+                usedSiglas.add(playerDTO.sigla());
+            } else {
+                throw new IllegalArgumentException("Error saving team: Invalid player sigla.");
+            }
+
             Player savedPlayer = playerRp.save(player);
             players.add(savedPlayer);
             team.addPlayer(savedPlayer);
         }
 
         team.setPlayers(players);
-
         Player captain = playerRp.findByName(teamDTO.captainName())
                 .orElseThrow(() -> new IllegalArgumentException("Captain player not found."));
         team.setCaptain(captain);
-
-        try {
-            team.setPlayers(players);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Error saving team: " + e.getMessage());
-        }
 
         return teamRp.save(team);
     }
-    @Transactional
-    public Team update(UUID id, TeamDTO teamDTO) throws BadRequestException {
+
+
+    public Team updateName(UUID id, TeamDTO teamDTO) throws BadRequestException {
         Team team = getById(id);
         team.setName(teamDTO.name());
 
+        return teamRp.save(team);
+    }
+    public Team updatePlayers(UUID id, TeamDTO teamDTO) throws BadRequestException {
+        Team team = getById(id);
+
         Set<Player> players = new HashSet<>();
         for (PlayerDTO playerDTO : teamDTO.players()) {
-            Player player = new Player();
-            player.setName(playerDTO.name());
-            Player savedPlayer = playerRp.save(player);
+            Player playerToUpdate = team.getPlayers().stream()
+                    .filter(player -> player.getName().equals(playerDTO.name()))
+                    .findFirst()
+                    .orElseThrow(() -> new BadRequestException("Player not found in the team: " + playerDTO.name()));
+
+            playerSv.updateCredentialPlayer(playerToUpdate.getId(), playerDTO);
+
+            Player savedPlayer = playerRp.save(playerToUpdate);
             players.add(savedPlayer);
         }
 
-        try {
-            team.setPlayers(players);
-        } catch (IllegalArgumentException e) {
-            throw new BadRequestException("Error updating team: " + e.getMessage());
-        }
-
-        Player captain = playerRp.findByName(teamDTO.captainName())
-                .orElseThrow(() -> new IllegalArgumentException("Captain player not found."));
-        team.setCaptain(captain);
+        team.setPlayers(players);
 
         return teamRp.save(team);
     }

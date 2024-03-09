@@ -10,6 +10,7 @@ import it.epicode.capstone.Models.Entities.Tournament;
 import it.epicode.capstone.Models.ResponsesDTO.RoundsGeneratedRes;
 import it.epicode.capstone.Services.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ import java.util.List;
 @RequestMapping("/api/generate-round")
 @Tag(name = "Generate Round API")
 @Hidden
+@PreAuthorize("hasAuthority('MANAGER')")
 public class RoundController {
 
     @Autowired

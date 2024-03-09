@@ -3,6 +3,8 @@ package it.epicode.capstone.Services;
 import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Models.DTO.RefereeDTO;
 import it.epicode.capstone.Models.Entities.Referee;
+import it.epicode.capstone.Models.Enums.Role;
+import it.epicode.capstone.Models.Enums.RoleInTheGame;
 import it.epicode.capstone.Repositories.RefereeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,12 +35,12 @@ public class RefereeService {
     public List<Referee> getAllRefereeFromTournament(String name){
         return refereeRp.findByTournamentName(name);
     }
-    public Referee save(RefereeDTO refereeDTO){
+    public Referee createReferee(RefereeDTO refereeDTO){
         Referee r = new Referee();
         r.setName(refereeDTO.name());
         r.setSurname(refereeDTO.surname());
         r.setDateOfBirth(LocalDate.parse(refereeDTO.dateOfBirth()));
-
+        r.setRole(RoleInTheGame.REFEREE);
         return refereeRp.save(r);
     }
     public Referee update(UUID id, RefereeDTO refereeDTO)throws BadRequestException{

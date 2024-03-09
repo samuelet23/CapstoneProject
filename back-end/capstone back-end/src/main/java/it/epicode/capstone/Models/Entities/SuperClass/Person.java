@@ -1,5 +1,6 @@
 package it.epicode.capstone.Models.Entities.SuperClass;
 
+import it.epicode.capstone.Models.Enums.RoleInTheGame;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +23,9 @@ public abstract class Person {
     String name;
     String surname;
     LocalDate dateOfBirth;
+
+    @Enumerated(EnumType.STRING)
+    RoleInTheGame roleInTheGame;
 
     @Setter(AccessLevel.NONE)
     int age;

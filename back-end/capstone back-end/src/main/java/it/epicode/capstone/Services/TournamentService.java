@@ -8,6 +8,7 @@ import it.epicode.capstone.Models.DTO.*;
 import it.epicode.capstone.Models.Entities.*;
 import it.epicode.capstone.Models.Enums.GameStatus;
 import it.epicode.capstone.Models.Enums.Role;
+import it.epicode.capstone.Models.Enums.RoleInTheGame;
 import it.epicode.capstone.Models.Enums.TournamentLevel;
 import it.epicode.capstone.Repositories.*;
 import org.slf4j.event.Level;
@@ -57,8 +58,8 @@ public class TournamentService {
         t.setStartDate(LocalDate.parse(dto.startDate()));
         t.setLevel(TournamentLevel.valueOf(dto.level()));
         try {
-            List<String> refereeNames = dto.referees();
-            List<Referee> referees = createReferee(refereeNames);
+
+            List<Referee> referees = createReferee(dto.referees());
             t.setNumOfRefereeForTournament(referees, t.getLevel());
         } catch (Exception e) {
             throw new Exception("Error creating tournament: " + e.getMessage());
@@ -257,46 +258,22 @@ public class TournamentService {
         }
         Set<Team> teams = new HashSet<>();
         for (TeamDTO teamDTO : dto.teams()) {
-            Team team = teamSv.getByName(teamDTO.name());
-            Set<Player> players = createPlayerFromDto(teamDTO.players());
-            try {
-                team.setPlayers(players);
-            } catch (IllegalArgumentException e) {
-                throw new BadRequestException("Error creating team: " + e.getMessage());
-            }
-            team.setLogo(teamDTO.logo());
-            team.setName(teamDTO.name());
-
-
-            Player captain = playerSv.getByName(teamDTO.captainName());
-
-
-            team.setCaptain(captain);
+              Team team = teamSv.createTeam(teamDTO);
             teams.add(team);
         }
         return teams;
     }
 
     private List<Referee> createReferee(List<String> refereeNames) throws BadRequestException {
-        List<Referee> referees = refereeSv.getAll();
-        for (String refereeName : refereeNames) {
-            Referee referee;
-            referee = refereeSv.getByName(refereeName);
-            if (referee.getRole() != Role.REFEREE) {
-                throw new IllegalArgumentException("The person with name"+referee.getName()+" isn't a Referee");
+        List<Referee> referees = new ArrayList<>();
+        for (String name : refereeNames) {
+            Referee referee = refereeSv.getByName(name);
+            if (referee.getRole() != RoleInTheGame.REFEREE) {
+                throw new IllegalArgumentException("The person with name " + referee.getName() + " isn't a Referee");
             }
             referees.add(referee);
         }
         return referees;
-    }
-    private Set<Player> createPlayerFromDto(Set<PlayerDTO> playerDTOs) throws BadRequestException {
-        Set<Player> players = (Set<Player>) playerSv.findAll();
-        for (PlayerDTO playerDTO : playerDTOs) {
-            Player player = playerSv.getByName(playerDTO.name());
-            player.setName(playerDTO.name());
-            players.add(player);
-        }
-        return players;
     }
     public Place createPlaceFromDto(PlaceDTO placeDTO) throws BadRequestException {
         AddressDTO addressDTO = placeDTO.address();

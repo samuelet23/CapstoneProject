@@ -18,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +36,7 @@ public class UserController {
     private UserService userSv;
 
     @GetMapping("/get/all")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public Page<User> getAll(Pageable pageable){
         return userSv.getAll(pageable);
     }
@@ -45,13 +49,17 @@ public class UserController {
         return userSv.getByUsername(username);
     }
     @PostMapping("/create")
+    @PreAuthorize("hasAnyAuthority('USER,ADMIN')")
     public User createUser(@RequestBody @Validated UserDTO userDTO, BindingResult bindingResult) throws BadRequestException, InternalServerErrorException {
         HandlerException.internalServerErrorException(bindingResult);
         HandlerException.badRequestException(bindingResult);
         return userSv.create(userDTO);
     }
+
     @PutMapping("update/{id}")
+    @PreAuthorize("hasAnyAuthority('USER,ADMIN')")
     public ConfirmRes updateUserById(@PathVariable UUID id,@RequestBody @Validated UserUpdateDTO userDTO, BindingResult bindingResult) throws BadRequestException, InternalServerErrorException {
+        checkUserAuthorization(userDTO.getUsername());
         HandlerException.internalServerErrorException(bindingResult);
         HandlerException.badRequestException(bindingResult);
         userSv.updateById(userDTO, id);
@@ -60,8 +68,11 @@ public class UserController {
                 HttpStatus.CREATED
         );
     }
+
     @PutMapping("update/{username}")
+    @PreAuthorize("hasAnyAuthority('USER,ADMIN')")
     public ConfirmRes updateUserByUsername(@PathVariable String username,@RequestBody @Validated UserUpdateDTO userDTO, BindingResult bindingResult) throws BadRequestException, InternalServerErrorException {
+        checkUserAuthorization(username);
         HandlerException.internalServerErrorException(bindingResult);
         HandlerException.badRequestException(bindingResult);
         userSv.updateByUsername(userDTO, username);
@@ -70,8 +81,11 @@ public class UserController {
                 HttpStatus.CREATED
         );
     }
+
     @PatchMapping("update/password/{username}")
+    @PreAuthorize("hasAnyAuthority('USER,ADMIN')")
     public ConfirmRes updatePasswordByUsername(@RequestBody @Validated UpdatePasswordDTO updatePasswordDTO,@PathVariable String username, BindingResult bindingResult) throws BadRequestException, InternalServerErrorException, UnauthorizedException {
+        checkUserAuthorization(username);
         HandlerException.internalServerErrorException(bindingResult);
         HandlerException.unathorizedException(bindingResult);
         HandlerException.badRequestException(bindingResult);
@@ -83,7 +97,9 @@ public class UserController {
     }
 
     @PatchMapping("update/username/{id}")
-    public ConfirmRes updateUsername(@PathVariable UUID id,@RequestBody @Validated UserUpdateDTO username, BindingResult bindingResult) throws BadRequestException {
+    @PreAuthorize("hasAnyAuthority('USER,ADMIN')")
+    public ConfirmRes updateUsername(@PathVariable UUID id,@RequestBody @Validated UserUpdateDTO username, BindingResult bindingResult) throws BadRequestException, UnauthorizedException {
+        checkUserAuthorization(username.username());
         HandlerException.badRequestException(bindingResult);
         userSv.updateUsername(id, username.username());
         return new ConfirmRes(
@@ -92,16 +108,19 @@ public class UserController {
         );
     }
     @PatchMapping("update/{username}/manager")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public Role updateRoleToManager(@PathVariable String username, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         return userSv.updateRoleManagerByUsername(username);
     }
     @PatchMapping("update/{username}/captain")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public Role updateRoleToCaptain(@PathVariable String username, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         return userSv.updateRoleCaptainByUsername(username);
     }
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public DeleteRes deleteById(@PathVariable UUID id)throws BadRequestException{
          userSv.deleteById(id);
         return new DeleteRes(
@@ -109,11 +128,22 @@ public class UserController {
         );
     }
     @DeleteMapping("/delete/{username}")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public DeleteRes deleteByUsername(@PathVariable String username)throws BadRequestException{
          userSv.deleteByUsername(username);
         return new DeleteRes(
                 "User with username: "+username+" has been deleted successfully"
         );
+    }
+
+
+    private void checkUserAuthorization(String targetUsername) throws UnauthorizedException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String authenticatedUsername = authentication.getName();
+
+        if (!authenticatedUsername.equals(targetUsername) && !authentication.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ADMIN"))) {
+            throw new UnauthorizedException("You are not authorized to perform this action");
+        }
     }
 }
 
