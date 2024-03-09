@@ -58,8 +58,8 @@ public class UserController {
 
     @PutMapping("update/{id}")
     @PreAuthorize("hasAnyAuthority('USER,ADMIN')")
-    public ConfirmRes updateUserById(@PathVariable UUID id,@RequestBody @Validated UserUpdateDTO userDTO, BindingResult bindingResult) throws BadRequestException, InternalServerErrorException {
-        checkUserAuthorization(userDTO.getUsername());
+    public ConfirmRes updateUserById(@PathVariable UUID id,@RequestBody @Validated UserUpdateDTO userDTO, BindingResult bindingResult) throws BadRequestException, InternalServerErrorException, UnauthorizedException {
+        checkUserAuthorization(userDTO.username());
         HandlerException.internalServerErrorException(bindingResult);
         HandlerException.badRequestException(bindingResult);
         userSv.updateById(userDTO, id);
@@ -71,7 +71,7 @@ public class UserController {
 
     @PutMapping("update/{username}")
     @PreAuthorize("hasAnyAuthority('USER,ADMIN')")
-    public ConfirmRes updateUserByUsername(@PathVariable String username,@RequestBody @Validated UserUpdateDTO userDTO, BindingResult bindingResult) throws BadRequestException, InternalServerErrorException {
+    public ConfirmRes updateUserByUsername(@PathVariable String username,@RequestBody @Validated UserUpdateDTO userDTO, BindingResult bindingResult) throws BadRequestException, InternalServerErrorException, UnauthorizedException {
         checkUserAuthorization(username);
         HandlerException.internalServerErrorException(bindingResult);
         HandlerException.badRequestException(bindingResult);
