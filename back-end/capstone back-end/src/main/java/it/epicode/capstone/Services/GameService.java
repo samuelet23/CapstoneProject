@@ -1,14 +1,12 @@
 package it.epicode.capstone.Services;
 
 import it.epicode.capstone.Exceptions.BadRequestException;
-import it.epicode.capstone.Exceptions.TournamentNotReadyException;
 import it.epicode.capstone.Models.DTO.BeforeGameDTO;
 import it.epicode.capstone.Models.DTO.DuringGameDTO;
 import it.epicode.capstone.Models.Entities.Game;
 import it.epicode.capstone.Models.Entities.Player;
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
 import it.epicode.capstone.Models.Entities.Team;
-import it.epicode.capstone.Models.Entities.Tournament;
 import it.epicode.capstone.Models.Enums.GameStatus;
 import it.epicode.capstone.Repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class GameService {

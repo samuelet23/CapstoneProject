@@ -7,11 +7,8 @@ import it.epicode.capstone.Models.DTO.AddPointsDTO;
 import it.epicode.capstone.Models.DTO.BeforeGameDTO;
 import it.epicode.capstone.Models.DTO.DuringGameDTO;
 import it.epicode.capstone.Models.Entities.Game;
-import it.epicode.capstone.Models.Entities.Player;
-import it.epicode.capstone.Models.Entities.SuperClass.Competition;
 import it.epicode.capstone.Models.Entities.Team;
 import it.epicode.capstone.Models.Entities.Tournament;
-import it.epicode.capstone.Models.ResponsesDTO.ConfirmRes;
 import it.epicode.capstone.Models.ResponsesDTO.DeleteRes;
 import it.epicode.capstone.Services.GameService;
 import it.epicode.capstone.Services.PlayerService;
@@ -19,7 +16,6 @@ import it.epicode.capstone.Services.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +25,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/game")
-@Tag(name = "Game Api")
+@Tag(name = "Game API")
 public class GameController {
 
     @Autowired

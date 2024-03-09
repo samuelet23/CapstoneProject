@@ -1,6 +1,7 @@
 package it.epicode.capstone.Services;
 
 import it.epicode.capstone.Exceptions.BadRequestException;
+import it.epicode.capstone.Exceptions.NoTournamentsAvailableException;
 import it.epicode.capstone.Exceptions.NotFoundException;
 import it.epicode.capstone.Exceptions.TournamentDataException;
 import it.epicode.capstone.Models.DTO.*;
@@ -9,6 +10,7 @@ import it.epicode.capstone.Models.Enums.GameStatus;
 import it.epicode.capstone.Models.Enums.Role;
 import it.epicode.capstone.Models.Enums.TournamentLevel;
 import it.epicode.capstone.Repositories.*;
+import org.slf4j.event.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -89,8 +91,8 @@ public class TournamentService {
 
             gameRp.save(game);
         }
-
         return games;
+
     }
     public List<Game> generateQuarterFinalMatches(Tournament tournament) throws TournamentDataException {
         List<Game> games = new ArrayList<>();
@@ -177,37 +179,57 @@ public class TournamentService {
 
 
 
-    public Tournament updateLevelToJunior(String name)throws BadRequestException{
+    public void updateLevelToJunior(String name)throws BadRequestException{
         Tournament t = getByName(name);
         t.setLevel(TournamentLevel.JUNIOR);
-        return tournamentRp.save(t);
+        tournamentRp.save(t);
     }
-    public Tournament updateLevelToRisingStars(String name)throws BadRequestException{
+    public void updateLevelToRisingStars(String name)throws BadRequestException{
         Tournament t = getByName(name);
         t.setLevel(TournamentLevel.RISINGSTARS);
-        return tournamentRp.save(t);
+        tournamentRp.save(t);
     }
-    public Tournament updateLevelToElite(String name)throws BadRequestException{
+    public void updateLevelToElite(String name)throws BadRequestException{
         Tournament t = getByName(name);
         t.setLevel(TournamentLevel.ELITE);
-        return tournamentRp.save(t);
+        tournamentRp.save(t);
     }
 
-    public Tournament updateCoverUrl(Tournament tournament, String url){
+    public void uploadCoverUrl(Tournament tournament, String url){
         tournament.setCoverUrl(url);
-        return tournamentRp.save(tournament);
+        tournamentRp.save(tournament);
     }
 
-    public List<Tournament> GetByLevel(String level){
+    public List<Tournament> getByLevel(String level) throws BadRequestException {
+        TournamentLevel junior = TournamentLevel.JUNIOR;
+        TournamentLevel risingStars = TournamentLevel.RISINGSTARS;
+        TournamentLevel elite = TournamentLevel.ELITE;
+        if (!level.toUpperCase().equals(junior.name()) &&
+                !level.toUpperCase().equals(risingStars.name()) &&
+                !level.toUpperCase().equals(elite.name())) {
+
+            throw new BadRequestException("Invalid tournament level provided: " + level);
+
+        }
         return tournamentRp.findByLevel(TournamentLevel.valueOf(level));
     }
 
     public List<Tournament> getByStartDateAfter(String startDate){
-        return tournamentRp.findByStartDateAfter(LocalDate.parse(startDate));
+        List<Tournament> tournaments = tournamentRp.findByStartDateAfter(LocalDate.parse(startDate));
+        if (tournaments.isEmpty()) {
+            throw new NoTournamentsAvailableException("No tournaments available after the provided start date: " + startDate);
+        }
+
+        return tournaments;
+
     }
     public List<Tournament> findByTownAndStartDateAfter(String townName, String  startDate) throws BadRequestException {
         Place p = placeSv.getByTownName(townName);
-        return tournamentRp.findByPlaceAndStartDateAfter(p, LocalDate.parse(startDate));
+        List<Tournament> tournaments = tournamentRp.findByPlaceAndStartDateAfter(p, LocalDate.parse(startDate));
+        if (tournaments.isEmpty()) {
+            throw new NoTournamentsAvailableException("No tournaments available after the provided start date or the provided town name" );
+        }
+        return  tournaments;
     }
 
     public void deleteById(UUID id)throws BadRequestException{

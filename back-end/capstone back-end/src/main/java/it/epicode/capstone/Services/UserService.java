@@ -80,58 +80,58 @@ public class UserService {
         return u;
     }
 
-    public User updateById(UserUpdateDTO user, UUID id) throws BadRequestException, InternalServerErrorException {
+    public void updateById(UserUpdateDTO user, UUID id) throws BadRequestException, InternalServerErrorException {
         User u = getById(id);
         updateUserInformation(u, user);
-        return u;
     }
-    public User updateByUsername(UserUpdateDTO user, String username) throws BadRequestException, InternalServerErrorException {
+    public void updateByUsername(UserUpdateDTO user, String username) throws BadRequestException, InternalServerErrorException {
         User u = getByUsername(username);
         updateUserInformation(u, user);
-        return u;
     }
 
-    public User updatePasswordByUsername(String oldPassword, String newPassword, String newConfirmPassword, String username) throws UnauthorizedException, BadRequestException, InternalServerErrorException {
+    public void updatePasswordByUsername(UpdatePasswordDTO updatePasswordDTO, String username) throws UnauthorizedException, BadRequestException, InternalServerErrorException {
 
         User user = getByUsername(username);
 
-        if (encoder.matches(oldPassword, user.getPassword())) {
+        if (encoder.matches(updatePasswordDTO.oldPassword(), user.getPassword())) {
             throw new UnauthorizedException("Old passowrd isn't correct. Impossible to update");
         }
-        user.setPassword(encoder.encode(newPassword));
-        user.setConfirmPassword(encoder.encode(newConfirmPassword));
+        user.setPassword(encoder.encode(updatePasswordDTO.newPassword()));
+        user.setConfirmPassword(encoder.encode(updatePasswordDTO.newConfirmPassword()));
 
         matchPassowrd(user.getPassword(), user.getConfirmPassword());
         emailManagement(user);
-        return userRp.save(user);
+        userRp.save(user);
 
     }
 
-    public User updateUsername(UUID id, String username) throws BadRequestException {
+    public void updateUsername(UUID id, String username) throws BadRequestException {
         User u = getById(id);
         u.setUsername(username);
         List<String> usernames = userRp.getAllUsernames();
         if (usernames.contains(username)) {
             throw new BadRequestException("Username already exists, Impossible to update");
         }
-            return userRp.save(u);
+        userRp.save(u);
     }
 
-    public User updateRoleManagerByUsername(String username) throws BadRequestException {
+    public Role updateRoleManagerByUsername(String username) throws BadRequestException {
         User u = getByUsername(username);
         u.setRole(Role.MANAGER);
         if (u.getRole() == Role.MANAGER) {
             throw new BadRequestException("The role is already MANAGER");
         }
-        return userRp.save(u);
+        userRp.save(u);
+        return u.getRole();
     }
-    public User updateRoleCaptainByUsername(String username) throws BadRequestException {
+    public Role updateRoleCaptainByUsername(String username) throws BadRequestException {
         User u = getByUsername(username);
         u.setRole(Role.CAPTAIN);
         if (u.getRole() == Role.CAPTAIN) {
             throw new BadRequestException("The role is already CAPTAIN");
         }
-        return userRp.save(u);
+         userRp.save(u);
+        return u.getRole();
     }
     public void deleteById(UUID id) throws BadRequestException {
         User u = getById(id);

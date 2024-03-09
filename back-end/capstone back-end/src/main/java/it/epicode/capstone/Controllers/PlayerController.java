@@ -14,7 +14,6 @@ import it.epicode.capstone.Models.ResponsesDTO.PlayerPointRes;
 import it.epicode.capstone.Services.GameService;
 import it.epicode.capstone.Services.PlayerService;
 import it.epicode.capstone.Services.TournamentService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +26,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/player")
-@Tag(name = "Player Api")
+@Tag(name = "Player API")
 public class PlayerController {
 
     @Autowired
@@ -86,19 +85,19 @@ public class PlayerController {
     public ConfirmRes updateCredentialPlayers(@PathVariable UUID id,@RequestBody @Validated PlayerDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         playerSv.updateCredentialPlayer(id, playerDTO);
-        return new ConfirmRes("Player's credential has been update successfully", HttpStatus.ACCEPTED);
+        return new ConfirmRes("Player's credential has been update successfully", HttpStatus.CREATED);
     }
     @PatchMapping("/update/stats/{id}")
     public ConfirmRes updateStatsById(@PathVariable UUID id,@RequestBody @Validated UpdateStatsPlayerDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         playerSv.updateStatsById(id, playerDTO);
-        return new ConfirmRes("Player's stats has been update successfully", HttpStatus.ACCEPTED);
+        return new ConfirmRes("Player's stats has been update successfully", HttpStatus.CREATED);
     }
     @PatchMapping("/update/stats/{name}")
     public ConfirmRes updateStatsByName(@PathVariable String name,@RequestBody @Validated UpdateStatsPlayerDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         playerSv.updateStatsByName(name, playerDTO);
-        return new ConfirmRes("Player's stats has been update successfully", HttpStatus.ACCEPTED);
+        return new ConfirmRes("Player's stats has been update successfully", HttpStatus.CREATED);
     }
 
     @DeleteMapping("/delete/{id}")
