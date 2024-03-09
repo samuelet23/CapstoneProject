@@ -1,8 +1,11 @@
 package it.epicode.capstone.Models.Entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.Hidden;
 import it.epicode.capstone.Models.Entities.SuperClass.Person;
+import it.epicode.capstone.Models.Enums.RoleInTheGame;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,9 +25,12 @@ public class Player extends Person {
 
     private int point;
 
+    @Setter(AccessLevel.NONE)
     private char sigla;
 
     private int gamesPlayed;
+    private RoleInTheGame role = RoleInTheGame.REFEREE;
+
 
     @Transient
     @JsonIgnore
@@ -42,6 +48,8 @@ public class Player extends Person {
     public Player(String name){
         super(name);
     }
+
+
     public void setSigla(char sigla) {
         if (sigla >= 'A' && sigla <= 'E') {
             this.sigla = Character.toUpperCase(sigla);
@@ -55,10 +63,5 @@ public class Player extends Person {
         this.point += pointsToAdd;
     }
 
-    public double calculatePointsPerGameAverage() {
-        if (gamesPlayed == 0) {
-            return 0;
-        }
-        return (double) point / gamesPlayed;
-    }
+
 }

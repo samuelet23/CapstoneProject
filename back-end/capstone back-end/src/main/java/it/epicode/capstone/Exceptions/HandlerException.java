@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
+
 @RestControllerAdvice
 public class HandlerException {
 
@@ -64,15 +66,66 @@ public class HandlerException {
         return new ErrorResponse(HttpStatus.BAD_REQUEST,
                 "ERROR:", "Error in handling tournament data: " + e.getMessage());
     }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NoTournamentsAvailableException.class)
+    public ErrorResponse noTournamentAvailableHandler(NoTournamentsAvailableException e) {
+        return new ErrorResponse(HttpStatus.BAD_REQUEST,
+                "ERROR:", "no tournament available after this date: " + e.getMessage());
+    }
 
 
 
 
 
 
+    public static void noTournamentAvailableException(BindingResult bindingResult) throws NoTournamentsAvailableException {
+        if (bindingResult.hasErrors()) {
+            throw new NoTournamentsAvailableException(bindingResult.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toList()
+                    .toString());
+        }
+    }
     public static void tournamentNotReadyException(BindingResult bindingResult) throws TournamentNotReadyException {
         if (bindingResult.hasErrors()) {
             throw new TournamentNotReadyException(bindingResult.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toList()
+                    .toString());
+        }
+    }
+    public static void internalServerErrorException(BindingResult bindingResult) throws InternalServerErrorException {
+        if (bindingResult.hasErrors()) {
+            throw new InternalServerErrorException(bindingResult.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toList()
+                    .toString());
+        }
+    }
+    public static void illegalArgumentException(BindingResult bindingResult)  {
+        if (bindingResult.hasErrors()) {
+            throw new IllegalArgumentException(bindingResult.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toList()
+                    .toString());
+        }
+    }
+    public static void unathorizedException(BindingResult bindingResult) throws UnauthorizedException {
+        if (bindingResult.hasErrors()) {
+            throw new UnauthorizedException(bindingResult.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toList()
+                    .toString());
+        }
+    }
+    public static void ioException(BindingResult bindingResult) throws IOException {
+        if (bindingResult.hasErrors()) {
+            throw new IOException(bindingResult.getAllErrors()
                     .stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .toList()
@@ -100,6 +153,15 @@ public class HandlerException {
     public static void notFoundException(BindingResult bindingResult) throws NotFoundException {
         if (bindingResult.hasErrors()) {
             throw new NotFoundException(bindingResult.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toList()
+                    .toString());
+        }
+    }
+    public static void badRequestException(BindingResult bindingResult) throws BadRequestException {
+        if (bindingResult.hasErrors()) {
+            throw new BadRequestException(bindingResult.getAllErrors()
                     .stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .toList()

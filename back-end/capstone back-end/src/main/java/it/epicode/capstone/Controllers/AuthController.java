@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
-@Tag(name = "Auth")
+@Tag(name = "Auth API")
 public class AuthController {
     @Autowired
     private AuthService authService;

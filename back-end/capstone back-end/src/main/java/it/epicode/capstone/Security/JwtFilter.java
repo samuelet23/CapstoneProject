@@ -63,8 +63,15 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         return new AntPathMatcher().match("/api/auth/**", request.getServletPath())
-                || new AntPathMatcher().match("/swagger-ui/**", request.getServletPath())
+                || new AntPathMatcher().match("/api/tournament/get/**", request.getServletPath())
+                || new AntPathMatcher().match("/api/place/get/**", request.getServletPath())
+                || new AntPathMatcher().match("/api/game/get/**", request.getServletPath())
+                || new AntPathMatcher().match("/api/player/get/**", request.getServletPath())
+                || new AntPathMatcher().match("/api/referee/get/**", request.getServletPath())
+                || new AntPathMatcher().match("/api/team/get/**", request.getServletPath())
+                || new AntPathMatcher().match("/api/user/get/all", request.getServletPath())
                 || new AntPathMatcher().match("/v2/api-docs", request.getServletPath())
+                || new AntPathMatcher().match("/swagger-ui/**", request.getServletPath())
                 || new AntPathMatcher().match("/v3/api-docs", request.getServletPath())
                 || new AntPathMatcher().match("/v3/api-docs/**", request.getServletPath())
                 || new AntPathMatcher().match("/swagger-resources", request.getServletPath())
