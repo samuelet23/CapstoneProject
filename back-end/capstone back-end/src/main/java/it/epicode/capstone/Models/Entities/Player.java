@@ -29,12 +29,13 @@ public class Player extends Person {
     private char sigla;
 
     private int gamesPlayed;
-    private RoleInTheGame role = RoleInTheGame.REFEREE;
+    private RoleInTheGame role = RoleInTheGame.PLAYER;
 
 
     @Transient
     @JsonIgnore
     String teamName;
+
     public Player(String name, String surname, LocalDate dateOfBirth) {
         super(name, surname, dateOfBirth);
     }

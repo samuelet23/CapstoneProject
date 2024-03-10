@@ -1,5 +1,6 @@
 package it.epicode.capstone.Controllers.ManagerApi;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Exceptions.BadRequestException;
@@ -37,28 +38,42 @@ public class TeamController {
 
 
     @PatchMapping("/update/captain/team-name")
+    @Operation(
+            description = "Update the captain of a team.",
+            summary = "Update team captain"
+    )
     public ConfirmRes updateCaptainFromTeam(@RequestParam("team-name") String teamName, @RequestBody @Validated  PlayerDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         teamSv.updateCaptain(teamName, playerDTO.name());
         return new ConfirmRes(
-                "Captain updated successfully."+ playerDTO.name()+ "is now the captain of the team "+teamName+".",
+                "Captain updated successfully. " + playerDTO.name() + " is now the captain of the team " + teamName + ".",
                 HttpStatus.CREATED
         );
     }
 
     @DeleteMapping("/delete/{id}")
+    @Operation(
+            description = "Delete a team by its ID.",
+            summary = "Delete team by ID"
+    )
     public DeleteRes deleteById(@PathVariable UUID id)throws BadRequestException{
         teamSv.deleteById(id);
         return new DeleteRes(
-                "Team with id: "+id+" has been deleted successfully"
+                "Team with id: " + id + " has been deleted successfully"
         );
     }
+
     @DeleteMapping("/delete/{name}")
+    @Operation(
+            description = "Delete a team by its name.",
+            summary = "Delete team by name"
+    )
     public DeleteRes deleteByName(@PathVariable String name)throws BadRequestException{
         teamSv.deleteByName(name);
         return new DeleteRes(
-                "Team with name: "+name+" has been deleted successfully"
+                "Team with name: " + name + " has been deleted successfully"
         );
     }
+
 
 }

@@ -27,6 +27,7 @@ public class Tournament extends Competition {
     private TournamentLevel level;
 
     private int initialRound;
+
     public Tournament(LocalDate startDate, String coverUrl, String name, List<Referee> referees, Set<Team> teams, List<Game> games, Place place, List<Player> players) {
         super(startDate, coverUrl, name, referees, teams, games, place, players);
     }
