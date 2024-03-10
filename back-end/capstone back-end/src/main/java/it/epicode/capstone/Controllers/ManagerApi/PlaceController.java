@@ -1,6 +1,7 @@
-package it.epicode.capstone.Controllers;
+package it.epicode.capstone.Controllers.ManagerApi;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Exceptions.HandlerException;
@@ -28,7 +29,9 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/place")
-@Tag(name = "Town/Province/Region API")
+@Tag(name = "TOWN/PROVINCE/REGION API (only for Managers)")
+@PreAuthorize("hasAuthority('MANAGER')")
+@SecurityRequirement(name = "Easy3vs3Auth")
 public class PlaceController {
 
     @Autowired
@@ -37,14 +40,12 @@ public class PlaceController {
     private TownRepository townRp;
 
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public Place createPlace(@RequestBody @Validated PlaceDTO placeDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         return placeSv.save(placeDTO) ;
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updatePlaceById(@RequestBody @Validated PlaceDTO placeDTO,@PathVariable UUID id,BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         placeSv.updateById(placeDTO, id);
@@ -54,7 +55,6 @@ public class PlaceController {
          );
     }
     @PutMapping("/update/court-name")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updatePlaceByCourtName(@RequestBody PlaceDTO placeDTO, @RequestParam("court-name") String courtName,BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         placeSv.updateByCourtName(placeDTO, courtName);
@@ -64,7 +64,6 @@ public class PlaceController {
          );
     }
     @PatchMapping("/update/id/court-name")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updateCourtName(@RequestParam UUID id, @RequestBody @Validated PlaceDTO placeDTO,BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         placeSv.updateCourtName(id, placeDTO.courtName());
@@ -75,7 +74,6 @@ public class PlaceController {
     }
 
     @PatchMapping("/update/id/address")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updateAddress(@RequestParam UUID id,@RequestBody @Validated AddressDTO address, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         Address a = new Address(
@@ -92,7 +90,6 @@ public class PlaceController {
         );
     }
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public DeleteRes deletePlace (@PathVariable UUID id)throws BadRequestException{
         placeSv.delete(id);
         return new DeleteRes(

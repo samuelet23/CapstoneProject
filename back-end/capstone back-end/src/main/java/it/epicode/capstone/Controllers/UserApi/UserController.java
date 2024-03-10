@@ -1,5 +1,6 @@
-package it.epicode.capstone.Controllers;
+package it.epicode.capstone.Controllers.UserApi;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Exceptions.HandlerException;
@@ -29,7 +30,8 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/user")
-@Tag(name = "User API")
+@Tag(name = "USER API (accessible with normal authentication)")
+@SecurityRequirement(name = "Easy3vs3Auth")
 public class UserController {
 
     @Autowired

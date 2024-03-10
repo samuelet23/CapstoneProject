@@ -17,8 +17,8 @@ import java.nio.charset.Charset;
 import java.text.Normalizer;
 import java.util.List;
 
-@Component
-@Order(2)
+//@Component
+//@Order(3)
 public class TownConfig implements CommandLineRunner {
     public static final Logger logger = LoggerFactory.getLogger(TownConfig.class);
 

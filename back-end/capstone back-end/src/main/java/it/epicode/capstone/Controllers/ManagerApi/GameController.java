@@ -1,6 +1,7 @@
-package it.epicode.capstone.Controllers;
+package it.epicode.capstone.Controllers.ManagerApi;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Exceptions.HandlerException;
@@ -27,7 +28,9 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/game")
-@Tag(name = "Game API")
+@Tag(name = "GAME API (only for Managers)")
+@PreAuthorize("hasAuthority('MANAGER')")
+@SecurityRequirement(name = "Easy3vs3Auth")
 public class GameController {
 
     @Autowired
@@ -39,33 +42,28 @@ public class GameController {
 
 
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public Game createGame(@RequestBody @Validated BeforeGameDTO beforeGameDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         return gameSv.createGame(beforeGameDTO);
     }
 
     @PutMapping("/update/{id}/homePoints")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public Game updateHomePoints(@PathVariable UUID id,@RequestBody @Validated AddPointsDTO addPointsDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         return gameSv.updateHomePoints(id, addPointsDTO.pointToAdd(), addPointsDTO.siglaPlayer());
     }
     @PutMapping("/update/{id}/awayPoints")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public Game updateAwayPoints(@PathVariable UUID id, @RequestBody @Validated AddPointsDTO addPointsDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         return gameSv.updateAwayPoints(id, addPointsDTO.pointToAdd(), addPointsDTO.siglaPlayer());
     }
     @PostMapping("/finish/{id}")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public Team finishedGame(@PathVariable UUID id, @RequestBody @Validated DuringGameDTO gameDTO, BindingResult bindingResult)throws Exception{
         HandlerException.exception(bindingResult);
         return gameSv.finishedGame(id, gameDTO);
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public DeleteRes deleteById(@PathVariable UUID id)throws BadRequestException{
         gameSv.delete(id);
         return new DeleteRes("game was successfully deleted");

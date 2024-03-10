@@ -35,7 +35,7 @@ import org.springframework.core.annotation.Order;
 )
 @SecurityScheme(
         name = "Easy3vs3Auth",
-        description = "Enter the Captain or Manager passwords to attempt all endpoints",
+        description = "Here, if you are authorized, you can have the access to all endopints",
         scheme = "bearer",
         type = SecuritySchemeType.HTTP,
         bearerFormat = "JWT",

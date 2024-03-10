@@ -30,7 +30,7 @@ public class JwtTools {
     public String createToken(User u){
         long currentTimeMills = System.currentTimeMillis();
         return Jwts.builder()
-                .subject(u.getId().toString())
+                .subject(u.getUsername())
                 .issuedAt(new Date(currentTimeMills))
                 .expiration(new Date(currentTimeMills + Long.parseLong(expiration)))
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)))
@@ -49,7 +49,7 @@ public class JwtTools {
         }
     }
 
-    public UUID extractUserIdFromToken(String token)throws UnauthorizedException{
+    public UUID extractUsernameFromToken(String token)throws UnauthorizedException{
         try {
             return UUID
                     .fromString(Jwts.parser()
@@ -72,11 +72,11 @@ public class JwtTools {
             return false;
         }
         String token = req.getHeader("Authorization").split(" ")[1];
-        UUID tokenUserId = extractUserIdFromToken(token);
-        return tokenUserId.equals(userId);
+        UUID tokenUsername = extractUsernameFromToken(token);
+        return tokenUsername.equals(userId);
     }
 
-    public UUID extractUserIdFromReq() throws UnauthorizedException {
+    public UUID extractUserUsernameFromReq() throws UnauthorizedException {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         HttpServletRequest req;
         if (requestAttributes instanceof ServletRequestAttributes) {
@@ -84,6 +84,6 @@ public class JwtTools {
         } else
             throw new UnauthorizedException("Access token non valido");
         String token = req.getHeader("Authorization").split(" ")[1];
-        return extractUserIdFromToken(token);
+        return extractUsernameFromToken(token);
     }
 }

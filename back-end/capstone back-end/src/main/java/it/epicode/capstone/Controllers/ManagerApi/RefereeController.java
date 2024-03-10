@@ -1,5 +1,6 @@
-package it.epicode.capstone.Controllers;
+package it.epicode.capstone.Controllers.ManagerApi;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Exceptions.HandlerException;
@@ -20,7 +21,9 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/referee")
-@Tag(name = "Referee API")
+@Tag(name = "REFEREE API (only for managers)")
+@PreAuthorize("hasAuthority('MANAGER')")
+@SecurityRequirement(name = "Easy3vs3Auth")
 public class RefereeController {
 
     @Autowired
@@ -28,14 +31,12 @@ public class RefereeController {
 
 
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public Referee createReferee(@RequestBody @Validated RefereeDTO refereeDTO, BindingResult bindingResult) throws BadRequestException {
         HandlerException.badRequestException(bindingResult);
         return refereeSv.createReferee(refereeDTO);
     }
 
     @PutMapping("update/{id}")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes update(@PathVariable UUID id,@RequestBody @Validated RefereeDTO refereeDTO, BindingResult bindingResult )throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         refereeSv.update(id, refereeDTO);
@@ -45,7 +46,6 @@ public class RefereeController {
         );
     }
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public DeleteRes deleteById(@PathVariable UUID id)throws BadRequestException{
         refereeSv.deleteById(id);
         return new DeleteRes(
@@ -53,7 +53,6 @@ public class RefereeController {
         );
     }
     @DeleteMapping("/delete/{name}")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public DeleteRes deleteByName(String name)throws BadRequestException{
         refereeSv.deleteByName(name);
         return new DeleteRes(

@@ -1,5 +1,6 @@
-package it.epicode.capstone.Controllers;
+package it.epicode.capstone.Controllers.ManagerApi;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Exceptions.HandlerException;
@@ -26,34 +27,16 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/team")
-@Tag(name = "Team API")
+@Tag(name = "TEAM API (only for managers)")
+@PreAuthorize("hasAuthority('MANAGER')")
+@SecurityRequirement(name = "Easy3vs3Auth")
 public class TeamController {
 
     @Autowired
     private TeamService teamSv;
 
 
-
-    @PostMapping("/create")
-    @PreAuthorize("hasAuthority('CAPTAIN')")
-    public Team createTeam(@RequestBody @Validated TeamDTO teamDTO, BindingResult bindingResult ){
-        HandlerException.illegalArgumentException(bindingResult);
-        return teamSv.createTeam(teamDTO);
-    }
-    @PutMapping("/update/name/{id}")
-    @PreAuthorize("hasAuthority('CAPTAIN')")
-    public Team updateName(@PathVariable UUID id, @RequestBody @Validated TeamDTO teamDTO, BindingResult bindingResult)throws BadRequestException{
-        HandlerException.badRequestException(bindingResult);
-        return teamSv.updateName(id, teamDTO);
-    }
-    @PutMapping("/update/player/{id}")
-    @PreAuthorize("hasAuthority('CAPTAIN')")
-    public Team updatePlayer(@PathVariable UUID id, @RequestBody @Validated TeamDTO teamDTO, BindingResult bindingResult)throws BadRequestException{
-        HandlerException.badRequestException(bindingResult);
-        return teamSv.updatePlayers(id, teamDTO);
-    }
     @PatchMapping("/update/captain/team-name")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updateCaptainFromTeam(@RequestParam("team-name") String teamName, @RequestBody @Validated  PlayerDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         teamSv.updateCaptain(teamName, playerDTO.name());
@@ -64,7 +47,6 @@ public class TeamController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public DeleteRes deleteById(@PathVariable UUID id)throws BadRequestException{
         teamSv.deleteById(id);
         return new DeleteRes(
@@ -72,7 +54,6 @@ public class TeamController {
         );
     }
     @DeleteMapping("/delete/{name}")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public DeleteRes deleteByName(@PathVariable String name)throws BadRequestException{
         teamSv.deleteByName(name);
         return new DeleteRes(

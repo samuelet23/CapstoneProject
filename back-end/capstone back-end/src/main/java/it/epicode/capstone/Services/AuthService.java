@@ -5,6 +5,7 @@ import it.epicode.capstone.Exceptions.InternalServerErrorException;
 import it.epicode.capstone.Exceptions.UnauthorizedException;
 import it.epicode.capstone.Models.DTO.UserDTO;
 import it.epicode.capstone.Models.Entities.User;
+import it.epicode.capstone.Models.Enums.Role;
 import it.epicode.capstone.Models.ResponsesDTO.AccessTokenRes;
 import it.epicode.capstone.Repositories.UserRepository;
 import it.epicode.capstone.Security.JwtTools;
@@ -38,6 +39,7 @@ public class AuthService {
                 userDTO.name(),
                 userDTO.surname(),
                 LocalDate.parse(userDTO.dateOfBirth(), formatter),
+                Role.valueOf(userDTO.role()),
                 userDTO.username(),
                 userDTO.email(),
                 encoder.encode(userDTO.password()),
@@ -58,6 +60,19 @@ public class AuthService {
         throw new InternalServerErrorException("Data Integrity Violation: " + e.getMessage());
         }
     }
+    public User registerCaptain(UserDTO userDTO) throws BadRequestException, InternalServerErrorException {
+        User u =register(userDTO);
+        u.setRole(Role.CAPTAIN);
+        return u;
+    }
+    public User registerManager(UserDTO userDTO) throws BadRequestException, InternalServerErrorException {
+        User u =register(userDTO);
+        u.setRole(Role.MANAGER);
+        return u;
+    }
+
+
+
 
     public AccessTokenRes login(String username, String password) throws BadRequestException, UnauthorizedException {
         User u = userRep.findByUsername(username)
@@ -69,6 +84,7 @@ public class AuthService {
         }
         return new AccessTokenRes(jwtTools.createToken(u));
     }
+
 
 
 }

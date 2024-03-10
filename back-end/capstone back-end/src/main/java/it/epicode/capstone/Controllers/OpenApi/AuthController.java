@@ -1,6 +1,7 @@
-package it.epicode.capstone.Controllers;
+package it.epicode.capstone.Controllers.OpenApi;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.DependentSchema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Exceptions.BadRequestException;
@@ -22,32 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
-@Tag(name = "Auth API")
+@Tag(name = "AUTH API (used for endpoints related to authentication )")
 public class AuthController {
     @Autowired
     private AuthService authService;
 
     @Operation(
             description = "Register endpoint for user",
-            summary = "This is a summary for register endpoint",
-            responses = {
-                    @ApiResponse(
-                            description = "Success",
-                            responseCode = "200"
-                    ),
-                    @ApiResponse(
-                            description = "Bad Request",
-                            responseCode = "400"
-                    ),
-                    @ApiResponse(
-                            description = "Not Found",
-                            responseCode = "404"
-                    ),
-                    @ApiResponse(
-                            description = "Internal Server Error",
-                            responseCode = "500"
-                    )
-            }
+            summary = "This is a summary for register endpoint"
 
     )
     @PostMapping("/register")
@@ -59,25 +42,7 @@ public class AuthController {
 
     @Operation(
             description = "Login endpoint for user",
-            summary = "This is a summary for login endpoint",
-            responses = {
-                    @ApiResponse(
-                            description = "Success",
-                            responseCode = "200"
-                    ),
-                    @ApiResponse(
-                            description = "Bad Request",
-                            responseCode = "400"
-                    ),
-                    @ApiResponse(
-                            description = "Not Found",
-                            responseCode = "404"
-                    ),
-                    @ApiResponse(
-                            description = "Internal Server Error",
-                            responseCode = "500"
-                    )
-            }
+            summary = "This is a summary for login endpoint"
 
     )
     @PostMapping("/login")

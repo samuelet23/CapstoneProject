@@ -1,6 +1,7 @@
-package it.epicode.capstone.Controllers;
+package it.epicode.capstone.Controllers.ManagerApi;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Exceptions.HandlerException;
@@ -18,9 +19,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/generate-round")
-@Tag(name = "Generate Round API")
-@Hidden
+@Tag(name = "GENERATE ROUND API (only for managers)")
 @PreAuthorize("hasAuthority('MANAGER')")
+//@SecurityRequirement(name = "Easy3vs3Auth")
+@Hidden
 public class RoundController {
 
     @Autowired

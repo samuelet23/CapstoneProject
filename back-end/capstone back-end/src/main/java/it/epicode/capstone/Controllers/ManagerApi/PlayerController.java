@@ -1,5 +1,6 @@
-package it.epicode.capstone.Controllers;
+package it.epicode.capstone.Controllers.ManagerApi;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Exceptions.HandlerException;
@@ -27,51 +28,27 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/player")
-@Tag(name = "Player API")
+@Tag(name = "PLAYER API (only for managers)")
+@PreAuthorize("hasAuthority('MANAGER')")
+@SecurityRequirement(name = "Easy3vs3Auth")
 public class PlayerController {
 
     @Autowired
     private PlayerService playerSv;
 
-    @Autowired
-    private GameService gameSv;
-
-    private TournamentService tournamentSv;
-
-
-    @PostMapping("/create")
-    @PreAuthorize("hasAuthority('CAPTAIN')")
-    public Player createPlayer(@RequestBody @Validated PlayerDTO playerDTO){
-        return playerSv.create(playerDTO);
-    }
-
-    @PatchMapping("/update/sigla/{name}")
-    @PreAuthorize("hasAuthority('CAPTAIN')")
-    public ConfirmRes updateSigla(@PathVariable String name,@RequestBody @Validated PlayerDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
-        HandlerException.badRequestException(bindingResult);
-        playerSv.updateSigla(name, playerDTO.sigla());
-        return new ConfirmRes(
-                "Player with name"+name+" has been udated with the sigla"+ playerDTO.sigla(),
-                HttpStatus.CREATED
-                );
-    }
-
     @PatchMapping("/update/credential/{id}")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updateCredentialPlayers(@PathVariable UUID id,@RequestBody @Validated PlayerDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         playerSv.updateCredentialPlayer(id, playerDTO);
         return new ConfirmRes("Player's credential has been update successfully", HttpStatus.CREATED);
     }
     @PatchMapping("/update/stats/{id}")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updateStatsById(@PathVariable UUID id,@RequestBody @Validated UpdateStatsPlayerDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         playerSv.updateStatsById(id, playerDTO);
         return new ConfirmRes("Player's stats has been update successfully", HttpStatus.CREATED);
     }
     @PatchMapping("/update/stats/{name}")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updateStatsByName(@PathVariable String name,@RequestBody @Validated UpdateStatsPlayerDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         playerSv.updateStatsByName(name, playerDTO);
@@ -79,13 +56,11 @@ public class PlayerController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAuthority('MANAGER')")
         public DeleteRes deleteById(@PathVariable UUID id)throws BadRequestException{
         playerSv.deleteById(id);
         return new DeleteRes("Player deletion successful.");
     }
     @DeleteMapping("/delete/{name}")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public DeleteRes deleteByName(@PathVariable String name)throws BadRequestException{
         playerSv.deleteByName(name);
         return new DeleteRes("Player deletion successful.");

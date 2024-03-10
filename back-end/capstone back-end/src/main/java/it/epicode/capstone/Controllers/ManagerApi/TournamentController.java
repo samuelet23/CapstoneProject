@@ -1,8 +1,9 @@
-package it.epicode.capstone.Controllers;
+package it.epicode.capstone.Controllers.ManagerApi;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.tags.Tags;
 import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Exceptions.HandlerException;
 import it.epicode.capstone.Exceptions.TournamentDataException;
@@ -30,9 +31,9 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/tournament")
-@Tag(name = "Tournament API")
+@Tag(name = "TOURNAMENT API (only for managers)")
+@PreAuthorize("hasAuthority('MANAGER')")
 @SecurityRequirement(name = "Easy3vs3Auth") //inserire quest annotazion in tutti i controller che devono essere autenticati
-//@Hidden quest'annotazione nasconde tutto il controller, se messo su un metodo nasconderà solo il metodo
 public class TournamentController {
 
     @Autowired
@@ -43,13 +44,11 @@ public class TournamentController {
 
 
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public Tournament createTournament(@RequestBody @Validated  TournamentDTO dto)throws Exception{
         return tournamentSv.createTournament(dto);
     }
 
     @PatchMapping("/update/level/junior/tournament-name")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updateLevelToJunior(@RequestParam("tournament-name") String tournamentName, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         tournamentSv.updateLevelToJunior(tournamentName);
@@ -59,7 +58,6 @@ public class TournamentController {
         );
     }
     @PatchMapping("/update/level/rising-stars/tournament-name")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updateLevelToRisingStars(@RequestParam("tournament-name")String tournamentName, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         tournamentSv.updateLevelToRisingStars(tournamentName);
@@ -69,7 +67,6 @@ public class TournamentController {
         );
     }
     @PatchMapping("/update/level/elite/tournament-name")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updateLevelToElite(@RequestParam("tournament-name")String tournamentName, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         tournamentSv.updateLevelToElite(tournamentName);
@@ -79,7 +76,6 @@ public class TournamentController {
         );
     }
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public DeleteRes deleteTournamentById(@PathVariable UUID id)throws BadRequestException{
         tournamentSv.deleteById(id);
         return new DeleteRes(
@@ -87,7 +83,6 @@ public class TournamentController {
         );
     }
     @DeleteMapping("/delete/{name}")
-    @PreAuthorize("hasAuthority('MANAGER')")
     public DeleteRes deleteTournamentByName(@PathVariable String name)throws BadRequestException{
         tournamentSv.deleteByName(name);
         return new DeleteRes(

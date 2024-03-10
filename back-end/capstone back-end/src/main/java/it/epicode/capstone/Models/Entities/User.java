@@ -42,18 +42,23 @@ public class User extends Person implements UserDetails {
     private Timestamp createdAt;
 
     @Enumerated(EnumType.STRING)
-    private Role role = Role.USER;
+    private Role role;
 
-    public User(String name, String surname, LocalDate dateOfBirth, String username, String email, String password, String confirmPassword) throws BadRequestException {
+    public User(String name, String surname, LocalDate dateOfBirth,Role role, String username, String email, String password, String confirmPassword) throws BadRequestException {
         super(name, surname, dateOfBirth);
         this.username = username;
         this.email = email;
+        this.role = role;
         this.password = password;
         this.confirmPassword = confirmPassword;
         createdAt = Timestamp.valueOf(LocalDateTime.now());
     }
 
-
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
 
     @Override
     @JsonIgnore

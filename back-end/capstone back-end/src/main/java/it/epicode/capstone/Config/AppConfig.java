@@ -2,7 +2,11 @@ package it.epicode.capstone.Config;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import it.epicode.capstone.Models.ResponsesDTO.AccessTokenRes;
+import it.epicode.capstone.Services.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -15,6 +19,9 @@ import java.util.Properties;
 @Configuration
 @PropertySource("application.properties")
 public class AppConfig {
+
+
+
 
     @Bean
     public PasswordEncoder encoder(){

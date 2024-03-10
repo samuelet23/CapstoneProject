@@ -15,9 +15,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 @Component
-@Order(1)
+@Order(2)
 public class ProvinceConfig implements CommandLineRunner {
 
     public static final Logger logger = LoggerFactory.getLogger(ProvinceConfig.class);
@@ -35,8 +36,8 @@ public class ProvinceConfig implements CommandLineRunner {
                 String[] row = rows[i].split(";");
                 if (row[0].equals("Roma")) row[0] = "RM";
 
-                Province existingProvince = provinceRp.findBySigla(row[0]).orElseThrow(() -> new BadRequestException("Province with sigla"+row[0]+" Not Found"));
-                if (existingProvince != null) {
+                Optional<Province> existingProvince = provinceRp.findBySigla(row[0]);
+                if (existingProvince.isPresent()) {
                     return;
                 }
 
