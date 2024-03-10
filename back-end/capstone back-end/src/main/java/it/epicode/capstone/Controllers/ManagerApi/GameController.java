@@ -1,6 +1,7 @@
 package it.epicode.capstone.Controllers.ManagerApi;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Exceptions.BadRequestException;
@@ -42,30 +43,53 @@ public class GameController {
 
 
     @PostMapping("/create")
+    @Operation(
+            description = "Create a new game.",
+            summary = "Create Game"
+    )
     public Game createGame(@RequestBody @Validated BeforeGameDTO beforeGameDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         return gameSv.createGame(beforeGameDTO);
     }
 
     @PutMapping("/update/{id}/homePoints")
+    @Operation(
+            description = "Update home points of a game.",
+            summary = "Update Home Points"
+    )
     public Game updateHomePoints(@PathVariable UUID id,@RequestBody @Validated AddPointsDTO addPointsDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         return gameSv.updateHomePoints(id, addPointsDTO.pointToAdd(), addPointsDTO.siglaPlayer());
     }
+
     @PutMapping("/update/{id}/awayPoints")
+    @Operation(
+            description = "Update away points of a game.",
+            summary = "Update Away Points"
+    )
     public Game updateAwayPoints(@PathVariable UUID id, @RequestBody @Validated AddPointsDTO addPointsDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         return gameSv.updateAwayPoints(id, addPointsDTO.pointToAdd(), addPointsDTO.siglaPlayer());
     }
+
     @PostMapping("/finish/{id}")
+    @Operation(
+            description = "Finish a game.",
+            summary = "Finish Game"
+    )
     public Team finishedGame(@PathVariable UUID id, @RequestBody @Validated DuringGameDTO gameDTO, BindingResult bindingResult)throws Exception{
         HandlerException.exception(bindingResult);
         return gameSv.finishedGame(id, gameDTO);
     }
 
     @DeleteMapping("/delete/{id}")
+    @Operation(
+            description = "Delete a game by ID.",
+            summary = "Delete Game by ID"
+    )
     public DeleteRes deleteById(@PathVariable UUID id)throws BadRequestException{
         gameSv.delete(id);
-        return new DeleteRes("game was successfully deleted");
+        return new DeleteRes("Game was successfully deleted");
     }
+
 }

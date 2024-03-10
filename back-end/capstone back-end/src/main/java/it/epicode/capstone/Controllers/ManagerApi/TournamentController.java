@@ -1,6 +1,7 @@
 package it.epicode.capstone.Controllers.ManagerApi;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
@@ -44,49 +45,77 @@ public class TournamentController {
 
 
     @PostMapping("/create")
+    @Operation(
+            description = "Create a new tournament.",
+            summary = "Create tournament"
+    )
     public Tournament createTournament(@RequestBody @Validated  TournamentDTO dto)throws Exception{
         return tournamentSv.createTournament(dto);
     }
 
     @PatchMapping("/update/level/junior/tournament-name")
+    @Operation(
+            description = "Update the level of a tournament to Junior.",
+            summary = "Update tournament level to Junior"
+    )
     public ConfirmRes updateLevelToJunior(@RequestParam("tournament-name") String tournamentName, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         tournamentSv.updateLevelToJunior(tournamentName);
         return new ConfirmRes(
                 "Tournament Level has been updated to JUNIOR",
-                    HttpStatus.CREATED
+                HttpStatus.CREATED
         );
     }
+
     @PatchMapping("/update/level/rising-stars/tournament-name")
+    @Operation(
+            description = "Update the level of a tournament to Rising Stars.",
+            summary = "Update tournament level to Rising Stars"
+    )
     public ConfirmRes updateLevelToRisingStars(@RequestParam("tournament-name")String tournamentName, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         tournamentSv.updateLevelToRisingStars(tournamentName);
         return new ConfirmRes(
                 "Tournament Level has been updated to RISING STARS",
-                    HttpStatus.CREATED
+                HttpStatus.CREATED
         );
     }
+
     @PatchMapping("/update/level/elite/tournament-name")
+    @Operation(
+            description = "Update the level of a tournament to Elite.",
+            summary = "Update tournament level to Elite"
+    )
     public ConfirmRes updateLevelToElite(@RequestParam("tournament-name")String tournamentName, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         tournamentSv.updateLevelToElite(tournamentName);
         return new ConfirmRes(
                 "Tournament Level has been updated to ELITE",
-                    HttpStatus.CREATED
+                HttpStatus.CREATED
         );
     }
+
     @DeleteMapping("/delete/{id}")
+    @Operation(
+            description = "Delete a tournament by its ID.",
+            summary = "Delete tournament by ID"
+    )
     public DeleteRes deleteTournamentById(@PathVariable UUID id)throws BadRequestException{
         tournamentSv.deleteById(id);
         return new DeleteRes(
-                "tournament with id "+id+ " has been deleted successfully"
+                "Tournament with ID "+id+ " has been deleted successfully"
         );
     }
+
     @DeleteMapping("/delete/{name}")
+    @Operation(
+            description = "Delete a tournament by its name.",
+            summary = "Delete tournament by name"
+    )
     public DeleteRes deleteTournamentByName(@PathVariable String name)throws BadRequestException{
         tournamentSv.deleteByName(name);
         return new DeleteRes(
-                "tournament with name "+name+ " has been deleted successfully"
+                "Tournament with name "+name+ " has been deleted successfully"
         );
     }
 

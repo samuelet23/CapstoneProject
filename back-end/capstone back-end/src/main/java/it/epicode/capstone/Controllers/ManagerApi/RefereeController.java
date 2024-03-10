@@ -1,5 +1,6 @@
 package it.epicode.capstone.Controllers.ManagerApi;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Exceptions.BadRequestException;
@@ -31,12 +32,20 @@ public class RefereeController {
 
 
     @PostMapping("/create")
+    @Operation(
+            description = "Create a new referee.",
+            summary = "Create Referee"
+    )
     public Referee createReferee(@RequestBody @Validated RefereeDTO refereeDTO, BindingResult bindingResult) throws BadRequestException {
         HandlerException.badRequestException(bindingResult);
         return refereeSv.createReferee(refereeDTO);
     }
 
     @PutMapping("update/{id}")
+    @Operation(
+            description = "Update referee information.",
+            summary = "Update Referee"
+    )
     public ConfirmRes update(@PathVariable UUID id,@RequestBody @Validated RefereeDTO refereeDTO, BindingResult bindingResult )throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         refereeSv.update(id, refereeDTO);
@@ -45,18 +54,29 @@ public class RefereeController {
                 HttpStatus.CREATED
         );
     }
+
     @DeleteMapping("/delete/{id}")
+    @Operation(
+            description = "Delete a referee by ID.",
+            summary = "Delete Referee by ID"
+    )
     public DeleteRes deleteById(@PathVariable UUID id)throws BadRequestException{
         refereeSv.deleteById(id);
         return new DeleteRes(
                 "Referee has been deleted successfully"
         );
     }
+
     @DeleteMapping("/delete/{name}")
+    @Operation(
+            description = "Delete a referee by name.",
+            summary = "Delete Referee by Name"
+    )
     public DeleteRes deleteByName(String name)throws BadRequestException{
         refereeSv.deleteByName(name);
         return new DeleteRes(
                 "Referee has been deleted successfully"
         );
     }
+
 }

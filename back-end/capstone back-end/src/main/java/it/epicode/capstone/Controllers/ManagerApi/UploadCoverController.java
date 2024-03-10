@@ -1,6 +1,7 @@
 package it.epicode.capstone.Controllers.ManagerApi;
 
 import com.cloudinary.Cloudinary;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Exceptions.BadRequestException;
@@ -35,15 +36,20 @@ public class UploadCoverController {
 
 
     @PatchMapping("/cover-tournament/{tournament-name}")
-    public UploadConfirm uploadCoverTournament(@RequestParam("file") MultipartFile file,@PathVariable("tournament-name") String tournamentName, BindingResult bindingResult) throws IOException, BadRequestException {
+    @Operation(
+            description = "Upload a cover image for a tournament.",
+            summary = "Upload tournament cover image"
+    )
+    public UploadConfirm uploadCoverTournament(@RequestParam("file") MultipartFile file, @PathVariable("tournament-name") String tournamentName, BindingResult bindingResult) throws IOException, BadRequestException {
         HandlerException.ioException(bindingResult);
         HandlerException.badRequestException(bindingResult);
         Tournament t = tournamentSv.getByName(tournamentName);
         String url = (String) cloudinary.uploader().upload(file.getBytes(), new HashMap<>()).get("url");
-        tournamentSv.uploadCoverUrl(t,url);
+        tournamentSv.uploadCoverUrl(t, url);
         return new UploadConfirm(
-                "Cover for "+tournamentName+" uploaded successfully",
+                "Cover for " + tournamentName + " uploaded successfully",
                 url
         );
     }
+
 }
