@@ -28,8 +28,8 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
-@Tag(name = "CAPTAIN ROLE API")
-@PreAuthorize("hasAuthority('CAPTAIN')")
+@Tag(name = "CAPTAIN ROLE API (only  for Captains and Managers)")
+@PreAuthorize("hasAnyAuthority('CAPTAIN,MANAGER')")
 @SecurityRequirement(name = "Easy3vs3Auth")
 public class CaptainController {
     @Autowired
