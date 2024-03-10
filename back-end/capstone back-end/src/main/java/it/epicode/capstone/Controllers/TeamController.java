@@ -32,34 +32,7 @@ public class TeamController {
     @Autowired
     private TeamService teamSv;
 
-    @GetMapping("/get/all")
-    public Page<Team> getAllTeam(Pageable pageable){
-        return teamSv.getAll(pageable);
-    }
-    @GetMapping("/get/all/tournament-name")
-    public List<Team> getAllByTournamentName(@RequestParam("tournament-name") String tournamentName){
-        return teamSv.getAllByTournamentName(tournamentName);
-    }
-    @GetMapping("/get/all/without-captain")
-    public List<Team> getAllTeamWithoutCaptain() throws NotFoundException {
-        List<Team> teams = teamSv.getAllTeamWithoutCaptain();
-        if (teams.isEmpty()) {
-            throw new NotFoundException( "No teams without a captain found." );
-        }
-        return teams;
-    }
-    @GetMapping("/get/{id}")
-    public Team getTeamById(@PathVariable UUID id)throws BadRequestException {
-        return teamSv.getById(id);
-    }
-    @GetMapping("/get/{name}")
-    public Team getTeamByName(@PathVariable String name)throws BadRequestException {
-        return teamSv.getByName(name);
-    }
-    @GetMapping("/get/player-name")
-    public Team getTeamByPlayerName(@RequestParam("player-name") String playerName)throws BadRequestException{
-        return teamSv.getByPlayerName(playerName);
-    }
+
 
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('CAPTAIN')")

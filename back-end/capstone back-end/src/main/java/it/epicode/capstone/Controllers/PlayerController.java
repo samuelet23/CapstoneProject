@@ -38,46 +38,7 @@ public class PlayerController {
 
     private TournamentService tournamentSv;
 
-    @GetMapping("/get/all")
-    public Page<Player> getAllPlayer(Pageable pageable) {
-        return playerSv.findAll(pageable);
-    }
 
-    @GetMapping("/get/all/team-name")
-    public Page<Player> getAllFromTeamName(@RequestParam("team-name") String teamName, Pageable pageable) {
-        return playerSv.findAllByTeamName(teamName, pageable);
-    }
-    @GetMapping("/get/all/tournament-name")
-    public Page<Player> getAllByTournamentName(@RequestParam("tournament-name") String tournamentName, Pageable pageable) {
-        return playerSv.findAllByTournamentName(tournamentName, pageable);
-    }
-
-    @GetMapping("/get/name-player/averagePoints")
-    public double averagePointPerGame(@RequestParam("name-player") String namePlayer) throws BadRequestException {
-        Player p = playerSv.getByName(namePlayer);
-        return gameSv.averagePointPerGame(p);
-    }
-    @GetMapping("/get/{id}")
-    public Player getById(@PathVariable UUID id)throws BadRequestException{
-        return playerSv.getById(id);
-    }
-    @GetMapping("/get/name")
-    public Player getByName(@RequestParam String name)throws BadRequestException{
-        return playerSv.getByName(name);
-    }
-    @GetMapping("/get/{id}/points")
-    public ConfirmPlayerPoints getPointsByPlayerId(@PathVariable UUID id) {
-         int points = playerSv.getPointsByPlayerId(id);
-         return new ConfirmPlayerPoints("Player points have been successfully retrieved.",points);
-    }
-    @GetMapping("/get/point-player/tournament-name")
-    public PlayerPointRes getPlayersAndPointsFromTournament(@RequestParam String tournamentName)throws BadRequestException{
-        Tournament tournament = tournamentSv.getByName(tournamentName);
-        return new PlayerPointRes(
-                "Player points have been successfully retrieved.",
-                playerSv.getPlayersWithNameAndPointsByTournament(tournament)
-        );
-    }
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('CAPTAIN')")
     public Player createPlayer(@RequestBody @Validated PlayerDTO playerDTO){

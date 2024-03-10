@@ -1,5 +1,6 @@
 package it.epicode.capstone.Controllers;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Exceptions.HandlerException;
@@ -36,19 +37,6 @@ public class GameController {
     @Autowired
     private TournamentService tournamentSv;
 
-    @GetMapping("/get/all")
-    public Page<Game> getGameAll(Pageable pageable){
-        return gameSv.getAll(pageable);
-    }
-    @GetMapping("/get/all/tournament/{name}")
-    public List<Game> getGameAllByTournament(@PathVariable String name)throws BadRequestException{
-        Tournament tournament = tournamentSv.getByName(name);
-        return gameSv.getAllByTournament(tournament);
-    }
-    @GetMapping("/get/{id}")
-    public Game getGameById(@PathVariable UUID id)throws BadRequestException {
-        return gameSv.getById(id);
-    }
 
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('MANAGER')")

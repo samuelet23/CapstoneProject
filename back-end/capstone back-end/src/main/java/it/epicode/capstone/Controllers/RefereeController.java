@@ -26,22 +26,7 @@ public class RefereeController {
     @Autowired
     private RefereeService refereeSv;
 
-    @GetMapping("/get/all")
-    public List<Referee> getAllReferee(){
-        return refereeSv.getAll();
-    }
-    @GetMapping("/get/{id}")
-    public Referee getById(@PathVariable UUID id)throws BadRequestException {
-        return refereeSv.getById(id);
-    }
-    @GetMapping("/get/{name}")
-    public Referee getByName(@PathVariable String name)throws BadRequestException {
-        return refereeSv.getByName(name);
-    }
-    @GetMapping("/get/all/tournament-name")
-    public List<Referee> getAllFromTournamentName(@RequestParam("tournament-name") String name){
-        return refereeSv.getAllRefereeFromTournament(name);
-    }
+
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('MANAGER')")
     public Referee createReferee(@RequestBody @Validated RefereeDTO refereeDTO, BindingResult bindingResult) throws BadRequestException {

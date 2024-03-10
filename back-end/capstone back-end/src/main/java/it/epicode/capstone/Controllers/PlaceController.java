@@ -1,5 +1,6 @@
 package it.epicode.capstone.Controllers;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Exceptions.HandlerException;
@@ -34,35 +35,6 @@ public class PlaceController {
     private PlaceService placeSv;
 
     private TownRepository townRp;
-
-    @GetMapping("/get/all")
-    public Page<Place> getAllPlace(Pageable pageable){
-        return placeSv.getAll(pageable);
-    }
-    @GetMapping("/get/all/town")
-    public List<Town> getAllTown(){
-        return placeSv.getAllTown();
-    }
-    @GetMapping("/get/all/province")
-    public List<Province> getAllProvince(){
-        return placeSv.getAllProvince();
-    }
-    @GetMapping("/get/all/region")
-    public List<String> getAllRegione(){
-        return placeSv.getAllRegion();
-    }
-    @GetMapping("/get/{id}")
-    public Place getPlaceById(@PathVariable UUID id)throws BadRequestException{
-        return placeSv.getById(id);
-    }
-    @GetMapping("/get/court-name")
-    public Place getPlaceByCourtName(@RequestParam("court-name") String courtName)throws BadRequestException{
-        return placeSv.getByCourtName(courtName);
-    }
-    @GetMapping("/get/town-name")
-    public Place getTownName(@RequestParam("town-name") String townName)throws BadRequestException{
-        return placeSv.getByTownName(townName);
-    }
 
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('MANAGER')")

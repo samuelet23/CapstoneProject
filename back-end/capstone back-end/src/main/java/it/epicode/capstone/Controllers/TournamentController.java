@@ -41,46 +41,6 @@ public class TournamentController {
     @Autowired
     private TournamentService tournamentSv;
 
-    @GetMapping("/get/all")
-    public Page<Tournament> getAllTournament(Pageable pageable){
-        return tournamentSv.getAll(pageable);
-    }
-    @GetMapping("/get/all/place-id")
-    public Page<Competition> getAllTournamentByPlaceId(@RequestParam("place-id") UUID id, Pageable pageable){
-        return placeSv.getAllTournamentsByPlaceId(id, pageable);
-    }
-    @GetMapping("/get/all/auto-complete/court-name")
-    public Page<Competition> getAllTournamentByCourtName(@RequestParam("court-name") String courtName, Pageable pageable){
-        return placeSv.findTournamentsByKeywordInCourtName(courtName, pageable);
-    }
-    @GetMapping("/get/all/auto-complete/town-name")
-    public Page<Competition> getAllTournamentByTownName(@RequestParam("town-name") String townName, Pageable pageable){
-        return placeSv.findTournamentsByKeywordInTownName(townName, pageable);
-    }
-    @GetMapping("/get/all/auto-complete/region-name")
-    public Page<Competition> getAllTournamentByRegion(@RequestParam("region-name") String region, Pageable pageable){
-        return placeSv.findTournamentsByKeywordInRegion(region, pageable);
-    }
-    @GetMapping("/get/all/tournament-level")
-    public List<Tournament> getAllTournamentByLevel(@RequestParam("tournament-level") String level) throws BadRequestException {
-        return tournamentSv.getByLevel(level);
-    }
-    @GetMapping("/get/all/after-starter-date")
-    public List<Tournament> getAllTournamentAfterStarDate(@RequestParam("after-starter-date") String startDate) {
-        return tournamentSv.getByStartDateAfter(startDate);
-    }
-    @GetMapping("/get/all/after-starter-date/town-name")
-    public List<Tournament> getAllTournamentAfterStarDateAndTown(@RequestParam("town-name") String townName, @RequestParam("after-starter-date")String startDate) throws BadRequestException {
-        return tournamentSv.findByTownAndStartDateAfter(townName,startDate);
-    }
-    @GetMapping("/get/{id}")
-    public Tournament getTournamentById(@PathVariable UUID id)throws BadRequestException {
-        return tournamentSv.getById(id);
-    }
-    @GetMapping("/get/{tournament-name}")
-    public Tournament getTournamentByName(@PathVariable("tournament-name") String name)throws BadRequestException {
-        return tournamentSv.getByName(name);
-    }
 
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('MANAGER')")

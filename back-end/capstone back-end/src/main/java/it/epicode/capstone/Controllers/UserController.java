@@ -35,19 +35,7 @@ public class UserController {
     @Autowired
     private UserService userSv;
 
-    @GetMapping("/get/all")
-    @PreAuthorize("hasAuthority('MANAGER')")
-    public Page<User> getAll(Pageable pageable){
-        return userSv.getAll(pageable);
-    }
-    @GetMapping("/get/{id}")
-    public User getUserById(@PathVariable UUID id)throws BadRequestException {
-        return userSv.getById(id);
-    }
-    @GetMapping("/get/username")
-    public User getByUsername(@PathVariable String username)throws BadRequestException {
-        return userSv.getByUsername(username);
-    }
+
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('USER,ADMIN')")
     public User createUser(@RequestBody @Validated UserDTO userDTO, BindingResult bindingResult) throws BadRequestException, InternalServerErrorException {
