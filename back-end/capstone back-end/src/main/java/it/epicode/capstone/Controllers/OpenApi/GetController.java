@@ -159,7 +159,7 @@ public class GetController {
         return playerSv.findAllByTournamentName(tournamentName, pageable);
     }
 
-    @GetMapping("/player/get/name-player/averagePoints")
+    @GetMapping("/player/get/averagePoints/name-player")
     @Operation(
             description = "Retrieve the average points per game for a player.",
             summary = "Get average points per game by player name"
@@ -221,7 +221,7 @@ public class GetController {
         return refereeSv.getAll();
     }
 
-    @GetMapping("/referee/get/{id}")
+    @GetMapping("/referee/get/byId/{id}")
     @Operation(
             description = "Retrieve a referee by their unique identifier.",
             summary = "Get a referee by ID"
@@ -230,7 +230,7 @@ public class GetController {
         return refereeSv.getById(id);
     }
 
-    @GetMapping("/referee/get/{name}")
+    @GetMapping("/referee/get/byName/{name}")
     @Operation(
             description = "Retrieve a referee by their name.",
             summary = "Get a referee by name"
@@ -282,7 +282,7 @@ public class GetController {
         return teams;
     }
 
-    @GetMapping("/team/get/{id}")
+    @GetMapping("/team/get/byId/{id}")
     @Operation(
             description = "Retrieve a team by its unique identifier.",
             summary = "Get a team by ID"
@@ -291,7 +291,7 @@ public class GetController {
         return teamSv.getById(id);
     }
 
-    @GetMapping("/team/get/{name}")
+    @GetMapping("/team/get/byName/{name}")
     @Operation(
             description = "Retrieve a team by its name.",
             summary = "Get a team by name"
@@ -381,10 +381,10 @@ public class GetController {
             summary = "Get tournaments starting after a given date in a specific town"
     )
     public List<Tournament> getAllTournamentAfterStarDateAndTown(@RequestParam("town-name") String townName, @RequestParam("after-starter-date")String startDate) throws BadRequestException {
-        return tournamentSv.findByTownAndStartDateAfter(townName,startDate);
+        return tournamentSv.findByPlaceAndStartDateAfter(townName,startDate);
     }
 
-    @GetMapping("/tournament/get/{id}")
+    @GetMapping("/tournament/get/byId/{id}")
     @Operation(
             description = "Retrieve a tournament by its unique identifier.",
             summary = "Get a tournament by ID"
@@ -393,7 +393,7 @@ public class GetController {
         return tournamentSv.getById(id);
     }
 
-    @GetMapping("/tournament/get/{tournament-name}")
+    @GetMapping("/tournament/get/byName/{tournament-name}")
     @Operation(
             description = "Retrieve a tournament by its name.",
             summary = "Get a tournament by name"
@@ -406,7 +406,6 @@ public class GetController {
     // ****************** USER CONTROLLER ********************
 
     @GetMapping("/user/get/all")
-    @PreAuthorize("hasAuthority('MANAGER')")
     @Operation(
             description = "Retrieve all users with pagination support.",
             summary = "Get all users"
@@ -415,7 +414,8 @@ public class GetController {
         return userSv.getAll(pageable);
     }
 
-    @GetMapping("/user/get/{id}")
+    @GetMapping("/user/get/byId/{id}")
+    @PreAuthorize("hasAuthority('MANAGER')")
     @Operation(
             description = "Retrieve a user by their unique identifier.",
             summary = "Get a user by ID"
@@ -424,12 +424,13 @@ public class GetController {
         return userSv.getById(id);
     }
 
-    @GetMapping("/user/get/username")
+    @GetMapping("/user/get/byUsername/{username}")
+    @PreAuthorize("hasAuthority('MANAGER')")
     @Operation(
             description = "Retrieve a user by their username.",
             summary = "Get a user by username"
     )
-    public User getByUsername(@PathVariable String username)throws BadRequestException {
+    public User getByUsername(@PathVariable  String username)throws BadRequestException {
         return userSv.getByUsername(username);
     }
 

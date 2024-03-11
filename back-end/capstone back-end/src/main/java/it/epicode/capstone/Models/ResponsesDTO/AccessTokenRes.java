@@ -8,6 +8,6 @@ import lombok.Data;
 @AllArgsConstructor
 @Tag(name = "Access Token Response")
 public class AccessTokenRes {
-
     private String accessToken;
+    private String role;
 }

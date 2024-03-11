@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -202,21 +203,22 @@ public class TournamentService {
     }
 
     public List<Tournament> getByLevel(String level) throws BadRequestException {
-        TournamentLevel junior = TournamentLevel.JUNIOR;
-        TournamentLevel risingStars = TournamentLevel.RISINGSTARS;
-        TournamentLevel elite = TournamentLevel.ELITE;
-        if (!level.toUpperCase().equals(junior.name()) &&
-                !level.toUpperCase().equals(risingStars.name()) &&
-                !level.toUpperCase().equals(elite.name())) {
-
+        TournamentLevel tournamentLevel = null;
+        try {
+            String levelWithoutSpaces = level.replaceAll("\\s", "");
+            levelWithoutSpaces = levelWithoutSpaces.toUpperCase();
+            tournamentLevel = TournamentLevel.valueOf(levelWithoutSpaces);
+        } catch (IllegalArgumentException ex) {
             throw new BadRequestException("Invalid tournament level provided: " + level);
-
         }
-        return tournamentRp.findByLevel(TournamentLevel.valueOf(level));
+
+        return tournamentRp.findByLevel(tournamentLevel);
     }
 
+
     public List<Tournament> getByStartDateAfter(String startDate){
-        List<Tournament> tournaments = tournamentRp.findByStartDateAfter(LocalDate.parse(startDate));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        List<Tournament> tournaments = tournamentRp.findByStartDateAfter(LocalDate.parse(startDate, formatter));
         if (tournaments.isEmpty()) {
             throw new NoTournamentsAvailableException("No tournaments available after the provided start date: " + startDate);
         }
@@ -224,7 +226,7 @@ public class TournamentService {
         return tournaments;
 
     }
-    public List<Tournament> findByTownAndStartDateAfter(String townName, String  startDate) throws BadRequestException {
+    public List<Tournament> findByPlaceAndStartDateAfter(String townName, String  startDate) throws BadRequestException {
         Place p = placeSv.getByTownName(townName);
         List<Tournament> tournaments = tournamentRp.findByPlaceAndStartDateAfter(p, LocalDate.parse(startDate));
         if (tournaments.isEmpty()) {

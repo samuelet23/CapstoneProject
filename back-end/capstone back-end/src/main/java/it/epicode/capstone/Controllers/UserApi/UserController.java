@@ -41,7 +41,7 @@ public class UserController {
 
 
     @PostMapping("/create")
-    @PreAuthorize("hasAnyAuthority('USER,ADMIN')")
+    @PreAuthorize("hasAuthority('MANAGER')")
     @Operation(
             description = "Create a new user.",
             summary = "Create user"
@@ -53,7 +53,7 @@ public class UserController {
     }
 
     @PutMapping("update/{id}")
-    @PreAuthorize("hasAnyAuthority('USER,ADMIN')")
+    @PreAuthorize("hasAnyAuthority('USER,MANAGER')")
     @Operation(
             description = "Update a user by their unique identifier.",
             summary = "Update user by ID"
@@ -70,7 +70,7 @@ public class UserController {
     }
 
     @PutMapping("update/{username}")
-    @PreAuthorize("hasAnyAuthority('USER,ADMIN')")
+    @PreAuthorize("hasAnyAuthority('USER,MANAGER')")
     @Operation(
             description = "Update a user by their username.",
             summary = "Update user by username"
@@ -87,7 +87,7 @@ public class UserController {
     }
 
     @PatchMapping("update/password/{username}")
-    @PreAuthorize("hasAnyAuthority('USER,ADMIN')")
+    @PreAuthorize("hasAnyAuthority('USER,MANAGER')")
     @Operation(
             description = "Update a user's password by their username.",
             summary = "Update user's password by username"
@@ -105,7 +105,7 @@ public class UserController {
     }
 
     @PatchMapping("update/username/{id}")
-    @PreAuthorize("hasAnyAuthority('USER,ADMIN')")
+    @PreAuthorize("hasAnyAuthority('USER,MANAGER')")
     @Operation(
             description = "Update a user's username by their unique identifier.",
             summary = "Update user's username by ID"

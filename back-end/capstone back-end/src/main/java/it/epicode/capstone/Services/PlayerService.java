@@ -43,7 +43,7 @@ public class PlayerService {
     }
     public Player getByName(String name)throws BadRequestException{
         return playerRp.findByName(name).orElseThrow(
-                () -> new BadRequestException("Player with id "+name+" Not Found" )
+                () -> new BadRequestException("Player with name "+name+" Not Found" )
         );
     }
     public Integer getPointsByPlayerId(UUID id){

@@ -60,15 +60,13 @@ public class AuthService {
         throw new InternalServerErrorException("Data Integrity Violation: " + e.getMessage());
         }
     }
-    public User registerCaptain(UserDTO userDTO) throws BadRequestException, InternalServerErrorException {
+    public void registerCaptain(UserDTO userDTO) throws BadRequestException, InternalServerErrorException {
         User u =register(userDTO);
         u.setRole(Role.CAPTAIN);
-        return u;
     }
-    public User registerManager(UserDTO userDTO) throws BadRequestException, InternalServerErrorException {
+    public void registerManager(UserDTO userDTO) throws BadRequestException, InternalServerErrorException {
         User u =register(userDTO);
         u.setRole(Role.MANAGER);
-        return u;
     }
 
 
@@ -82,7 +80,7 @@ public class AuthService {
         if (!encoder.matches(password, u.getPassword())) {
             throw new UnauthorizedException("Incorrect email/password");
         }
-        return new AccessTokenRes(jwtTools.createToken(u));
+        return new AccessTokenRes(jwtTools.createToken(u), u.getRole().toString());
     }
 
 
