@@ -26,7 +26,7 @@ public class Player extends Person {
     private int point;
 
     @Setter(AccessLevel.NONE)
-    private char sigla;
+    private String sigla;
 
     private int gamesPlayed;
     private RoleInTheGame role = RoleInTheGame.PLAYER;
@@ -51,13 +51,14 @@ public class Player extends Person {
     }
 
 
-    public void setSigla(char sigla) {
-        if (sigla >= 'A' && sigla <= 'E') {
-            this.sigla = Character.toUpperCase(sigla);
+    public void setSigla(String sigla) {
+        if (sigla.length() == 1 && sigla.matches("[A-Ea-e]")) {
+            this.sigla = String.valueOf(Character.toUpperCase(sigla.charAt(0)));
         } else {
-            throw new IllegalArgumentException("The sigla must be containing between A and E.");
+            throw new IllegalArgumentException("The sigla must be a single character between A and E.");
         }
     }
+
 
 
     public void addPoints(int pointsToAdd) {

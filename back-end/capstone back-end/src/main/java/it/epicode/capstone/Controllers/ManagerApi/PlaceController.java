@@ -31,8 +31,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/place")
 @Tag(name = "TOWN/PROVINCE/REGION API (only for Managers)")
-@PreAuthorize("hasAuthority('MANAGER')")
 @SecurityRequirement(name = "Easy3vs3Auth")
+@PreAuthorize("hasAuthority('MANAGER')")
 public class PlaceController {
 
     @Autowired

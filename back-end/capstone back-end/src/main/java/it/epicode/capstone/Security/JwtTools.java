@@ -27,63 +27,85 @@ public class JwtTools {
     @Getter
     private String expiration;
 
-    public String createToken(User u){
-        long currentTimeMills = System.currentTimeMillis();
+
+    public String createToken(User user) {
+        long currentTimeMillis = System.currentTimeMillis();
         return Jwts.builder()
-                .subject(u.getUsername())
-                .issuedAt(new Date(currentTimeMills))
-                .expiration(new Date(currentTimeMills + Long.parseLong(expiration)))
+                .subject(user.getUsername())
+                .issuedAt(new Date(currentTimeMillis))
+                .expiration(new Date(currentTimeMillis + Long.parseLong(expiration)))
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)))
                 .compact();
     }
 
-    public void validateToken(String token) throws UnauthorizedException {
+    public void validationToken(String token) throws UnauthorizedException {
         try {
-            Jwts
-                .parser()
-                .verifyWith(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)))
+            Jwts.parser()
+                    .verifyWith(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)))
                     .build()
                     .parse(token);
-        }catch (Exception e){
-            throw new UnauthorizedException("Invalid Access Token");
+        } catch (Exception e) {
+            throw new UnauthorizedException(e.getMessage());
         }
     }
 
-    public UUID extractUsernameFromToken(String token)throws UnauthorizedException{
-        try {
-            return UUID
-                    .fromString(Jwts.parser()
-                                    .verifyWith(Keys.hmacShaKeyFor(secret.getBytes()))
-                                    .build()
-                                    .parseSignedClaims(token)
-                                    .getPayload()
-                                    .getSubject());
-        }catch (IllegalArgumentException e){
-            throw new UnauthorizedException("Invalid Access Token");
-        }
+    public String extractUsernameFromToken(String token) {
+        return Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)))
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
+
     }
 
-    public boolean matchTokenSub(UUID userId) throws UnauthorizedException {
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        HttpServletRequest req;
-        if (requestAttributes instanceof ServletRequestAttributes) {
-            req = ((ServletRequestAttributes)requestAttributes).getRequest();
-        } else {
-            return false;
-        }
-        String token = req.getHeader("Authorization").split(" ")[1];
-        UUID tokenUsername = extractUsernameFromToken(token);
-        return tokenUsername.equals(userId);
-    }
 
-    public UUID extractUserUsernameFromReq() throws UnauthorizedException {
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        HttpServletRequest req;
-        if (requestAttributes instanceof ServletRequestAttributes) {
-            req = ((ServletRequestAttributes)requestAttributes).getRequest();
-        } else
-            throw new UnauthorizedException("Access token non valido");
-        String token = req.getHeader("Authorization").split(" ")[1];
-        return extractUsernameFromToken(token);
-    }
+
+//    public String createToken(User u) {
+//        return Jwts.builder().subject(u.getId().toString()).issuedAt(new Date(System.currentTimeMillis()))
+//                .expiration(new Date(System.currentTimeMillis() + Long.parseLong(expiration)))
+//                .signWith(Keys.hmacShaKeyFor(secret.getBytes())).compact();
+//    }
+//
+//    public void validateToken(String token) throws UnauthorizedException {
+//        try {
+//            Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secret.getBytes()))
+//                    .build().parse(token);
+//        } catch (Exception e) {
+//            throw new UnauthorizedException("Access token non valido");
+//        }
+//    }
+//
+//    public UUID extractUserIdFromToken(String token) throws UnauthorizedException {
+//        try{
+//            return UUID.fromString(Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secret.getBytes())).build()
+//                    .parseSignedClaims(token).getPayload().getSubject());
+//        } catch (IllegalArgumentException e) {
+//            throw new UnauthorizedException("Access token non valido");
+//        }
+//    }
+//
+//    public boolean matchTokenSub(UUID userId) throws UnauthorizedException {
+//        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+//        HttpServletRequest req;
+//        if (requestAttributes instanceof ServletRequestAttributes) {
+//            req = ((ServletRequestAttributes)requestAttributes).getRequest();
+//        } else {
+//            return false;
+//        }
+//        String token = req.getHeader("Authorization").split(" ")[1];
+//        UUID tokenUserId = extractUserIdFromToken(token);
+//        return tokenUserId.equals(userId);
+//    }
+//
+//    public UUID extractUserIdFromReq() throws UnauthorizedException {
+//        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+//        HttpServletRequest req;
+//        if (requestAttributes instanceof ServletRequestAttributes) {
+//            req = ((ServletRequestAttributes)requestAttributes).getRequest();
+//        } else
+//            throw new UnauthorizedException("Access token non valido");
+//        String token = req.getHeader("Authorization").split(" ")[1];
+//        return extractUserIdFromToken(token);
+//    }
 }

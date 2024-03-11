@@ -58,9 +58,9 @@ public class UserService {
         u.setDateOfBirth(LocalDate.parse(user.dateOfBirth(), formatter));
         u.setUsername(user.username());
         u.setEmail(user.email());
+        u.setRole(Role.USER);
         u.setPassword(user.password());
         u.setConfirmPassword(user.confirmPassword());
-        u.setRole(Role.USER);
         u.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
         matchPassowrd(user.password(), user.confirmPassword());
         try {

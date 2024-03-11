@@ -9,6 +9,8 @@ import it.epicode.capstone.Models.Entities.User;
 import it.epicode.capstone.Models.ResponsesDTO.AccessTokenRes;
 import it.epicode.capstone.Repositories.UserRepository;
 import it.epicode.capstone.Services.AuthService;
+import it.epicode.capstone.Services.PlayerService;
+import it.epicode.capstone.Services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,8 @@ public class TokenConfig implements CommandLineRunner {
     private PasswordEncoder encoder;
     @Autowired
     private AuthService authService;
-
+    @Autowired
+    private UserService userService;
     @Autowired
     private UserRepository userRp;
 
@@ -60,9 +63,45 @@ public class TokenConfig implements CommandLineRunner {
         );
 
         generateCaptainToken(captainDTO);
+
+        UserDTO userDTO = new UserDTO(
+                "user",
+                "user1",
+                "user1",
+                "23/11/2000",
+                "user@gmail.com",
+                "USER",
+                "user",
+                "user"
+        );
+         UserDTO user2DTO = new UserDTO(
+                "user2",
+                "user2",
+                "user2",
+                "23/11/2000",
+                "user2@gmail.com",
+                "USER",
+                "user2",
+                "user2"
+        );
+
+        generateUserToken(captainDTO);
+
+
+
     }
 
-    private void generateManagerToken(UserDTO managerDTO) throws UnauthorizedException, BadRequestException, InternalServerErrorException {
+    private void generateUserToken(UserDTO userDTO) throws UnauthorizedException, BadRequestException, InternalServerErrorException {
+        try {
+            AccessTokenRes accessTokenRes = authService.login(userDTO.username(), userDTO.password());
+            System.out.println("User Token: " + accessTokenRes.getAccessToken());
+        } catch (BadRequestException | UnauthorizedException e) {
+            authService.registerUser(userDTO);
+            AccessTokenRes accessTokenRes = authService.login(userDTO.username(), userDTO.password());
+            System.out.println("User Token: "+ accessTokenRes.getAccessToken());
+        }
+    }
+ private void generateManagerToken(UserDTO managerDTO) throws UnauthorizedException, BadRequestException, InternalServerErrorException {
         try {
             AccessTokenRes accessTokenRes = authService.login(managerDTO.username(), managerDTO.password());
             System.out.println("Manager Token: " + accessTokenRes.getAccessToken());

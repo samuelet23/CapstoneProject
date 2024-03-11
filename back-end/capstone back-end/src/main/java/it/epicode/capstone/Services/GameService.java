@@ -53,7 +53,7 @@ public class GameService {
 
 
     }
-    public Game updateHomePoints(UUID id, int pointsToAdd, char sigla) throws BadRequestException {
+    public Game updateHomePoints(UUID id, int pointsToAdd, String sigla) throws BadRequestException {
         Game game = getById(id);
         if (pointsToAdd <= 0 || pointsToAdd > 3) {
             throw new BadRequestException("You cannot add more than three points in a single action.");
@@ -73,7 +73,7 @@ public class GameService {
         return gameRp.save(game);
     }
 
-    public Game updateAwayPoints(UUID id, int pointsToAdd, char sigla) throws BadRequestException {
+    public Game updateAwayPoints(UUID id, int pointsToAdd, String sigla) throws BadRequestException {
         Game game = getById(id);
         if (pointsToAdd <= 0 || pointsToAdd > 3) {
             throw new BadRequestException("You cannot add more than three points in a single action.");

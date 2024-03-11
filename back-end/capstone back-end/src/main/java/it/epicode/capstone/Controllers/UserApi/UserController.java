@@ -33,6 +33,7 @@ import java.util.UUID;
 @RequestMapping("/api/user")
 @Tag(name = "USER API (accessible with normal authentication)")
 @SecurityRequirement(name = "Easy3vs3Auth")
+@PreAuthorize("hasAuthority('MANAGER')")
 public class UserController {
 
     @Autowired
@@ -41,7 +42,6 @@ public class UserController {
 
 
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('MANAGER')")
     @Operation(
             description = "Create a new user.",
             summary = "Create user"
@@ -53,13 +53,11 @@ public class UserController {
     }
 
     @PutMapping("update/{id}")
-    @PreAuthorize("hasAnyAuthority('USER,MANAGER')")
     @Operation(
             description = "Update a user by their unique identifier.",
             summary = "Update user by ID"
     )
     public ConfirmRes updateUserById(@PathVariable UUID id,@RequestBody @Validated UserUpdateDTO userDTO, BindingResult bindingResult) throws BadRequestException, InternalServerErrorException, UnauthorizedException {
-        checkUserAuthorization(userDTO.username());
         HandlerException.internalServerErrorException(bindingResult);
         HandlerException.badRequestException(bindingResult);
         userSv.updateById(userDTO, id);
@@ -70,13 +68,11 @@ public class UserController {
     }
 
     @PutMapping("update/{username}")
-    @PreAuthorize("hasAnyAuthority('USER,MANAGER')")
     @Operation(
             description = "Update a user by their username.",
             summary = "Update user by username"
     )
     public ConfirmRes updateUserByUsername(@PathVariable String username,@RequestBody @Validated UserUpdateDTO userDTO, BindingResult bindingResult) throws BadRequestException, InternalServerErrorException, UnauthorizedException {
-        checkUserAuthorization(username);
         HandlerException.internalServerErrorException(bindingResult);
         HandlerException.badRequestException(bindingResult);
         userSv.updateByUsername(userDTO, username);
@@ -87,13 +83,11 @@ public class UserController {
     }
 
     @PatchMapping("update/password/{username}")
-    @PreAuthorize("hasAnyAuthority('USER,MANAGER')")
     @Operation(
             description = "Update a user's password by their username.",
             summary = "Update user's password by username"
     )
     public ConfirmRes updatePasswordByUsername(@RequestBody @Validated UpdatePasswordDTO updatePasswordDTO,@PathVariable String username, BindingResult bindingResult) throws BadRequestException, InternalServerErrorException, UnauthorizedException {
-        checkUserAuthorization(username);
         HandlerException.internalServerErrorException(bindingResult);
         HandlerException.unathorizedException(bindingResult);
         HandlerException.badRequestException(bindingResult);
@@ -105,13 +99,11 @@ public class UserController {
     }
 
     @PatchMapping("update/username/{id}")
-    @PreAuthorize("hasAnyAuthority('USER,MANAGER')")
     @Operation(
             description = "Update a user's username by their unique identifier.",
             summary = "Update user's username by ID"
     )
     public ConfirmRes updateUsername(@PathVariable UUID id,@RequestBody @Validated UserUpdateDTO username, BindingResult bindingResult) throws BadRequestException, UnauthorizedException {
-        checkUserAuthorization(username.username());
         HandlerException.badRequestException(bindingResult);
         userSv.updateUsername(id, username.username());
         return new ConfirmRes(
@@ -121,7 +113,6 @@ public class UserController {
     }
 
     @PatchMapping("update/{username}/manager")
-    @PreAuthorize("hasAuthority('MANAGER')")
     @Operation(
             description = "Update a user's role to manager by their username.",
             summary = "Update user's role to manager by username"
@@ -132,7 +123,6 @@ public class UserController {
     }
 
     @PatchMapping("update/{username}/captain")
-    @PreAuthorize("hasAuthority('MANAGER')")
     @Operation(
             description = "Update a user's role to captain by their username.",
             summary = "Update user's role to captain by username"
@@ -143,7 +133,6 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAuthority('MANAGER')")
     @Operation(
             description = "Delete a user by their unique identifier.",
             summary = "Delete user by ID"
@@ -156,7 +145,6 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{username}")
-    @PreAuthorize("hasAuthority('MANAGER')")
     @Operation(
             description = "Delete a user by their username.",
             summary = "Delete user by username"

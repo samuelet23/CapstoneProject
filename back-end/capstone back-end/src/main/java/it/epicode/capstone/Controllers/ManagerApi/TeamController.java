@@ -29,8 +29,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/team")
 @Tag(name = "TEAM API (only for managers)")
-@PreAuthorize("hasAuthority('MANAGER')")
 @SecurityRequirement(name = "Easy3vs3Auth")
+@PreAuthorize("hasAuthority('MANAGER')")
 public class TeamController {
 
     @Autowired

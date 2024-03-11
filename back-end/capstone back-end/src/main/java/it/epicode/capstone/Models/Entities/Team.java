@@ -54,15 +54,16 @@ public class Team {
         players.add(player);
     }
 
-    public boolean hasPlayerWithSigla(char sigla) {
-        char upperCaseSigla = Character.toUpperCase(sigla);
+    public boolean hasPlayerWithSigla(String sigla) {
+        String upperCaseSigla = sigla.toUpperCase();
         for (Player player : players) {
-            if (player.getSigla() == upperCaseSigla) {
-                return false;
+            if (String.valueOf(player.getSigla()).equalsIgnoreCase(upperCaseSigla)) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
+
     public void setCaptain(Player player) throws IllegalArgumentException {
         if (!players.contains(player)) {
             throw new IllegalArgumentException("The player must be part of the team to be set as captain.");

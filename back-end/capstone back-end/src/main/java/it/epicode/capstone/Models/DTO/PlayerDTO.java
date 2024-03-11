@@ -18,7 +18,7 @@ public record PlayerDTO(
 
         @NotBlank(message = "The sigla field cannot be empty/null")
         @Pattern(regexp = "[A-E]", message = "The sigla must be a letter between 'A' and 'E'")
-        char sigla
+        String sigla
 
 ) {
 }

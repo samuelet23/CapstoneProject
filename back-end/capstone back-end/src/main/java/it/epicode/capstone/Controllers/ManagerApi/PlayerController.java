@@ -30,8 +30,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/player")
 @Tag(name = "PLAYER API (only for managers)")
-@PreAuthorize("hasAuthority('MANAGER')")
 @SecurityRequirement(name = "Easy3vs3Auth")
+@PreAuthorize("hasAuthority('MANAGER')")
 public class PlayerController {
 
     @Autowired

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,11 +54,13 @@ public class PlayerService {
         return playerRp.getPlayersWithNameAndPointsByTournament(tournament);
     }
     public Player create(PlayerDTO playerDTO){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         Player p = new Player();
         p.setName(playerDTO.name());
         p.setSurname(playerDTO.surname());
-        p.setDateOfBirth(LocalDate.parse(playerDTO.dateOfBirth()));
+        p.setDateOfBirth(LocalDate.parse(playerDTO.dateOfBirth(), formatter));
         p.setRoleInTheGame(RoleInTheGame.PLAYER);
+        p.setSigla(playerDTO.sigla());
         p.setPoint(0);
         p.setGamesPlayed(0);
 
@@ -83,7 +86,7 @@ public class PlayerService {
     }
 
 
-    public void updateSigla(String name, char sigla)throws BadRequestException{
+    public void updateSigla(String name, String sigla)throws BadRequestException{
         Player p = getByName(name);
         p.setSigla(sigla);
     }

@@ -33,8 +33,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/tournament")
 @Tag(name = "TOURNAMENT API (only for managers)")
-@PreAuthorize("hasAuthority('MANAGER')")
 @SecurityRequirement(name = "Easy3vs3Auth") //inserire quest annotazion in tutti i controller che devono essere autenticati
+@PreAuthorize("hasAuthority('MANAGER')")
 public class TournamentController {
 
     @Autowired

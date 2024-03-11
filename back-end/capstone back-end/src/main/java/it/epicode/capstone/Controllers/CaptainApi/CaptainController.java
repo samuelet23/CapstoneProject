@@ -29,8 +29,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api")
 @Tag(name = "CAPTAIN ROLE API (only  for Captains and Managers)")
-@PreAuthorize("hasAnyAuthority('CAPTAIN,MANAGER')")
 @SecurityRequirement(name = "Easy3vs3Auth")
+@PreAuthorize("hasAnyAuthority('CAPTAIN','MANAGER')")
 public class CaptainController {
     @Autowired
     private PlayerService playerSv;
@@ -67,7 +67,6 @@ public class CaptainController {
 // ***************** TEAM CONTROLLER *************************
 
     @PostMapping("/team/create")
-    @PreAuthorize("hasAuthority('CAPTAIN')")
     @Operation(
             description = "Create a new team.",
             summary = "Create team"
@@ -78,7 +77,6 @@ public class CaptainController {
     }
 
     @PutMapping("/team/update/name/{id}")
-    @PreAuthorize("hasAuthority('CAPTAIN')")
     @Operation(
             description = "Update a team's name by its unique identifier.",
             summary = "Update team's name by ID"
@@ -89,7 +87,6 @@ public class CaptainController {
     }
 
     @PutMapping("/team/update/player/{id}")
-    @PreAuthorize("hasAuthority('CAPTAIN')")
     @Operation(
             description = "Update a team's players by its unique identifier.",
             summary = "Update team's players by ID"
@@ -102,7 +99,6 @@ public class CaptainController {
 // ***************** UPLOAD IMG CONTROLLER *************************
 
     @PatchMapping("/upload/logo-team/{name-team}")
-    @PreAuthorize("hasAuthority('CAPTAIN')")
     @Operation(
             description = "Upload a logo for a team.",
             summary = "Upload team's logo"

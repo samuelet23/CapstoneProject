@@ -61,7 +61,7 @@ public class TeamService {
         team.setName(teamDTO.name());
 
         Set<Player> players = new HashSet<>();
-        Set<Character> usedSiglas = new HashSet<>();
+        Set<String> usedSiglas = new HashSet<>();
 
         for (PlayerDTO playerDTO : teamDTO.players()) {
             Player player = playerSv.create(playerDTO);

@@ -21,7 +21,7 @@ import java.util.UUID;
 
 @RestController
 @Tag(name = "OPEN GET API (accessible to everyone)")
-@RequestMapping("/api")
+@RequestMapping("/api/open")
 public class GetController {
     @Autowired
     private GameService gameSv;
@@ -57,6 +57,7 @@ public class GetController {
         return gameSv.getAllByTournament(tournament);
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/game/get/{id}")
     @Operation(
             description = "Retrieve a game by its unique identifier.",
@@ -104,6 +105,7 @@ public class GetController {
         return placeSv.getAllRegion();
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/place/get/{id}")
     @Operation(
             description = "Retrieve a place by its unique identifier.",
@@ -158,7 +160,6 @@ public class GetController {
     public Page<Player> getAllByTournamentName(@RequestParam("tournament-name") String tournamentName, Pageable pageable) {
         return playerSv.findAllByTournamentName(tournamentName, pageable);
     }
-
     @GetMapping("/player/get/averagePoints/name-player")
     @Operation(
             description = "Retrieve the average points per game for a player.",
@@ -168,8 +169,8 @@ public class GetController {
         Player p = playerSv.getByName(namePlayer);
         return gameSv.averagePointPerGame(p);
     }
-
-    @GetMapping("/player/get/{id}")
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/player/get/byId/{id}")
     @Operation(
             description = "Retrieve a player by their unique identifier.",
             summary = "Get a player by ID"
@@ -177,8 +178,8 @@ public class GetController {
     public Player getPlayerById(@PathVariable UUID id)throws BadRequestException{
         return playerSv.getById(id);
     }
-
-    @GetMapping("/player/get/name")
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/player/get/byName/{name}")
     @Operation(
             description = "Retrieve a player by their name.",
             summary = "Get a player by name"
@@ -186,7 +187,7 @@ public class GetController {
     public Player getPlayerByName(@RequestParam String name)throws BadRequestException{
         return playerSv.getByName(name);
     }
-
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/player/get/{id}/points")
     @Operation(
             description = "Retrieve the points scored by a player.",
@@ -196,7 +197,7 @@ public class GetController {
         int points = playerSv.getPointsByPlayerId(id);
         return new ConfirmPlayerPoints("Player points have been successfully retrieved.",points);
     }
-
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/player/get/point-player/tournament-name")
     @Operation(
             description = "Retrieve players and their points for a specific tournament.",
@@ -211,7 +212,7 @@ public class GetController {
     }
 
     // ****************** REFEREE CONTROLLER ********************
-
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/referee/get/all")
     @Operation(
             description = "Retrieve all referees.",
@@ -220,7 +221,7 @@ public class GetController {
     public List<Referee> getAllReferee(){
         return refereeSv.getAll();
     }
-
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/referee/get/byId/{id}")
     @Operation(
             description = "Retrieve a referee by their unique identifier.",
@@ -229,7 +230,7 @@ public class GetController {
     public Referee getRefereeById(@PathVariable UUID id)throws BadRequestException {
         return refereeSv.getById(id);
     }
-
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/referee/get/byName/{name}")
     @Operation(
             description = "Retrieve a referee by their name.",
@@ -238,7 +239,7 @@ public class GetController {
     public Referee getRefereeByName(@PathVariable String name)throws BadRequestException {
         return refereeSv.getByName(name);
     }
-
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/referee/get/all/tournament-name")
     @Operation(
             description = "Retrieve all referees for a specific tournament.",
@@ -383,7 +384,6 @@ public class GetController {
     public List<Tournament> getAllTournamentAfterStarDateAndTown(@RequestParam("town-name") String townName, @RequestParam("after-starter-date")String startDate) throws BadRequestException {
         return tournamentSv.findByPlaceAndStartDateAfter(townName,startDate);
     }
-
     @GetMapping("/tournament/get/byId/{id}")
     @Operation(
             description = "Retrieve a tournament by its unique identifier.",
@@ -392,7 +392,6 @@ public class GetController {
     public Tournament getTournamentById(@PathVariable UUID id)throws BadRequestException {
         return tournamentSv.getById(id);
     }
-
     @GetMapping("/tournament/get/byName/{tournament-name}")
     @Operation(
             description = "Retrieve a tournament by its name.",
@@ -404,7 +403,6 @@ public class GetController {
 
 
     // ****************** USER CONTROLLER ********************
-
     @GetMapping("/user/get/all")
     @Operation(
             description = "Retrieve all users with pagination support.",
@@ -414,8 +412,8 @@ public class GetController {
         return userSv.getAll(pageable);
     }
 
-    @GetMapping("/user/get/byId/{id}")
     @PreAuthorize("hasAuthority('MANAGER')")
+    @GetMapping("/user/get/byId/{id}")
     @Operation(
             description = "Retrieve a user by their unique identifier.",
             summary = "Get a user by ID"
@@ -424,8 +422,8 @@ public class GetController {
         return userSv.getById(id);
     }
 
-    @GetMapping("/user/get/byUsername/{username}")
     @PreAuthorize("hasAuthority('MANAGER')")
+    @GetMapping("/user/get/byUsername/{username}")
     @Operation(
             description = "Retrieve a user by their username.",
             summary = "Get a user by username"

@@ -9,6 +9,6 @@ public record AddPointsDTO (
         @Size(max = 3, message = "You can add maximum 3 points")
         int pointToAdd,
         @NotBlank(message = "siglaPlayer field cannot be empty/null")
-        char siglaPlayer
+        String siglaPlayer
 ){
 }

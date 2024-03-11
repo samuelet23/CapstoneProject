@@ -22,7 +22,6 @@ public record UserDTO (
         String dateOfBirth,
         @Email(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "not valid email")
         String email,
-        @NotBlank(message = "The role field cannot be empty/null")
         String role,
         @NotBlank(message = "The password field cannot be empty/null")
         @Size(min = 7, message = "Password must be of 7 characters")

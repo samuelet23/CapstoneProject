@@ -32,6 +32,9 @@ public class AuthService {
     public Optional<User> findByUserId(UUID userId){
         return userRep.findById(userId);
     }
+    public Optional<User> findByUsername(String username){
+        return userRep.findByUsername(username);
+    }
 
     public User register(UserDTO userDTO) throws BadRequestException, InternalServerErrorException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -59,6 +62,10 @@ public class AuthService {
         }
         throw new InternalServerErrorException("Data Integrity Violation: " + e.getMessage());
         }
+    }
+    public void registerUser(UserDTO userDTO) throws BadRequestException, InternalServerErrorException {
+        User u =register(userDTO);
+        u.setRole(Role.USER);
     }
     public void registerCaptain(UserDTO userDTO) throws BadRequestException, InternalServerErrorException {
         User u =register(userDTO);
