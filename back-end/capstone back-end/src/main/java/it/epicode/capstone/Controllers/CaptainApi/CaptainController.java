@@ -50,7 +50,7 @@ public class CaptainController {
             description = "Create a new player.",
             summary = "Create player"
     )
-    public Player createPlayer(@RequestBody @Validated PlayerDTO playerDTO){
+    public Player createPlayer(@RequestBody @Validated PlayerDTO playerDTO) throws BadRequestException {
         return playerSv.create(playerDTO);
     }
 
@@ -84,7 +84,7 @@ public class CaptainController {
             description = "Create a new team.",
             summary = "Create team"
     )
-    public Team createTeam(@RequestBody @Validated TeamDTO teamDTO, BindingResult bindingResult ){
+    public Team createTeam(@RequestBody @Validated TeamDTO teamDTO, BindingResult bindingResult ) throws BadRequestException {
         HandlerException.illegalArgumentException(bindingResult);
         return teamSv.createTeam(teamDTO);
     }

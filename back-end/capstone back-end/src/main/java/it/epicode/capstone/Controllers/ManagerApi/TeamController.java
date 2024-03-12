@@ -8,6 +8,7 @@ import it.epicode.capstone.Exceptions.HandlerException;
 import it.epicode.capstone.Exceptions.NotFoundException;
 import it.epicode.capstone.Models.DTO.PlayerDTO;
 import it.epicode.capstone.Models.DTO.TeamDTO;
+import it.epicode.capstone.Models.DTO.UpdateCaptainDTO;
 import it.epicode.capstone.Models.Entities.Team;
 import it.epicode.capstone.Models.ResponsesDTO.ConfirmRes;
 import it.epicode.capstone.Models.ResponsesDTO.DeleteRes;
@@ -42,16 +43,16 @@ public class TeamController {
             description = "Update the captain of a team.",
             summary = "Update team captain"
     )
-    public ConfirmRes updateCaptainFromTeam(@RequestParam("team-name") String teamName, @RequestBody @Validated  PlayerDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
+    public ConfirmRes updateCaptainFromTeam(@RequestParam("team-name") String teamName, @RequestBody @Validated UpdateCaptainDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
-        teamSv.updateCaptain(teamName, playerDTO.name());
+        teamSv.updateCaptain(teamName, playerDTO.nickname());
         return new ConfirmRes(
-                "Captain updated successfully. " + playerDTO.name() + " is now the captain of the team " + teamName + ".",
+                "Captain updated successfully. " + playerDTO.nickname() + " is now the captain of the team " + teamName + ".",
                 HttpStatus.CREATED
         );
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/byId/{id}")
     @Operation(
             description = "Delete a team by its ID.",
             summary = "Delete team by ID"
@@ -63,7 +64,7 @@ public class TeamController {
         );
     }
 
-    @DeleteMapping("/delete/{name}")
+    @DeleteMapping("/delete/byName/{name}")
     @Operation(
             description = "Delete a team by its name.",
             summary = "Delete team by name"

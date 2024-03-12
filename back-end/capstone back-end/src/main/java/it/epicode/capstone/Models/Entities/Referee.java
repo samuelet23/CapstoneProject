@@ -22,6 +22,8 @@ public class Referee extends Person {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tournament_id")
     private Competition tournament;
+    @Column(unique = true)
+    private String nickname;
 
     @Enumerated(EnumType.STRING)
     private RoleInTheGame role = RoleInTheGame.REFEREE;
@@ -33,5 +35,9 @@ public class Referee extends Person {
         super(name, surname, dateOfBirth);
         this.tournament = tournament;
     }
-
+    public Referee(String name, String surname, LocalDate dateOfBirth, Competition tournament, String nickname) {
+        super(name, surname, dateOfBirth);
+        this.tournament = tournament;
+        this.nickname = nickname;
+    }
 }

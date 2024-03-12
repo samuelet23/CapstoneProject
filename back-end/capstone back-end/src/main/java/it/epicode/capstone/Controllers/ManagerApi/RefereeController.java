@@ -41,21 +41,34 @@ public class RefereeController {
         return refereeSv.createReferee(refereeDTO);
     }
 
-    @PutMapping("update/{id}")
+    @PutMapping("/update/byId/{id}")
     @Operation(
             description = "Update referee information.",
             summary = "Update Referee"
     )
     public ConfirmRes update(@PathVariable UUID id,@RequestBody @Validated RefereeDTO refereeDTO, BindingResult bindingResult )throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
-        refereeSv.update(id, refereeDTO);
+        refereeSv.updateById(id, refereeDTO);
+        return new ConfirmRes(
+                "Referee has been update successfully",
+                HttpStatus.CREATED
+        );
+    }
+    @PutMapping("/update/byNickname/{nickname}")
+    @Operation(
+            description = "Update referee information.",
+            summary = "Update Referee"
+    )
+    public ConfirmRes update(@PathVariable String nickname,@RequestBody @Validated RefereeDTO refereeDTO, BindingResult bindingResult )throws BadRequestException{
+        HandlerException.badRequestException(bindingResult);
+        refereeSv.updateByNickname(nickname, refereeDTO);
         return new ConfirmRes(
                 "Referee has been update successfully",
                 HttpStatus.CREATED
         );
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/byId/{id}")
     @Operation(
             description = "Delete a referee by ID.",
             summary = "Delete Referee by ID"
@@ -67,13 +80,13 @@ public class RefereeController {
         );
     }
 
-    @DeleteMapping("/delete/{name}")
+    @DeleteMapping("/delete/byNickname/{nickname}")
     @Operation(
             description = "Delete a referee by name.",
             summary = "Delete Referee by Name"
     )
-    public DeleteRes deleteByName(String name)throws BadRequestException{
-        refereeSv.deleteByName(name);
+    public DeleteRes deleteByName(@PathVariable String nickname)throws BadRequestException{
+        refereeSv.deleteByNickname(nickname);
         return new DeleteRes(
                 "Referee has been deleted successfully"
         );

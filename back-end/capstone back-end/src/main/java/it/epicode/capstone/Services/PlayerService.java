@@ -15,7 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,37 +56,59 @@ public class PlayerService {
     public List<Object[]> getPlayersWithNameAndPointsByTournament(Tournament tournament){
         return playerRp.getPlayersWithNameAndPointsByTournament(tournament);
     }
-    public Player create(PlayerDTO playerDTO){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        Player p = new Player();
-        p.setName(playerDTO.name());
-        p.setSurname(playerDTO.surname());
-        p.setNickname(playerDTO.nickname());
-        p.setDateOfBirth(LocalDate.parse(playerDTO.dateOfBirth(), formatter));
-        p.setRoleInTheGame(RoleInTheGame.PLAYER);
-        p.setSigla(playerDTO.sigla());
-        p.setPoint(0);
-        p.setGamesPlayed(0);
+    public Player create(PlayerDTO playerDTO) throws BadRequestException {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            Player p = new Player();
+            p.setName(playerDTO.name());
+            p.setSurname(playerDTO.surname());
+            p.setNickname(playerDTO.nickname());
+            p.setDateOfBirth(LocalDate.parse(playerDTO.dateOfBirth(), formatter));
+            if (!isOverFourteen(LocalDate.parse(playerDTO.dateOfBirth(), formatter))) {
+                throw new BadRequestException("Il giocatore deve avere un'eta maggiore di 14 anni");
+            }
+            p.setAge(calculateAge(p.getDateOfBirth()));
+            p.setRoleInTheGame(RoleInTheGame.PLAYER);
+            p.setSigla(playerDTO.sigla());
+            p.setPoint(0);
+            p.setGamesPlayed(0);
 
-        return playerRp.save(p);
+            return playerRp.save(p);
+        } catch (DateTimeParseException e) {
+            throw new BadRequestException("Formato data di nascita non valido. Assicurati che sia nel formato dd/MM/yyyy");
+        }
     }
     public void updateCredentialPlayer(UUID id, PlayerDTO playerDTO) throws BadRequestException {
-
-        Player p = getById(id);
-        p.setName(playerDTO.name());
-        p.setSurname(playerDTO.surname());
-        p.setDateOfBirth(LocalDate.parse(playerDTO.dateOfBirth()));
-
-        playerRp.save(p);
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            Player p = getById(id);
+            p.setName(playerDTO.name());
+            p.setSurname(playerDTO.surname());
+            p.setDateOfBirth(LocalDate.parse(playerDTO.dateOfBirth(), formatter));
+            if (!isOverFourteen(LocalDate.parse(playerDTO.dateOfBirth(), formatter))) {
+                throw new BadRequestException("Il giocatore deve avere un'eta maggiore di 14 anni");
+            }
+            p.setAge(calculateAge(p.getDateOfBirth()));
+            playerRp.save(p);
+        } catch (DateTimeParseException e) {
+            throw new BadRequestException("Formato data di nascita non valido. Assicurati che sia nel formato dd/MM/yyyy");
+        }
     }
     public Player updateCredentialPlayer(String name, PlayerDTO playerDTO) throws BadRequestException {
-
-        Player p = getByNickname(name);
-        p.setName(playerDTO.name());
-        p.setSurname(playerDTO.surname());
-        p.setDateOfBirth(LocalDate.parse(playerDTO.dateOfBirth()));
-
-        return playerRp.save(p);
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            Player p = getByNickname(name);
+            p.setName(playerDTO.name());
+            p.setSurname(playerDTO.surname());
+            p.setDateOfBirth(LocalDate.parse(playerDTO.dateOfBirth(), formatter));
+            if (!isOverFourteen(LocalDate.parse(playerDTO.dateOfBirth(), formatter))) {
+                throw new BadRequestException("Il giocatore deve avere un'eta maggiore di 14 anni");
+            }
+            p.setAge(calculateAge(p.getDateOfBirth()));
+            return playerRp.save(p);
+        } catch (DateTimeParseException e) {
+            throw new BadRequestException("Formato data di nascita non valido. Assicurati che sia nel formato dd/MM/yyyy");
+        }
     }
 
 
@@ -111,8 +135,14 @@ public class PlayerService {
     }
     public void updateStatsByName(String name, UpdateStatsPlayerDTO playerDTO)throws BadRequestException{
         Player p = getByNickname(name);
-        p.setPoint(playerDTO.point());
+        if (playerDTO.gamesPlayed() == 0 || playerDTO.gamesPlayed() > 4) {
+            throw new BadRequestException("ERRORE: le partite giocato non possono essere uguali a 0 o superiori a 4");
+        }
         p.setGamesPlayed(playerDTO.gamesPlayed());
+        if (playerDTO.point() == 0) {
+            throw new BadRequestException("Non puoi inserire 0 punti ad un giocatore, il minimo è 1");
+        }
+        p.setPoint(playerDTO.point());
 
         playerRp.save(p);
     }
@@ -126,4 +156,17 @@ public class PlayerService {
     }
 
 
+
+    private static boolean isOverFourteen(LocalDate dateOfBirth) {
+        LocalDate currentDate = LocalDate.now();
+        Period period = Period.between(dateOfBirth, currentDate);
+        int age = period.getYears();
+        return age > 14;
+    }
+    private static int calculateAge(LocalDate dateOfBirth) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate currentDate = LocalDate.now();
+        Period period = Period.between(dateOfBirth, currentDate);
+        return period.getYears();
+    }
 }
