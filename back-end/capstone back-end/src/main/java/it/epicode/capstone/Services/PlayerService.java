@@ -5,6 +5,7 @@ import it.epicode.capstone.Models.DTO.PlayerDTO;
 import it.epicode.capstone.Models.DTO.UpdateStatsPlayerDTO;
 import it.epicode.capstone.Models.Entities.Player;
 import it.epicode.capstone.Models.Entities.Tournament;
+import it.epicode.capstone.Models.Enums.Role;
 import it.epicode.capstone.Models.Enums.RoleInTheGame;
 import it.epicode.capstone.Repositories.PlayerRepository;
 import org.apache.catalina.valves.rewrite.InternalRewriteMap;
@@ -42,9 +43,9 @@ public class PlayerService {
                 () -> new BadRequestException("Player with id "+id+" Not Found" )
         );
     }
-    public Player getByName(String name)throws BadRequestException{
-        return playerRp.findByName(name).orElseThrow(
-                () -> new BadRequestException("Player with name "+name+" Not Found" )
+    public Player getByNickname(String nickname)throws BadRequestException{
+        return playerRp.findByNickname(nickname).orElseThrow(
+                () -> new BadRequestException("Player with nickname "+nickname+" Not Found" )
         );
     }
     public Integer getPointsByPlayerId(UUID id){
@@ -58,6 +59,7 @@ public class PlayerService {
         Player p = new Player();
         p.setName(playerDTO.name());
         p.setSurname(playerDTO.surname());
+        p.setNickname(playerDTO.nickname());
         p.setDateOfBirth(LocalDate.parse(playerDTO.dateOfBirth(), formatter));
         p.setRoleInTheGame(RoleInTheGame.PLAYER);
         p.setSigla(playerDTO.sigla());
@@ -77,7 +79,7 @@ public class PlayerService {
     }
     public Player updateCredentialPlayer(String name, PlayerDTO playerDTO) throws BadRequestException {
 
-        Player p = getByName(name);
+        Player p = getByNickname(name);
         p.setName(playerDTO.name());
         p.setSurname(playerDTO.surname());
         p.setDateOfBirth(LocalDate.parse(playerDTO.dateOfBirth()));
@@ -86,9 +88,19 @@ public class PlayerService {
     }
 
 
+    public Player updateNicknameById(UUID id,String nickname) throws BadRequestException {
+        Player p = getById(id);
+        p.setNickname(nickname);
+        return  playerRp.save(p);
+
+    }
     public void updateSigla(String name, String sigla)throws BadRequestException{
-        Player p = getByName(name);
+        Player p = getByNickname(name);
+        if (p.getSigla().equals(sigla )) {
+            throw new BadRequestException("Player: "+p.getNickname()+" ha già questa sigla");
+        }
         p.setSigla(sigla);
+        playerRp.save(p);
     }
     public void updateStatsById(UUID id, UpdateStatsPlayerDTO playerDTO)throws BadRequestException{
         Player p = getById(id);
@@ -98,7 +110,7 @@ public class PlayerService {
         playerRp.save(p);
     }
     public void updateStatsByName(String name, UpdateStatsPlayerDTO playerDTO)throws BadRequestException{
-        Player p = getByName(name);
+        Player p = getByNickname(name);
         p.setPoint(playerDTO.point());
         p.setGamesPlayed(playerDTO.gamesPlayed());
 
@@ -109,7 +121,7 @@ public class PlayerService {
         playerRp.delete(p);
     }
     public void deleteByName(String name)throws BadRequestException{
-        Player p = getByName(name);
+        Player p = getByNickname(name);
         playerRp.delete(p);
     }
 

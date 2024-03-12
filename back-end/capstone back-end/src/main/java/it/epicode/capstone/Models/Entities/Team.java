@@ -1,5 +1,6 @@
 package it.epicode.capstone.Models.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.Hidden;
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
 import jakarta.persistence.*;
@@ -21,16 +22,19 @@ public class Team {
     @Setter(AccessLevel.NONE)
     private UUID id;
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany(mappedBy = "team", cascade = CascadeType.REMOVE)
     private Set<Player> players = new HashSet<>();
 
     private String logo;
+
+    @Column(unique = true)
     private String name;
 
-    @OneToOne
-    @JoinColumn(name = "captain_id")
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "captain_id" )
     private Player captain;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "winner")
     private Set<Game> wonGames = new HashSet<>();
 
@@ -54,10 +58,9 @@ public class Team {
         players.add(player);
     }
 
-    public boolean hasPlayerWithSigla(String sigla) {
-        String upperCaseSigla = sigla.toUpperCase();
+    public boolean hasPlayerWithSigla(String sigla) {;
         for (Player player : players) {
-            if (String.valueOf(player.getSigla()).equalsIgnoreCase(upperCaseSigla)) {
+            if (player.getSigla().equalsIgnoreCase(sigla)) {
                 return true;
             }
         }

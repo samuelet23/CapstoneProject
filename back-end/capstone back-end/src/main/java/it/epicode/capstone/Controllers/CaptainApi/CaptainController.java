@@ -8,6 +8,8 @@ import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Exceptions.HandlerException;
 import it.epicode.capstone.Models.DTO.PlayerDTO;
 import it.epicode.capstone.Models.DTO.TeamDTO;
+import it.epicode.capstone.Models.DTO.UpdatePlayerTeamDTO;
+import it.epicode.capstone.Models.DTO.UpdateTeamNameDTO;
 import it.epicode.capstone.Models.Entities.Player;
 import it.epicode.capstone.Models.Entities.Team;
 import it.epicode.capstone.Models.ResponsesDTO.ConfirmRes;
@@ -24,7 +26,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/api")
@@ -50,16 +54,25 @@ public class CaptainController {
         return playerSv.create(playerDTO);
     }
 
-    @PatchMapping("/player/update/sigla/{name}")
+    @PatchMapping("/player/update/sigla/{nickname}")
     @Operation(
             description = "Update a player's sigla by their name.",
             summary = "Update player's sigla by name"
     )
-    public ConfirmRes updateSigla(@PathVariable String name, @RequestBody @Validated PlayerDTO playerDTO, BindingResult bindingResult)throws BadRequestException {
+    public ConfirmRes updateSigla(@PathVariable String nickname, @RequestBody Map<String, String> requestBody, BindingResult bindingResult)throws BadRequestException {
+        if (!requestBody.containsKey("sigla") || requestBody.get("sigla").isEmpty()) {
+            throw new BadRequestException("Il campo sigla non può essere vuoto.");
+        }
+        String sigla = requestBody.get("sigla");
+        if (!Pattern.matches("[A-E]", sigla)) {
+            throw new BadRequestException("La sigla deve essere una lettera compresa tra 'A' e 'E'");
+        }
         HandlerException.badRequestException(bindingResult);
-        playerSv.updateSigla(name, playerDTO.sigla());
+
+        playerSv.updateSigla(nickname, sigla);
+
         return new ConfirmRes(
-                "Player with name "+name+" has been updated with the sigla "+ playerDTO.sigla(),
+                "Il giocatore con nome " + nickname + " è stato aggiornato con la sigla " + sigla,
                 HttpStatus.CREATED
         );
     }
@@ -76,25 +89,17 @@ public class CaptainController {
         return teamSv.createTeam(teamDTO);
     }
 
-    @PutMapping("/team/update/name/{id}")
+    @PatchMapping("/team/update/name/{id}")
     @Operation(
-            description = "Update a team's name by its unique identifier.",
-            summary = "Update team's name by ID"
+            description = "Aggiorna il nome di una squadra mediante il suo identificatore univoco.",
+            summary = "Aggiorna il nome della squadra tramite l'ID"
     )
-    public Team updateName(@PathVariable UUID id, @RequestBody @Validated TeamDTO teamDTO, BindingResult bindingResult)throws BadRequestException{
+    public Team updateName(@PathVariable UUID id, @RequestBody UpdateTeamNameDTO teamName, BindingResult bindingResult) throws BadRequestException {
+
         HandlerException.badRequestException(bindingResult);
-        return teamSv.updateName(id, teamDTO);
+        return teamSv.updateName(id, teamName.teamName());
     }
 
-    @PutMapping("/team/update/player/{id}")
-    @Operation(
-            description = "Update a team's players by its unique identifier.",
-            summary = "Update team's players by ID"
-    )
-    public Team updatePlayer(@PathVariable UUID id, @RequestBody @Validated TeamDTO teamDTO, BindingResult bindingResult)throws BadRequestException{
-        HandlerException.badRequestException(bindingResult);
-        return teamSv.updatePlayers(id, teamDTO);
-    }
 
 // ***************** UPLOAD IMG CONTROLLER *************************
 
@@ -103,9 +108,7 @@ public class CaptainController {
             description = "Upload a logo for a team.",
             summary = "Upload team's logo"
     )
-    public UploadConfirm uploadLogoTeam(@RequestParam("file") MultipartFile file, @PathVariable("name-team") String nameTeam, BindingResult bindingResult) throws IOException, BadRequestException {
-        HandlerException.badRequestException(bindingResult);
-        HandlerException.ioException(bindingResult);
+    public UploadConfirm uploadLogoTeam(@RequestParam("file") MultipartFile file, @PathVariable("name-team") String nameTeam) throws IOException, BadRequestException {
         Team team = teamSv.getByName(nameTeam);
         String url = (String) cloudinary.uploader().upload(file.getBytes(), new HashMap<>()).get("url");
         teamSv.updateLogo(team, url);

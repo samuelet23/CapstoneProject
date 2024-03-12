@@ -77,9 +77,8 @@ public class GameController {
             description = "Finish a game.",
             summary = "Finish Game"
     )
-    public Team finishedGame(@PathVariable UUID id, @RequestBody @Validated DuringGameDTO gameDTO, BindingResult bindingResult)throws Exception{
-        HandlerException.exception(bindingResult);
-        return gameSv.finishedGame(id, gameDTO);
+    public Team finishedGame(@PathVariable UUID id)throws Exception{
+        return gameSv.finishedGame(id);
     }
 
     @DeleteMapping("/delete/{id}")

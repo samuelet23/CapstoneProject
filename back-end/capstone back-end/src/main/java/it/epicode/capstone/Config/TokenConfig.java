@@ -74,18 +74,8 @@ public class TokenConfig implements CommandLineRunner {
                 "user",
                 "user"
         );
-         UserDTO user2DTO = new UserDTO(
-                "user2",
-                "user2",
-                "user2",
-                "23/11/2000",
-                "user2@gmail.com",
-                "USER",
-                "user2",
-                "user2"
-        );
 
-        generateUserToken(captainDTO);
+        generateUserToken(userDTO);
 
 
 

@@ -19,7 +19,7 @@ import java.util.UUID;
 @Repository
 public interface PlayerRepository extends JpaRepository<Player, UUID>, PagingAndSortingRepository<Player, UUID> {
 
-    Optional<Player> findByName(String name);
+    Optional<Player> findByNickname(String nickname);
     @Query("SELECT p FROM Player p WHERE p.team.name = :teamName")
     Page<Player> findAllByTeamName(@Param("teamName")String teamName, Pageable pageable);
 

@@ -3,6 +3,7 @@ package it.epicode.capstone.Models.Entities;
 import io.swagger.v3.oas.annotations.Hidden;
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
 import it.epicode.capstone.Models.Enums.GameStatus;
+import it.epicode.capstone.Models.Enums.Round;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -41,9 +42,8 @@ public class Game {
     @Enumerated(EnumType.STRING)
     private GameStatus status;
 
-    private int round;
-
-    private String phase;
+    @Enumerated(EnumType.STRING)
+    private Round round;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tournament_id")

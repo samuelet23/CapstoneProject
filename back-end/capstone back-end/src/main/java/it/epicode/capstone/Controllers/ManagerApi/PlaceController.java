@@ -8,6 +8,7 @@ import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Exceptions.HandlerException;
 import it.epicode.capstone.Models.DTO.AddressDTO;
 import it.epicode.capstone.Models.DTO.PlaceDTO;
+import it.epicode.capstone.Models.DTO.UpdateCourtNameDTO;
 import it.epicode.capstone.Models.Entities.Address;
 import it.epicode.capstone.Models.Entities.Place;
 import it.epicode.capstone.Models.Entities.Province;
@@ -47,10 +48,10 @@ public class PlaceController {
     )
     public Place createPlace(@RequestBody @Validated PlaceDTO placeDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
-        return placeSv.save(placeDTO) ;
+        return placeSv.create(placeDTO) ;
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update/byId/{id}")
     @Operation(
             description = "Update a place by ID.",
             summary = "Update Place by ID"
@@ -64,12 +65,12 @@ public class PlaceController {
         );
     }
 
-    @PutMapping("/update/court-name")
+    @PutMapping("/update/by-court-name/{court-name}")
     @Operation(
             description = "Update a place by court name.",
             summary = "Update Place by Court Name"
     )
-    public ConfirmRes updatePlaceByCourtName(@RequestBody PlaceDTO placeDTO, @RequestParam("court-name") String courtName,BindingResult bindingResult)throws BadRequestException{
+    public ConfirmRes updatePlaceByCourtName(@RequestBody PlaceDTO placeDTO, @PathVariable("court-name") String courtName,BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         placeSv.updateByCourtName(placeDTO, courtName);
         return new ConfirmRes(
@@ -83,7 +84,7 @@ public class PlaceController {
             description = "Update court name of a place by ID.",
             summary = "Update Court Name of Place by ID"
     )
-    public ConfirmRes updateCourtName(@RequestParam UUID id, @RequestBody @Validated PlaceDTO placeDTO,BindingResult bindingResult)throws BadRequestException{
+    public ConfirmRes updateCourtName(@RequestParam UUID id, @RequestBody @Validated UpdateCourtNameDTO placeDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         placeSv.updateCourtName(id, placeDTO.courtName());
         return new ConfirmRes(

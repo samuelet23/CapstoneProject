@@ -3,6 +3,7 @@ package it.epicode.capstone.Repositories;
 import it.epicode.capstone.Models.Entities.Game;
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
 import it.epicode.capstone.Models.Entities.Team;
+import it.epicode.capstone.Models.Enums.Round;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +17,5 @@ import java.util.UUID;
 public interface GameRepository extends JpaRepository<Game, UUID>, PagingAndSortingRepository<Game, UUID> {
     List<Game> findByTournament(Competition tournament);
 
+    boolean existsByHomeTeamNameAndAwayTeamNameAndRound(String homeTeam, String awayTeam, Round round);
 }

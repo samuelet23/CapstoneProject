@@ -18,7 +18,7 @@ public record AddressDTO(
         String civico,
 
         @Pattern(regexp = "[A-Z]{5}", message = "Cap must be of 5 characters")
-        int cap,
+        String cap,
         @NotBlank(message = "The password field cannot be empty/null")
         String townName,
         @NotBlank(message = "The password field cannot be empty/null")

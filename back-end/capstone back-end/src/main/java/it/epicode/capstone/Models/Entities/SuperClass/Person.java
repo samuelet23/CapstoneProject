@@ -24,40 +24,18 @@ public abstract class Person {
     String surname;
     LocalDate dateOfBirth;
 
-    @Enumerated(EnumType.STRING)
-    RoleInTheGame roleInTheGame;
 
-    @Setter(AccessLevel.NONE)
+
     int age;
 
     public Person(String name, String surname, LocalDate dateOfBirth){
         this.name = name;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
-        this.age = calculateAge();
     }
     public Person (String name){
         this.name = name;
     }
-    public int calculateAge()  {
-        LocalDate now = LocalDate.now();
-        if (dateOfBirth == null) {
-            throw new IllegalArgumentException("Invalid date of birth");
-        }
 
-        Period period = Period.between(this.dateOfBirth, now);
-
-        int years = period.getYears();
-        int month = period.getMonths();
-
-        if (month < 0) {
-            years--;
-        }
-        if (years < 14) {
-            throw new RuntimeException("You are still too young to sign up for the platform");
-        }
-
-        return years;
-    }
 
 }

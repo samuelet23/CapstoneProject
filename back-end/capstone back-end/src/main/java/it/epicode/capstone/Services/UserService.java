@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
@@ -57,10 +58,11 @@ public class UserService {
         u.setSurname(user.surname());
         u.setDateOfBirth(LocalDate.parse(user.dateOfBirth(), formatter));
         u.setUsername(user.username());
+        u.setAge(calculateAge(u.getDateOfBirth()));
         u.setEmail(user.email());
         u.setRole(Role.USER);
-        u.setPassword(user.password());
-        u.setConfirmPassword(user.confirmPassword());
+        u.setPassword(encoder.encode(user.password()));
+        u.setConfirmPassword(encoder.encode(user.confirmPassword()));
         u.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
         matchPassowrd(user.password(), user.confirmPassword());
         try {
@@ -117,19 +119,28 @@ public class UserService {
 
     public Role updateRoleManagerByUsername(String username) throws BadRequestException {
         User u = getByUsername(username);
-        u.setRole(Role.MANAGER);
         if (u.getRole() == Role.MANAGER) {
             throw new BadRequestException("The role is already MANAGER");
         }
+        u.setRole(Role.MANAGER);
         userRp.save(u);
         return u.getRole();
     }
     public Role updateRoleCaptainByUsername(String username) throws BadRequestException {
         User u = getByUsername(username);
-        u.setRole(Role.CAPTAIN);
         if (u.getRole() == Role.CAPTAIN) {
             throw new BadRequestException("The role is already CAPTAIN");
         }
+        u.setRole(Role.CAPTAIN);
+         userRp.save(u);
+        return u.getRole();
+    }
+    public Role updateRoleUserByUsername(String username) throws BadRequestException {
+        User u = getByUsername(username);
+        if (u.getRole() == Role.USER) {
+            throw new BadRequestException("The role is already USER");
+        }
+        u.setRole(Role.USER);
          userRp.save(u);
         return u.getRole();
     }
@@ -176,7 +187,26 @@ public class UserService {
             throw new BadRequestException("Passwords don't match");
         }
     }
+    private int calculateAge(LocalDate dateOfBirth)  {
+        LocalDate now = LocalDate.now();
+        if (dateOfBirth == null) {
+            throw new IllegalArgumentException("Invalid date of birth");
+        }
 
+        Period period = Period.between(dateOfBirth, now);
+
+        int years = period.getYears();
+        int month = period.getMonths();
+
+        if (month < 0) {
+            years--;
+        }
+        if (years < 14) {
+            throw new RuntimeException("You are still too young to sign up for the platform");
+        }
+
+        return years;
+    }
 
 
 }

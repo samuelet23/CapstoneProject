@@ -6,10 +6,7 @@ import it.epicode.capstone.Exceptions.NotFoundException;
 import it.epicode.capstone.Exceptions.TournamentDataException;
 import it.epicode.capstone.Models.DTO.*;
 import it.epicode.capstone.Models.Entities.*;
-import it.epicode.capstone.Models.Enums.GameStatus;
-import it.epicode.capstone.Models.Enums.Role;
-import it.epicode.capstone.Models.Enums.RoleInTheGame;
-import it.epicode.capstone.Models.Enums.TournamentLevel;
+import it.epicode.capstone.Models.Enums.*;
 import it.epicode.capstone.Repositories.*;
 import org.slf4j.event.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +64,7 @@ public class TournamentService {
         }
         t.setTeams(createTeams(dto));
         t.setPlace(createPlaceFromDto(dto.place()));
-        t.setInitialRound(8);
+        t.setInitialRound(Round.OCTAVEFINAL);
         generateOttaviMatches(t);
         return tournamentRp.save(t);
     }
@@ -87,8 +84,7 @@ public class TournamentService {
             game.setHomeTeam(homeTeam);
             game.setAwayTeam(awayTeam);
             game.setStatus(GameStatus.SCHEDULED);
-            game.setRound(8);
-            game.setPhase("Ottavi di finale");
+            game.setRound(Round.OCTAVEFINAL);
             games.add(game);
 
             gameRp.save(game);
@@ -114,8 +110,7 @@ public class TournamentService {
             game.setHomeTeam(homeTeam);
             game.setAwayTeam(awayTeam);
             game.setStatus(GameStatus.SCHEDULED);
-            game.setRound(4);
-            game.setPhase("Quarti di finale");
+            game.setRound(Round.QUARTERFINAL);
             games.add(game);
             gameRp.save(game);
         }
@@ -142,8 +137,7 @@ public class TournamentService {
             game.setHomeTeam(homeTeam);
             game.setAwayTeam(awayTeam);
             game.setStatus(GameStatus.SCHEDULED);
-            game.setRound(2);
-            game.setPhase("Semifinali");
+            game.setRound(Round.SEMIFINAL);
 
             games.add(game);
 
@@ -169,8 +163,7 @@ public class TournamentService {
         game.setHomeTeam(homeTeam);
         game.setAwayTeam(awayTeam);
         game.setStatus(GameStatus.SCHEDULED);
-        game.setRound(1);
-        game.setPhase("Finale");
+        game.setRound(Round.FINAL);
 
         gameRp.save(game);
 
@@ -292,7 +285,7 @@ public class TournamentService {
         List<Team> qualifiedTeams = teamSv.getAllByTournamentName(tournament.getName());
 
         for (Game game : games) {
-            if (game.getStatus() == GameStatus.FINISHED && game.getRound() < tournament.getInitialRound()) {
+            if (game.getStatus() == GameStatus.FINISHED && game.getRound() != tournament.getInitialRound()) {
                 Team winner = game.getWinner();
                 if (winner != null && !qualifiedTeams.contains(winner)) {
                     qualifiedTeams.add(winner);

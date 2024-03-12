@@ -9,24 +9,24 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 
 public record UserDTO (
-        @NotBlank(message = "The name field cannot be empty/null")
-        @Size(min = 3, message = "Name must be of 3 characters")
+        @NotBlank(message = "Il campo nome non può essere vuoto/null")
+        @Size(min = 3, message = "Il nome deve essere di almeno 3 caratteri")
         String name,
-        @NotBlank(message = "The surname field cannot be empty/null")
-        @Size(min = 3,message = "Surname must be of 3 characters")
+        @NotBlank(message = "Il campo cognome non può essere vuoto/null")
+        @Size(min = 3, message = "Il cognome deve essere di almeno 3 caratteri")
         String surname,
-        @NotBlank(message = "The username field cannot be empty/null")
-        @Size(min = 5, message = "Username must be of 5 characters")
+        @NotBlank(message = "Il campo nome utente non può essere vuoto/null")
+        @Size(min = 5, message = "Il nome utente deve essere di almeno 5 caratteri")
         String username,
-        @NotBlank(message = "The date Of Birth field cannot be empty/null, the date must be dd/MM/yyyy")
+        @NotBlank(message = "Il campo data di nascita non può essere vuoto/null, la data deve essere in formato gg/MM/aaaa")
         String dateOfBirth,
-        @Email(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "not valid email")
+        @Email(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Email non valida")
         String email,
         String role,
-        @NotBlank(message = "The password field cannot be empty/null")
-        @Size(min = 7, message = "Password must be of 7 characters")
+        @NotBlank(message = "Il campo password non può essere vuoto/null")
+        @Size(min = 7, message = "La password deve essere di almeno 7 caratteri")
         String password,
-        @NotBlank(message = "The confirm password field cannot be empty/null")
+        @NotBlank(message = "Il campo conferma password non può essere vuoto/null")
         String confirmPassword
-) {
-}
+) {}
+

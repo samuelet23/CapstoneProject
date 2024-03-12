@@ -3,6 +3,7 @@ package it.epicode.capstone.Models.Entities;
 import io.swagger.v3.oas.annotations.Hidden;
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
 import it.epicode.capstone.Models.Entities.SuperClass.Person;
+import it.epicode.capstone.Models.Enums.Round;
 import it.epicode.capstone.Models.Enums.TournamentLevel;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -26,7 +27,7 @@ public class Tournament extends Competition {
     @Enumerated(EnumType.STRING)
     private TournamentLevel level;
 
-    private int initialRound;
+    private Round initialRound = Round.OCTAVEFINAL;
 
     public Tournament(LocalDate startDate, String coverUrl, String name, List<Referee> referees, Set<Team> teams, List<Game> games, Place place, List<Player> players) {
         super(startDate, coverUrl, name, referees, teams, games, place, players);

@@ -8,13 +8,17 @@ import it.epicode.capstone.Models.Entities.Player;
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
 import it.epicode.capstone.Models.Entities.Team;
 import it.epicode.capstone.Models.Enums.GameStatus;
+import it.epicode.capstone.Models.Enums.Role;
+import it.epicode.capstone.Models.Enums.Round;
 import it.epicode.capstone.Repositories.GameRepository;
+import it.epicode.capstone.Repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -24,8 +28,12 @@ public class GameService {
     private GameRepository gameRp;
 
     @Autowired
+    private TeamService teamSv;
+    @Autowired
     private TournamentService tournamentSv;
 
+    @Autowired
+    private TeamRepository teamRp;
 
     public Page<Game> getAll(Pageable pageable) {
         return gameRp.findAll(pageable);
@@ -40,33 +48,39 @@ public class GameService {
         );
     }
 
-    public Game createGame(BeforeGameDTO game) throws BadRequestException {
+    public Game  createGame(BeforeGameDTO game) throws BadRequestException {
 
-        Game match = new Game(
-                new Team(game.homeTeam()),
-                new Team(game.awayTeam()),
-                0,
-                0);
+        if (gameRp.existsByHomeTeamNameAndAwayTeamNameAndRound(game.homeTeamName(), game.awayTeamName(),Round.valueOf(game.round()))) {
+            throw new BadRequestException("La partita è già stata giocata o si sta giocando adesso");
+        }
+
+        Team homeTeam = teamSv.getByName(game.homeTeamName());
+        Team awayTeam = teamSv.getByName(game.awayTeamName());
+
+        Game match = new Game(homeTeam, awayTeam, 0, 0);
         match.setStatus(GameStatus.STARTED);
-        match.setRound(game.round());
-        throw new BadRequestException("The round number is not valid, must be even");
+
+        String round = game.round().toUpperCase().trim();
+        match.setRound(Round.valueOf(round));
 
 
+        return gameRp.save(match);
     }
     public Game updateHomePoints(UUID id, int pointsToAdd, String sigla) throws BadRequestException {
         Game game = getById(id);
-        if (pointsToAdd <= 0 || pointsToAdd > 3) {
-            throw new BadRequestException("You cannot add more than three points in a single action.");
+        if (pointsToAdd < 1 || pointsToAdd > 3) {
+            throw new BadRequestException("Puoi aggiungere solo da 1 a 3 punti in un'azione singola.");
         }
 
-        if (game.getHomeTeam().hasPlayerWithSigla(sigla)) {
-            throw new BadRequestException("There is no player with the specified sigla in the home team.");
+        if (!game.getHomeTeam().hasPlayerWithSigla(sigla)) {
+            throw new BadRequestException("Non c'è nessun giocatore con la sigla specificata nella squadra di casa.");
         }
 
         game.setHomePoints(game.getHomePoints() + pointsToAdd);
         for (Player player : game.getHomeTeam().getPlayers()) {
-            if (player.getSigla() == sigla) {
+            if (player.getSigla().equalsIgnoreCase(sigla)) {
                 player.addPoints(pointsToAdd);
+                break;
             }
         }
 
@@ -76,16 +90,16 @@ public class GameService {
     public Game updateAwayPoints(UUID id, int pointsToAdd, String sigla) throws BadRequestException {
         Game game = getById(id);
         if (pointsToAdd <= 0 || pointsToAdd > 3) {
-            throw new BadRequestException("You cannot add more than three points in a single action.");
+            throw new BadRequestException("Puoi aggiungere solo da 1 a 3 punti in un'azione singola.");
         }
 
-        if (game.getAwayTeam().hasPlayerWithSigla(sigla)) {
-            throw new BadRequestException("There is no player with the specified sigla in the away team.");
+        if (!game.getAwayTeam().hasPlayerWithSigla(sigla)) {
+            throw new BadRequestException("Non c'è nessun giocatore con la sigla specificata nella squadra di casa.");
         }
 
         game.setAwayPoints(game.getAwayPoints() + pointsToAdd);
         for (Player player : game.getAwayTeam().getPlayers()) {
-            if (player.getSigla() == sigla) {
+            if (player.getSigla().equalsIgnoreCase(sigla)) {
                 player.addPoints(pointsToAdd);
             }
         }
@@ -93,11 +107,15 @@ public class GameService {
         return gameRp.save(game);
     }
 
-    public Team finishedGame(UUID id, DuringGameDTO gameDTO) throws Exception {
-        int homePoints = gameDTO.homePoints();
-        int awayPoints = gameDTO.awayPoints();
-
+    public Team finishedGame(UUID id) throws Exception {
         Game game = getById(id);
+
+        if (game.getStatus().equals(GameStatus.FINISHED)) {
+            throw new IllegalArgumentException("la partità è già finita, ha vinto la squadra: "+game.getWinner().getName());
+        }
+        int homePoints = game.getHomePoints();
+        int awayPoints = game.getAwayPoints();
+
         boolean matchFinished = false;
 
         while (!matchFinished) {
@@ -120,6 +138,8 @@ public class GameService {
                throw new Exception(e.getMessage());
             }
         }
+
+
         for (Player player : game.getHomeTeam().getPlayers()) {
             player.setGamesPlayed(player.getGamesPlayed() + 1);
         }
@@ -129,6 +149,9 @@ public class GameService {
         }
 
         game = gameRp.save(game);
+
+        game.getWinner().setWonGames(Set.of(game));
+
         return game.getWinner();
     }
 
@@ -146,6 +169,7 @@ public class GameService {
         Game game = getById(id);
         gameRp.delete(game);
     }
+
 
 
 

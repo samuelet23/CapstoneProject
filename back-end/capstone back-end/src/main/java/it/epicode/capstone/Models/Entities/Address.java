@@ -24,7 +24,7 @@ public class Address {
 
     private String civico;
 
-    private int cap;
+    private String cap;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
@@ -38,7 +38,7 @@ public class Address {
     private String  siglaProvince;
 
 
-    public Address(String via, String civico, int cap, String townName, String siglaProvince) {
+    public Address(String via, String civico, String cap, String townName, String siglaProvince) {
         this.via = via;
         this.civico = civico;
         this.cap = cap;

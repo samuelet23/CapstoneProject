@@ -31,9 +31,6 @@ public class Town {
     @OneToMany(mappedBy = "town")
     List<Address> addresses;
 
-    @JsonIgnore
-    @Transient
-    String nameProvince ;
 
     public Town(String name, Province province) {
         this.name = name;
@@ -41,6 +38,5 @@ public class Town {
     }
     public Town(Province siglaProvince, String name) {
         this.name = name;
-        nameProvince = siglaProvince.getSigla();
     }
 }

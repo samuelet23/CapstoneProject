@@ -1,14 +1,14 @@
 package it.epicode.capstone.Models.DTO;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 public record AddPointsDTO (
-        @NotBlank(message = "You must add some points")
-        @Size(max = 3, message = "You can add maximum 3 points")
+        @Min(value = 1, message = "Il valore deve essere almeno 1")
+        @Max(value = 3, message = "Il valore non può superare 3")
         int pointToAdd,
         @NotBlank(message = "siglaPlayer field cannot be empty/null")
+        @Pattern(regexp = "[A-Ea-e]", message = "La sigla deve essere una lettera compresa tra 'A' e 'E'")
         String siglaPlayer
 ){
 }

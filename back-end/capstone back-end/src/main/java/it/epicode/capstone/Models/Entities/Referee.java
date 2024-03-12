@@ -23,6 +23,7 @@ public class Referee extends Person {
     @JoinColumn(name = "tournament_id")
     private Competition tournament;
 
+    @Enumerated(EnumType.STRING)
     private RoleInTheGame role = RoleInTheGame.REFEREE;
 
     public Referee(String name, String surname, LocalDate dateOfBirth) {

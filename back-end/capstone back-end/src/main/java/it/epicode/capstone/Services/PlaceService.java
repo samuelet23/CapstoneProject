@@ -4,6 +4,7 @@ import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Models.DTO.PlaceDTO;
 import it.epicode.capstone.Models.Entities.*;
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
+import it.epicode.capstone.Repositories.AddressRepository;
 import it.epicode.capstone.Repositories.PlaceRepository;
 import it.epicode.capstone.Repositories.ProvinceRepository;
 import it.epicode.capstone.Repositories.TownRepository;
@@ -29,6 +30,8 @@ public class PlaceService {
     private TownRepository townRp;
     @Autowired
     private ProvinceRepository provinceRp;
+    @Autowired
+    private AddressRepository addressRp;
 
 
     public Page<Place> getAll(Pageable pageable){
@@ -64,34 +67,36 @@ public class PlaceService {
         );
     }
 
-    public Place save(PlaceDTO placeDTO) throws BadRequestException {
+    public Place create(PlaceDTO placeDTO) throws BadRequestException {
         Place p = new Place();
-        if (!checkPlaceInDatabase(placeDTO.address().townName(), placeDTO.address().siglaProvince())) {
-            p.setCourtName(placeDTO.courtName());
-            p.setTown(newTown(placeDTO));
+        if (checkPlaceInDatabase(placeDTO.address().townName(), placeDTO.address().siglaProvince())) {
             p.setAddress(newAddress(placeDTO));
+            p.setCourtName(placeDTO.courtName());
+            System.out.println("è statos settato");
+        }else{
+            System.out.println("NON è statos settato");
+
         }
         return placeRp.save(p);
     }
-
     public void updateById(PlaceDTO placeDTO, UUID id)throws BadRequestException{
-        if (checkPlaceInDatabase(placeDTO.address().townName(), placeDTO.address().siglaProvince())) {
+        if (!checkPlaceInDatabase(placeDTO.address().townName(), placeDTO.address().siglaProvince())) {
             throw new BadRequestException("Town or province not found in the database");
         }
         Place p = getById(id);
-        p.setCourtName(placeDTO.courtName());
-        p.setTown(newTown(placeDTO));
         p.setAddress(newAddress(placeDTO));
+        p.setCourtName(placeDTO.courtName());
 
         placeRp.save(p);
     }
+
+
     public void updateByCourtName(PlaceDTO placeDTO, String courtName)throws BadRequestException{
-        if (checkPlaceInDatabase(placeDTO.address().townName(), placeDTO.address().siglaProvince())) {
+        if (!checkPlaceInDatabase(placeDTO.address().townName(), placeDTO.address().siglaProvince())) {
             throw new BadRequestException("Town or province not found in the database");
         }
         Place p = getByCourtName(courtName);
         p.setCourtName(placeDTO.courtName());
-        p.setTown(newTown(placeDTO));
         p.setAddress(newAddress(placeDTO));
 
         placeRp.save(p);
@@ -134,32 +139,32 @@ public class PlaceService {
         Province p = provinceRp.findBySigla(siglaProvincia).orElseThrow(
                 () -> new BadRequestException("Province with sigla: "+siglaProvincia+"Not Found" )
         );
-        logger.info("The sigla "+siglaProvincia+" is Present in Database");
+        logger.info("The sigla "+siglaProvincia+" is Present on Database");
 
         Town t = townRp.findByName(townName).orElseThrow(
-                () -> new BadRequestException("Town with name" +townName+" Not Found")
+                () -> new BadRequestException("Town with name: " +townName+" Not Found")
         );
-        logger.info("The town "+townName+" is Present in Database");
+        logger.info("The town "+townName+" is Present on Database");
 
         return true;
     }
 
-    private Address newAddress(PlaceDTO placeDTO){
-        return new Address(
-                placeDTO.address().via(),
-                placeDTO.address().civico(),
-                placeDTO.address().cap(),
-                placeDTO.address().siglaProvince(),
-                placeDTO.address().townName()
-        );
+    private Address newAddress(PlaceDTO placeDTO ) throws BadRequestException {
+        Province p = provinceRp.findBySigla(placeDTO.address().siglaProvince()).orElseThrow(()-> new BadRequestException("Province with sigla: "+placeDTO.address().siglaProvince()+" Not Found"));
+        Town t = townRp.findByName(placeDTO.address().townName()).orElseThrow(()-> new BadRequestException("Town with name: "+placeDTO.address().townName()+" Not Found"));
+        Address address = new Address();
+
+        address.setVia(placeDTO.address().via());
+        address.setCivico(placeDTO.address().civico());
+        address.setCap(placeDTO.address().cap());
+        address.setTownName(t.getName());
+        address.setSiglaProvince(p.getSigla());
+
+        address.setTown(t);
+
+        return addressRp.save(address);
     }
 
-    private Town newTown(PlaceDTO placeDTO){
-        Province p = new Province();
-        return new Town(
-                p,
-                placeDTO.address().townName()
-        );
-    }
+
 
 }

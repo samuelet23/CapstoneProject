@@ -3,6 +3,7 @@ package it.epicode.capstone.Services;
 import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Models.DTO.PlayerDTO;
 import it.epicode.capstone.Models.DTO.TeamDTO;
+import it.epicode.capstone.Models.DTO.UpdatePlayerTeamDTO;
 import it.epicode.capstone.Models.Entities.Player;
 import it.epicode.capstone.Models.Entities.Team;
 import it.epicode.capstone.Repositories.PlayerRepository;
@@ -28,6 +29,7 @@ public class TeamService {
     private PlayerRepository playerRp;
     @Autowired
     private PlayerService playerSv;
+
 
     public Page<Team> getAll(Pageable pageable) {
         return teamRp.findAll(pageable);
@@ -55,67 +57,55 @@ public class TeamService {
     public List<Team> getAllTeamWithoutCaptain(){
         return teamRp.findByCaptainIsNull();
     }
+
     @Transactional
     public Team createTeam(TeamDTO teamDTO) {
+
         Team team = new Team();
-        team.setName(teamDTO.name());
+
+        team.setName(teamDTO.nameTeam());
+
+
+        Team savedTeam = teamRp.save(team);
 
         Set<Player> players = new HashSet<>();
         Set<String> usedSiglas = new HashSet<>();
 
         for (PlayerDTO playerDTO : teamDTO.players()) {
             Player player = playerSv.create(playerDTO);
+            player.setTeam(savedTeam);
+            player.setTeamName(savedTeam.getName());
             if (!usedSiglas.contains(playerDTO.sigla()) && usedSiglas.size() < 5) {
                 player.setSigla(playerDTO.sigla());
                 usedSiglas.add(playerDTO.sigla());
             } else {
-                throw new IllegalArgumentException("Error saving team: Invalid player sigla.");
+                throw new IllegalArgumentException("Errore nel salvare il team. - La sigla deve essere diversa per ogni giocatore");
             }
-
             Player savedPlayer = playerRp.save(player);
             players.add(savedPlayer);
-            team.addPlayer(savedPlayer);
+            savedTeam.addPlayer(savedPlayer);
         }
 
-        team.setPlayers(players);
-        Player captain = playerRp.findByName(teamDTO.captainName())
+        savedTeam.setPlayers(players);
+        Player captain = playerRp.findByNickname(teamDTO.captainName())
                 .orElseThrow(() -> new IllegalArgumentException("Captain player not found."));
-        team.setCaptain(captain);
+        savedTeam.setCaptain(captain);
 
-        return teamRp.save(team);
+        return teamRp.save(savedTeam);
     }
 
 
-    public Team updateName(UUID id, TeamDTO teamDTO) throws BadRequestException {
-        Team team = getById(id);
-        team.setName(teamDTO.name());
-
-        return teamRp.save(team);
-    }
-    public Team updatePlayers(UUID id, TeamDTO teamDTO) throws BadRequestException {
+    public Team updateName(UUID id, String teamName) throws BadRequestException {
         Team team = getById(id);
 
-        Set<Player> players = new HashSet<>();
-        for (PlayerDTO playerDTO : teamDTO.players()) {
-            Player playerToUpdate = team.getPlayers().stream()
-                    .filter(player -> player.getName().equals(playerDTO.name()))
-                    .findFirst()
-                    .orElseThrow(() -> new BadRequestException("Player not found in the team: " + playerDTO.name()));
-
-            playerSv.updateCredentialPlayer(playerToUpdate.getId(), playerDTO);
-
-            Player savedPlayer = playerRp.save(playerToUpdate);
-            players.add(savedPlayer);
-        }
-
-        team.setPlayers(players);
+        team.setName(teamName);
 
         return teamRp.save(team);
     }
 
     public void updateCaptain(String teamName, String playerName)throws BadRequestException{
         Team t = getByName(teamName);
-        Player p = playerRp.findByName(playerName).orElseThrow(
+        Player p = playerRp.findByNickname(playerName).orElseThrow(
                 () -> new IllegalArgumentException("Captain player Not Found")
         );
         if (t.getCaptain() ==  p) {

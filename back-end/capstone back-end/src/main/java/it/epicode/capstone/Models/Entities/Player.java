@@ -19,21 +19,23 @@ import java.time.LocalDate;
 @Table(name = "players ")
 public class Player extends Person {
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "team_id")
     private Team team;
 
     private int point;
 
-    @Setter(AccessLevel.NONE)
+    @Column(unique = true)
+    private String nickname;
+
     private String sigla;
 
     private int gamesPlayed;
-    private RoleInTheGame role = RoleInTheGame.PLAYER;
+    @Enumerated(EnumType.STRING)
+    private RoleInTheGame roleInTheGame = RoleInTheGame.PLAYER;
 
 
-    @Transient
-    @JsonIgnore
     String teamName;
 
     public Player(String name, String surname, LocalDate dateOfBirth) {
@@ -42,6 +44,7 @@ public class Player extends Person {
     public Player(String name, String surname, LocalDate dateOfBirth,Team teamName, int point,  int gamesPlayed) {
         super(name, surname, dateOfBirth);
         this.teamName  = teamName.getName();
+        team.addPlayer(this);
         this.point = point;
         this.gamesPlayed = gamesPlayed;
     }
@@ -51,13 +54,7 @@ public class Player extends Person {
     }
 
 
-    public void setSigla(String sigla) {
-        if (sigla.length() == 1 && sigla.matches("[A-Ea-e]")) {
-            this.sigla = String.valueOf(Character.toUpperCase(sigla.charAt(0)));
-        } else {
-            throw new IllegalArgumentException("The sigla must be a single character between A and E.");
-        }
-    }
+
 
 
 

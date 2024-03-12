@@ -166,7 +166,7 @@ public class GetController {
             summary = "Get average points per game by player name"
     )
     public double averagePointPerGame(@RequestParam("name-player") String namePlayer) throws BadRequestException {
-        Player p = playerSv.getByName(namePlayer);
+        Player p = playerSv.getByNickname(namePlayer);
         return gameSv.averagePointPerGame(p);
     }
     @PreAuthorize("hasAuthority('USER')")
@@ -185,7 +185,7 @@ public class GetController {
             summary = "Get a player by name"
     )
     public Player getPlayerByName(@RequestParam String name)throws BadRequestException{
-        return playerSv.getByName(name);
+        return playerSv.getByNickname(name);
     }
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/player/get/{id}/points")

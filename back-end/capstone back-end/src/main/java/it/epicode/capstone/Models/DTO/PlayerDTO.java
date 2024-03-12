@@ -7,17 +7,23 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record PlayerDTO(
-        @NotBlank(message = "The name field cannot be empty/null")
-        @Size(min = 3, message = "Name must be of 3 characters")
+        @NotBlank(message = "Il campo nome non può essere vuoto/null")
+        @Size(min = 3, message = "Il nome deve essere composto da almeno 3 caratteri")
         String name,
-        @NotBlank(message = "The surname field cannot be empty/null")
-        @Size(min = 3,message = "Surname must be of 3 characters")
+
+        @NotBlank(message = "Il campo cognome non può essere vuoto/null")
+        @Size(min = 3, message = "Il cognome deve essere composto da almeno 3 caratteri")
         String surname,
-        @NotBlank(message = "The date Of Birth field cannot be empty/null, the date must be dd/MM/yyyy")
+
+        @NotBlank(message = "Il campo soprannome non può essere vuoto/null")
+        @Size(min = 3, message = "Il soprannome deve essere composto da almeno 3 caratteri")
+        String nickname,
+
+        @NotBlank(message = "Il campo data di nascita non può essere vuoto/null, la data deve essere nel formato gg/MM/aaaa")
         String dateOfBirth,
 
-        @NotBlank(message = "The sigla field cannot be empty/null")
-        @Pattern(regexp = "[A-E]", message = "The sigla must be a letter between 'A' and 'E'")
+        @NotBlank(message = "Il campo sigla non può essere vuoto/null")
+        @Pattern(regexp = "[A-E]", message = "La sigla deve essere una lettera compresa tra 'A' e 'E'")
         String sigla
 
 ) {

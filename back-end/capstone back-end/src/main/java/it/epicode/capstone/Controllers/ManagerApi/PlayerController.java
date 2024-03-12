@@ -59,14 +59,14 @@ public class PlayerController {
         return new ConfirmRes("Player's stats have been updated successfully", HttpStatus.CREATED);
     }
 
-    @PatchMapping("/update/stats/{name}")
+    @PatchMapping("/update/stats/{nickname}")
     @Operation(
-            description = "Update player's statistics by name.",
-            summary = "Update Player Stats by Name"
+            description = "Update player's statistics by nickname.",
+            summary = "Update Player Stats by nickname"
     )
-    public ConfirmRes updateStatsByName(@PathVariable String name,@RequestBody @Validated UpdateStatsPlayerDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
+    public ConfirmRes updateStatsByNickname(@PathVariable String nickname,@RequestBody @Validated UpdateStatsPlayerDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
-        playerSv.updateStatsByName(name, playerDTO);
+        playerSv.updateStatsByName(nickname, playerDTO);
         return new ConfirmRes("Player's stats have been updated successfully", HttpStatus.CREATED);
     }
 
@@ -80,13 +80,13 @@ public class PlayerController {
         return new DeleteRes("Player deletion successful.");
     }
 
-    @DeleteMapping("/delete/{name}")
+    @DeleteMapping("/delete/{nickname}")
     @Operation(
-            description = "Delete a player by name.",
-            summary = "Delete Player by Name"
+            description = "Delete a player by nickname.",
+            summary = "Delete Player by nickname"
     )
-    public DeleteRes deleteByName(@PathVariable String name)throws BadRequestException{
-        playerSv.deleteByName(name);
+    public DeleteRes deleteByNickname(@PathVariable String nickname)throws BadRequestException{
+        playerSv.deleteByName(nickname);
         return new DeleteRes("Player deletion successful.");
     }
 

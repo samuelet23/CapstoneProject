@@ -14,6 +14,7 @@ import it.epicode.capstone.Models.Entities.User;
 import it.epicode.capstone.Models.Enums.Role;
 import it.epicode.capstone.Models.ResponsesDTO.ConfirmRes;
 import it.epicode.capstone.Models.ResponsesDTO.DeleteRes;
+import it.epicode.capstone.Models.ResponsesDTO.UpdateRoleRes;
 import it.epicode.capstone.Services.UserService;
 import org.hibernate.sql.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class UserController {
         return userSv.create(userDTO);
     }
 
-    @PutMapping("update/{id}")
+    @PutMapping("/update/byId/{id}")
     @Operation(
             description = "Update a user by their unique identifier.",
             summary = "Update user by ID"
@@ -67,7 +68,7 @@ public class UserController {
         );
     }
 
-    @PutMapping("update/{username}")
+    @PutMapping("/update/byUsername/{username}")
     @Operation(
             description = "Update a user by their username.",
             summary = "Update user by username"
@@ -82,7 +83,7 @@ public class UserController {
         );
     }
 
-    @PatchMapping("update/password/{username}")
+    @PatchMapping("/update/password/{username}")
     @Operation(
             description = "Update a user's password by their username.",
             summary = "Update user's password by username"
@@ -98,41 +99,67 @@ public class UserController {
         );
     }
 
-    @PatchMapping("update/username/{id}")
+    @PatchMapping("/update/username/{id}")
     @Operation(
             description = "Update a user's username by their unique identifier.",
             summary = "Update user's username by ID"
     )
-    public ConfirmRes updateUsername(@PathVariable UUID id,@RequestBody @Validated UserUpdateDTO username, BindingResult bindingResult) throws BadRequestException, UnauthorizedException {
+    public ConfirmRes updateUsername(@PathVariable UUID id,@RequestBody String username, BindingResult bindingResult) throws BadRequestException, UnauthorizedException {
         HandlerException.badRequestException(bindingResult);
-        userSv.updateUsername(id, username.username());
+        if (username.isEmpty()) {
+            throw new BadRequestException("Il campo non può essere vuoto");
+        } else if (username.length() <  5) {
+            throw new BadRequestException("Il nome utente deve essere di almeno 5 caratteri");
+        }
+        userSv.updateUsername(id, username);
         return new ConfirmRes(
-                "Username "+username.username()+" has been updated successfully",
+                "Username "+username+" has been updated successfully",
                 HttpStatus.CREATED
         );
     }
 
-    @PatchMapping("update/{username}/manager")
+    @PatchMapping("/update/{username}/manager")
     @Operation(
             description = "Update a user's role to manager by their username.",
             summary = "Update user's role to manager by username"
     )
-    public Role updateRoleToManager(@PathVariable String username, BindingResult bindingResult)throws BadRequestException{
-        HandlerException.badRequestException(bindingResult);
-        return userSv.updateRoleManagerByUsername(username);
+    public UpdateRoleRes updateRoleToManager(@PathVariable String username)throws BadRequestException{
+       Role role =  userSv.updateRoleManagerByUsername(username);
+        return new UpdateRoleRes(
+                "Username Role"+username+" has been updated successfully to Captain",
+                HttpStatus.CREATED,
+                "The role now is "+ role
+        );
     }
 
-    @PatchMapping("update/{username}/captain")
+    @PatchMapping("/update/{username}/captain")
     @Operation(
             description = "Update a user's role to captain by their username.",
             summary = "Update user's role to captain by username"
     )
-    public Role updateRoleToCaptain(@PathVariable String username, BindingResult bindingResult)throws BadRequestException{
-        HandlerException.badRequestException(bindingResult);
-        return userSv.updateRoleCaptainByUsername(username);
+    public UpdateRoleRes updateRoleToCaptain(@PathVariable String username)throws BadRequestException{
+        Role role = userSv.updateRoleCaptainByUsername(username);
+        return new UpdateRoleRes(
+                "Username Role"+username+" has been updated successfully to Captain",
+                HttpStatus.CREATED,
+                "The role now is "+ role
+        );
+    }
+    @PatchMapping("/update/{username}/user")
+    @Operation(
+            description = "Update a user's role to user by their username.",
+            summary = "Update user's role to user by username"
+    )
+    public UpdateRoleRes updateRoleToUser(@PathVariable String username)throws BadRequestException{
+        Role role = userSv.updateRoleUserByUsername(username);
+        return new UpdateRoleRes(
+                "Username Role"+username+" has been updated successfully to User",
+                HttpStatus.CREATED,
+                "The role now is "+ role
+        );
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/byId/{id}")
     @Operation(
             description = "Delete a user by their unique identifier.",
             summary = "Delete user by ID"
@@ -144,7 +171,7 @@ public class UserController {
         );
     }
 
-    @DeleteMapping("/delete/{username}")
+    @DeleteMapping("/delete/byUsername/{username}")
     @Operation(
             description = "Delete a user by their username.",
             summary = "Delete user by username"
