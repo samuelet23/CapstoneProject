@@ -2,11 +2,11 @@ package it.epicode.capstone.Controllers.OpenApi;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.tags.Tags;
 import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Exceptions.NotFoundException;
 import it.epicode.capstone.Models.Entities.*;
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
+import it.epicode.capstone.Models.Entities.Game;
 import it.epicode.capstone.Models.ResponsesDTO.ConfirmPlayerPoints;
 import it.epicode.capstone.Models.ResponsesDTO.PlayerPointRes;
 import it.epicode.capstone.Services.*;

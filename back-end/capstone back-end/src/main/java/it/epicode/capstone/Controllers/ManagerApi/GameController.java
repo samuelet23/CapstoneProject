@@ -1,30 +1,24 @@
 package it.epicode.capstone.Controllers.ManagerApi;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Exceptions.HandlerException;
 import it.epicode.capstone.Models.DTO.AddPointsDTO;
-import it.epicode.capstone.Models.DTO.BeforeGameDTO;
-import it.epicode.capstone.Models.DTO.DuringGameDTO;
-import it.epicode.capstone.Models.Entities.Game;
 import it.epicode.capstone.Models.Entities.Team;
-import it.epicode.capstone.Models.Entities.Tournament;
+import it.epicode.capstone.Models.ResponsesDTO.ConfirmRes;
 import it.epicode.capstone.Models.ResponsesDTO.DeleteRes;
 import it.epicode.capstone.Services.GameService;
 import it.epicode.capstone.Services.PlayerService;
 import it.epicode.capstone.Services.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -42,14 +36,17 @@ public class GameController {
     private TournamentService tournamentSv;
 
 
-    @PostMapping("/create")
+    @PostMapping("/start/game-id")
     @Operation(
-            description = "Create a new game.",
-            summary = "Create Game"
+            description = "start a game.",
+            summary = "Start Game"
     )
-    public Game createGame(@RequestBody @Validated BeforeGameDTO beforeGameDTO, BindingResult bindingResult)throws BadRequestException{
-        HandlerException.badRequestException(bindingResult);
-        return gameSv.createGame(beforeGameDTO);
+    public ConfirmRes startGame(@RequestParam("game-id") UUID id)throws BadRequestException{
+        gameSv.createGame(id);
+        return new ConfirmRes(
+                "La partita è iniziata, Buona fortuna ai giocatori",
+                HttpStatus.OK
+        );
     }
 
     @PutMapping("/update/{id}/homePoints")
@@ -57,9 +54,13 @@ public class GameController {
             description = "Update home points of a game.",
             summary = "Update Home Points"
     )
-    public Game updateHomePoints(@PathVariable UUID id,@RequestBody @Validated AddPointsDTO addPointsDTO, BindingResult bindingResult)throws BadRequestException{
+    public ConfirmRes updateHomePoints(@PathVariable UUID id,@RequestBody @Validated AddPointsDTO addPointsDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
-        return gameSv.updateHomePoints(id, addPointsDTO.pointToAdd(), addPointsDTO.siglaPlayer());
+        gameSv.updateHomePoints(id, addPointsDTO.pointToAdd(), addPointsDTO.siglaPlayer());
+        return new ConfirmRes(
+                "I punti sono statti aggiunti correttamente",
+                HttpStatus.OK
+        );
     }
 
     @PutMapping("/update/{id}/awayPoints")
@@ -67,9 +68,14 @@ public class GameController {
             description = "Update away points of a game.",
             summary = "Update Away Points"
     )
-    public Game updateAwayPoints(@PathVariable UUID id, @RequestBody @Validated AddPointsDTO addPointsDTO, BindingResult bindingResult)throws BadRequestException{
+    public ConfirmRes updateAwayPoints(@PathVariable UUID id, @RequestBody @Validated AddPointsDTO addPointsDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
-        return gameSv.updateAwayPoints(id, addPointsDTO.pointToAdd(), addPointsDTO.siglaPlayer());
+        gameSv.updateAwayPoints(id, addPointsDTO.pointToAdd(), addPointsDTO.siglaPlayer());
+
+        return new ConfirmRes(
+                "I punti sono statti aggiunti correttamente",
+                HttpStatus.OK
+        );
     }
 
     @PostMapping("/finish/{id}")

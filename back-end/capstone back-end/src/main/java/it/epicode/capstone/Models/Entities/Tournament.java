@@ -1,10 +1,8 @@
 package it.epicode.capstone.Models.Entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.v3.oas.annotations.Hidden;
 import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
-import it.epicode.capstone.Models.Entities.SuperClass.Person;
 import it.epicode.capstone.Models.Enums.Round;
 import it.epicode.capstone.Models.Enums.TournamentLevel;
 import jakarta.persistence.Entity;
@@ -16,6 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -31,6 +30,7 @@ public class Tournament extends Competition {
 
     @JsonIgnore
     private Round initialRound;
+
 
     public Tournament(LocalDate startDate, String coverUrl, String name, List<Referee> referees, Set<Team> teams, List<Game> games, Place place, List<Player> players) {
         super(startDate, coverUrl, name, referees, teams, games, place, players);

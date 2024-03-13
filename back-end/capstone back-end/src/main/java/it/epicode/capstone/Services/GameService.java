@@ -1,15 +1,11 @@
 package it.epicode.capstone.Services;
 
-import it.epicode.capstone.Config.ProvinceConfig;
 import it.epicode.capstone.Exceptions.BadRequestException;
-import it.epicode.capstone.Models.DTO.BeforeGameDTO;
-import it.epicode.capstone.Models.DTO.DuringGameDTO;
 import it.epicode.capstone.Models.Entities.Game;
 import it.epicode.capstone.Models.Entities.Player;
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
 import it.epicode.capstone.Models.Entities.Team;
 import it.epicode.capstone.Models.Enums.GameStatus;
-import it.epicode.capstone.Models.Enums.Role;
 import it.epicode.capstone.Models.Enums.Round;
 import it.epicode.capstone.Repositories.GameRepository;
 import it.epicode.capstone.Repositories.TeamRepository;
@@ -52,22 +48,22 @@ public class GameService {
         );
     }
 
-    public Game  createGame(BeforeGameDTO game) throws BadRequestException {
-
-        if (gameRp.existsByHomeTeamNameAndAwayTeamNameAndRound(game.homeTeamName(), game.awayTeamName(),Round.valueOf(game.round()))) {
-            throw new BadRequestException("La partita è già stata giocata o si sta giocando adesso");
+    public void createGame(UUID matchId) throws BadRequestException {
+        Game match = getById(matchId);
+        if (match.getStatus() != GameStatus.SCHEDULED) {
+            throw new BadRequestException("Il match si sta giocando o è già finito");
         }
-
-        Team homeTeam = teamSv.getByName(game.homeTeamName());
-        Team awayTeam = teamSv.getByName(game.awayTeamName());
-
-        Game match = new Game(homeTeam, awayTeam, 0, 0);
         match.setStatus(GameStatus.STARTED);
 
-        return gameRp.save(match);
+        gameRp.save(match);
     }
-    public Game updateHomePoints(UUID id, int pointsToAdd, String sigla) throws BadRequestException {
+    public void updateHomePoints(UUID id, int pointsToAdd, String sigla) throws BadRequestException {
         Game game = getById(id);
+
+        if (game.getStatus() != GameStatus.STARTED) {
+            throw new BadRequestException("Non puoi inserire punti ad una partita che non è iniziata");
+        }
+
         if (pointsToAdd < 1 || pointsToAdd > 3) {
             throw new BadRequestException("Puoi aggiungere solo da 1 a 3 punti in un'azione singola.");
         }
@@ -84,11 +80,16 @@ public class GameService {
             }
         }
 
-        return gameRp.save(game);
+        gameRp.save(game);
     }
 
-    public Game updateAwayPoints(UUID id, int pointsToAdd, String sigla) throws BadRequestException {
+    public void updateAwayPoints(UUID id, int pointsToAdd, String sigla) throws BadRequestException {
         Game game = getById(id);
+        if (game.getStatus() != GameStatus.STARTED) {
+            throw new BadRequestException("Non puoi inserire punti ad una partita che non è iniziata");
+        }
+
+
         if (pointsToAdd <= 0 || pointsToAdd > 3) {
             throw new BadRequestException("Puoi aggiungere solo da 1 a 3 punti in un'azione singola.");
         }
@@ -104,11 +105,14 @@ public class GameService {
             }
         }
 
-        return gameRp.save(game);
+        gameRp.save(game);
     }
 
     public Team finishedGame(UUID id) throws Exception {
         Game game = getById(id);
+        if (game.getStatus().equals(GameStatus.SCHEDULED)) {
+            throw new BadRequestException("Non puoi inserire punti ad una partita che non è iniziata");
+        }
 
         if (game.getStatus().equals(GameStatus.FINISHED)) {
             throw new IllegalArgumentException("la partità è già finita, ha vinto la squadra: "+game.getWinner().getName());
@@ -130,7 +134,7 @@ public class GameService {
                     game.setWinner(game.getAwayTeam());
                     game.setStatus(GameStatus.FINISHED);
                 } else {
-                    throw new RuntimeException("The match cannot finish in a tie. Please continue the match.");
+                    throw new RuntimeException("La partità non può finire in parità, OVERTIME!");
                 }
 
                 matchFinished = true;

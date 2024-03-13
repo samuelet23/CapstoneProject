@@ -5,6 +5,7 @@ import it.epicode.capstone.Exceptions.NoTournamentsAvailableException;
 import it.epicode.capstone.Exceptions.TournamentDataException;
 import it.epicode.capstone.Models.DTO.*;
 import it.epicode.capstone.Models.Entities.*;
+import it.epicode.capstone.Models.Entities.Game;
 import it.epicode.capstone.Models.Enums.*;
 import it.epicode.capstone.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,6 +163,7 @@ public class TournamentService {
         if (quartiTeams.size() < 8) {
             throw new IllegalStateException("Non ci sono abbastanza team vincenti per generare i quarti di finale.");
         }
+        gameRp.deleteAll();
 
         Collections.shuffle(quartiTeams);
 
@@ -205,6 +207,8 @@ public class TournamentService {
             throw new IllegalStateException("Non ci sono abbastanza team vincenti per generare le semifinali.");
         }
 
+        gameRp.deleteAll();
+
         Collections.shuffle(semiFinalsTeams);
 
         List<Game> semiFinalsMatches = new ArrayList<>();
@@ -227,7 +231,7 @@ public class TournamentService {
         return  t.getGames();
     }
 
-    public List<Game> generateFinale(String nameTournament) throws BadRequestException {
+    public Game generateFinale(String nameTournament) throws BadRequestException {
         Tournament tournament = getByName(nameTournament);
         List<Game> semifinaliMatches = tournament.getGames();
         List<Team> finalTeams = new ArrayList<>();
@@ -247,7 +251,7 @@ public class TournamentService {
             throw new IllegalStateException("Non ci sono abbastanza team vincenti per generare la finale.");
         }
 
-        Collections.shuffle(finalTeams);
+        gameRp.deleteAll();
 
         Team homeTeam = finalTeams.get(0);
         Team awayTeam = finalTeams.get(1);
@@ -261,7 +265,7 @@ public class TournamentService {
         tournament.setGames(Collections.singletonList(finale));
         tournament.setInitialRound(Round.FINAL);
         Tournament t = tournamentRp.save(tournament);
-        return  t.getGames();
+        return  finale;
     }
 
 
