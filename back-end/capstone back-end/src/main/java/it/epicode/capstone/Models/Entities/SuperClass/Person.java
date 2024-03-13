@@ -23,9 +23,6 @@ public abstract class Person {
     String name;
     String surname;
     LocalDate dateOfBirth;
-
-
-
     int age;
 
     public Person(String name, String surname, LocalDate dateOfBirth){

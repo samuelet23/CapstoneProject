@@ -2,6 +2,7 @@ package it.epicode.capstone.Models.Entities;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
+import it.epicode.capstone.Models.Entities.Team;
 import it.epicode.capstone.Models.Enums.GameStatus;
 import it.epicode.capstone.Models.Enums.Round;
 import jakarta.persistence.*;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(name = "games")
 public class Game {
 
@@ -21,6 +23,7 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Setter(AccessLevel.NONE)
     private UUID id;
+
 
     @OneToOne
     @JoinColumn(name = "home_team_id")

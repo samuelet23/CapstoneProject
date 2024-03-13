@@ -2,11 +2,11 @@ package it.epicode.capstone.Controllers.OpenApi;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.tags.Tags;
 import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Exceptions.NotFoundException;
 import it.epicode.capstone.Models.Entities.*;
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
+import it.epicode.capstone.Models.Entities.Game;
 import it.epicode.capstone.Models.ResponsesDTO.ConfirmPlayerPoints;
 import it.epicode.capstone.Models.ResponsesDTO.PlayerPointRes;
 import it.epicode.capstone.Services.*;
@@ -231,13 +231,13 @@ public class GetController {
         return refereeSv.getById(id);
     }
     @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("/referee/get/byName/{name}")
+    @GetMapping("/referee/get/byNickname/{nickname}")
     @Operation(
-            description = "Retrieve a referee by their name.",
-            summary = "Get a referee by name"
+            description = "Retrieve a referee by their nickname.",
+            summary = "Get a referee by nickname"
     )
-    public Referee getRefereeByName(@PathVariable String name)throws BadRequestException {
-        return refereeSv.getByName(name);
+    public Referee getRefereeByNickname(@PathVariable String nickname)throws BadRequestException {
+        return refereeSv.getByNickname(nickname);
     }
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/referee/get/all/tournament-name")

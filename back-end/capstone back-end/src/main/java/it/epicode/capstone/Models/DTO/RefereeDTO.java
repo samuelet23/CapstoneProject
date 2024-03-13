@@ -14,6 +14,10 @@ public record RefereeDTO (
         @NotBlank(message = "The surname field cannot be empty/null")
         @Size(min = 3,message = "Surname must be of 3 characters")
         String surname,
+        @NotBlank(message = "Il campo soprannome non può essere vuoto/null")
+        @Size(min = 3, message = "Il soprannome deve essere composto da almeno 3 caratteri")
+        String nickname,
+
         @NotBlank(message = "The date Of Birth field cannot be empty/null, the date must be dd/MM/yyyy")
         String dateOfBirth,
         UUID idTournament

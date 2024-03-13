@@ -35,7 +35,7 @@ public class Player extends Person {
     @Enumerated(EnumType.STRING)
     private RoleInTheGame roleInTheGame = RoleInTheGame.PLAYER;
 
-
+    
     String teamName;
 
     public Player(String name, String surname, LocalDate dateOfBirth) {

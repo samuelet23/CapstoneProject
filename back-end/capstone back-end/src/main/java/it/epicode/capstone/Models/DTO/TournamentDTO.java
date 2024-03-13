@@ -18,14 +18,7 @@ public record TournamentDTO (
          @Size(min = 1, max = 3, message = "The tournament must have between 1 and 3 referee")
          @Valid
          List<String> referees,
-         @NotEmpty(message = "The tournament must have the teams")
-         @Size(min = 12, max = 16, message = "The tournament must have between 12 and 16 teams")
-         @Valid
-         Set<TeamDTO> teams,
 
-         @NotBlank(message = "The place field cannot be empty/null")
-         @NotEmpty(message = "This field must contain via, civico,cap, town name , sigla province ")
-         @Valid
          PlaceDTO place,
 
          String level

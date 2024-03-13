@@ -17,7 +17,7 @@ public record AddressDTO(
         @NotBlank(message = "The civico field cannot be empty/null")
         String civico,
 
-        @Pattern(regexp = "[A-Z]{5}", message = "Cap must be of 5 characters")
+        @Pattern(regexp = "\\d{5}", message = "Cap must be of 5 characters")
         String cap,
         @NotBlank(message = "The password field cannot be empty/null")
         String townName,

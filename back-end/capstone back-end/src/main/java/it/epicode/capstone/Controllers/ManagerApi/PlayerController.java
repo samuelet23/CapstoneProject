@@ -48,7 +48,7 @@ public class PlayerController {
         return new ConfirmRes("Player's credential has been updated successfully", HttpStatus.CREATED);
     }
 
-    @PatchMapping("/update/stats/{id}")
+    @PatchMapping("/update/stats/byId/{id}")
     @Operation(
             description = "Update player's statistics by ID.",
             summary = "Update Player Stats by ID"
@@ -59,7 +59,7 @@ public class PlayerController {
         return new ConfirmRes("Player's stats have been updated successfully", HttpStatus.CREATED);
     }
 
-    @PatchMapping("/update/stats/{nickname}")
+    @PatchMapping("/update/stats/byNickname/{nickname}")
     @Operation(
             description = "Update player's statistics by nickname.",
             summary = "Update Player Stats by nickname"

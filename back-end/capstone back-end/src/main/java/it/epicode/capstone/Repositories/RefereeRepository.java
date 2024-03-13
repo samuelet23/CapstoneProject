@@ -14,5 +14,5 @@ public interface RefereeRepository extends JpaRepository<Referee, UUID> {
     @Query("SELECT r FROM Referee r WHERE r.tournament.name = :name")
     List<Referee> findByTournamentName(String name);
 
-    Optional<Referee> findByName(String name);
+    Optional<Referee> findByNickname(String nickname);
 }

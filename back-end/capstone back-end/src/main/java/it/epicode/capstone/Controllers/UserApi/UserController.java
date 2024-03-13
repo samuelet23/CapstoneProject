@@ -123,6 +123,7 @@ public class UserController {
             description = "Update a user's role to manager by their username.",
             summary = "Update user's role to manager by username"
     )
+    @PreAuthorize("hasAnyAuthority('USER','MANAGER','CAPTAIN')")
     public UpdateRoleRes updateRoleToManager(@PathVariable String username)throws BadRequestException{
        Role role =  userSv.updateRoleManagerByUsername(username);
         return new UpdateRoleRes(
@@ -137,6 +138,7 @@ public class UserController {
             description = "Update a user's role to captain by their username.",
             summary = "Update user's role to captain by username"
     )
+    @PreAuthorize("hasAnyAuthority('USER','CAPTAIN')")
     public UpdateRoleRes updateRoleToCaptain(@PathVariable String username)throws BadRequestException{
         Role role = userSv.updateRoleCaptainByUsername(username);
         return new UpdateRoleRes(

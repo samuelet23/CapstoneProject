@@ -59,7 +59,7 @@ public class TeamService {
     }
 
     @Transactional
-    public Team createTeam(TeamDTO teamDTO) {
+    public Team createTeam(TeamDTO teamDTO) throws BadRequestException {
 
         Team team = new Team();
 
@@ -103,13 +103,13 @@ public class TeamService {
         return teamRp.save(team);
     }
 
-    public void updateCaptain(String teamName, String playerName)throws BadRequestException{
+    public void updateCaptain(String teamName, String nickname)throws BadRequestException{
         Team t = getByName(teamName);
-        Player p = playerRp.findByNickname(playerName).orElseThrow(
+        Player p = playerRp.findByNickname(nickname).orElseThrow(
                 () -> new IllegalArgumentException("Captain player Not Found")
         );
         if (t.getCaptain() ==  p) {
-            throw new IllegalArgumentException("The Player with name: "+playerName+" is already a Captain");
+            throw new IllegalArgumentException("The Player with name: "+nickname+" is already a Captain");
         }
         t.setCaptain(p);
         teamRp.save(t);

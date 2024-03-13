@@ -1,7 +1,6 @@
 package it.epicode.capstone.Models.Entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.v3.oas.annotations.Hidden;
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,6 +37,7 @@ public class Team {
     @OneToMany(mappedBy = "winner")
     private Set<Game> wonGames = new HashSet<>();
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tournament_id")
     private Competition tournament;
