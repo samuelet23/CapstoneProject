@@ -1,6 +1,7 @@
 package it.epicode.capstone.Models.Entities.SuperClass;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Models.Entities.*;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,7 +30,7 @@ public abstract class Competition {
     private String name;
 
     @OneToMany(mappedBy = "tournament")
-    private List<Referee> referees;
+    private List<Referee> referees = new ArrayList<>();
 
     @OneToMany(mappedBy = "tournament")
     private Set<Team> teams = new HashSet<Team>();
@@ -56,5 +57,27 @@ public abstract class Competition {
         this.place = place;
         this.players = players;
     }
+
+
+
+    public void addTeam(Team team) throws BadRequestException {
+        if (!teams.contains(team)) {
+            teams.add(team);
+            team.setTournament(this);
+        }else{
+            throw new BadRequestException("La squadra è già iscritta al torneo");
+        }
+
+    }
+
+    public void Referee(Referee referee) throws BadRequestException {
+        if (!referees.contains(referee)) {
+            referees.add(referee);
+            referee.setTournament(this);
+        }else{
+            throw new BadRequestException("l'arbitro fa già parte del torneo");
+        }
+    }
+
 
 }

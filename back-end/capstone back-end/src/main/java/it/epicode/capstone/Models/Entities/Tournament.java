@@ -30,7 +30,7 @@ public class Tournament extends Competition {
     private TournamentLevel level;
 
     @JsonIgnore
-    private Round initialRound = Round.OCTAVEFINAL;
+    private Round initialRound;
 
     public Tournament(LocalDate startDate, String coverUrl, String name, List<Referee> referees, Set<Team> teams, List<Game> games, Place place, List<Player> players) {
         super(startDate, coverUrl, name, referees, teams, games, place, players);
@@ -50,7 +50,7 @@ public class Tournament extends Competition {
         }
     }
 
-    private int getMaxRefereesForLevel(TournamentLevel level) {
+    public int getMaxRefereesForLevel(TournamentLevel level) {
         return switch (level) {
             case JUNIOR -> 1;
             case RISINGSTARS -> 2;

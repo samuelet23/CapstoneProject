@@ -61,9 +61,9 @@ public class TournamentController {
             description = "Update the level of a tournament to Junior and update the number of referees accordingly.",
             summary = "Update tournament level to Junior"
     )
-    public ConfirmRes updateLevelToJunior(@RequestParam("tournament-name") String tournamentName, @RequestBody List<RefereeDTO> refereesDTO, BindingResult bindingResult) throws Exception {
+    public ConfirmRes updateLevelToJunior(@RequestParam("tournament-name") String tournamentName, @RequestBody @Validated List<RefereeDTO> refereesDTOs, BindingResult bindingResult) throws Exception {
         HandlerException.badRequestException(bindingResult);
-        tournamentSv.updateLevelToJunior(tournamentName);
+        tournamentSv.updateLevelToJunior(refereesDTOs,tournamentName);
         return new ConfirmRes(
                 "Tournament Level has been updated to JUNIOR",
                 HttpStatus.CREATED
@@ -75,43 +75,58 @@ public class TournamentController {
             description = "Update the level of a tournament to Rising Stars and update the number of referees accordingly.",
             summary = "Update tournament level to Rising Stars"
     )
-    public ConfirmRes updateLevelToRisingStars(@RequestParam("tournament-name") String tournamentName, @RequestBody List<RefereeDTO> refereesDTO, BindingResult bindingResult) throws Exception {
+    public ConfirmRes updateLevelToRisingStars(@RequestParam("tournament-name") String tournamentName, @RequestBody @Validated List<RefereeDTO> refereesDTOs, BindingResult bindingResult) throws Exception {
         HandlerException.badRequestException(bindingResult);
-        tournamentSv.updateLevelToRisingStars( tournamentName);
+        tournamentSv.updateLevelToRisingStars(refereesDTOs, tournamentName);
         return new ConfirmRes(
                 "Tournament Level has been updated to RISING STARS",
                 HttpStatus.CREATED
         );
     }
 
+    @PostMapping("/start/{tournament-name}")
+    public List<Game> startTournament(@PathVariable("tournament-name") String nameTournament)throws BadRequestException{
+        return tournamentSv.startTournament(nameTournament);
+    }
+
+
     @PatchMapping("/update/level/elite/tournament-name")
     @Operation(
             description = "Update the level of a tournament to Elite and update the number of referees accordingly.",
             summary = "Update tournament level to Elite"
     )
-    public ConfirmRes updateLevelToElite(@RequestParam("tournament-name") String tournamentName, @RequestBody @Validated List<RefereeDTO> refereesDTO, BindingResult bindingResult ) throws Exception {
+    public ConfirmRes updateLevelToElite(@RequestParam("tournament-name") String tournamentName, @RequestBody @Validated List<RefereeDTO> refereesDTOs, BindingResult bindingResult ) throws Exception {
         HandlerException.badRequestException(bindingResult);
-        tournamentSv.updateLevelToElite(tournamentName);
+        tournamentSv.updateLevelToElite(refereesDTOs,tournamentName);
         return new ConfirmRes(
                 "Tournament Level has been updated to ELITE",
                 HttpStatus.CREATED
         );
     }
 
-    @PostMapping("/add/existing-team/tournament-name")
-    public ConfirmRes addTeamExistingToTournament(@RequestParam("existing-team") String nameTeam,@RequestParam("tournament-name") String nameTournament) throws BadRequestException {
+    @PostMapping("/subscribe/existing-team/tournament-name")
+    @Operation(
+            summary = "Subscribe an existing team to a tournament",
+            description = "This endpoint subscribe an already existing team into a specified tournament by the team's name and the tournament's name." +
+                    "It's a convenient way to add a team that is already registered in the system to a new or existing tournament without having to recreate the team from scratch."
+    )
+    public ConfirmRes subscribeExistingTeam(@RequestParam("existing-team") String nameTeam,@RequestParam("tournament-name") String nameTournament) throws BadRequestException {
 
-        tournamentSv.addTeamExistingToTournament(nameTeam,nameTournament);
+        tournamentSv.subscribeExistingTeam(nameTeam,nameTournament);
 
         return new ConfirmRes(
                 "Existing Team added successfully",
                 HttpStatus.CREATED
         );
     }
-    @PostMapping("/add/created-team/tournament-name")
-    public ConfirmRes addCreatedTeamToTournament(@RequestBody @Validated TeamDTO teamDTO, @RequestParam("tournament-name") String nameTournament, BindingResult bindingResult) throws BadRequestException {
+    @PostMapping("/subscribe/created-team/tournament-name")
+    @Operation(
+            summary = "Create and subscribe a new team to a tournament",
+            description = "This endpoint creates a new team based on the provided TeamDTO information and then subscribes this newly created team to a specified tournament by the tournament's name. It facilitates the process of adding fresh teams to the tournament, streamlining their creation and immediate enrollment in a single step."
+    )
+    public ConfirmRes createAndSubscribeTeamToTournament(@RequestBody @Validated TeamDTO teamDTO, @RequestParam("tournament-name") String nameTournament, BindingResult bindingResult) throws BadRequestException {
         HandlerException.badRequestException(bindingResult);
-        tournamentSv.addCreatedTeamToTournament(teamDTO,nameTournament);
+        tournamentSv.createAndSubscribeTeamToTournament(teamDTO,nameTournament);
         return new ConfirmRes(
                 "Created Team added successfully",
                 HttpStatus.CREATED

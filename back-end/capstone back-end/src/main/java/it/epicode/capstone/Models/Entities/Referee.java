@@ -1,5 +1,6 @@
 package it.epicode.capstone.Models.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.Hidden;
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
 import it.epicode.capstone.Models.Entities.SuperClass.Person;
@@ -19,9 +20,11 @@ import java.time.LocalDate;
 @Table(name = "referees")
 public class Referee extends Person {
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tournament_id")
     private Competition tournament;
+
     @Column(unique = true)
     private String nickname;
 
@@ -35,9 +38,8 @@ public class Referee extends Person {
         super(name, surname, dateOfBirth);
         this.tournament = tournament;
     }
-    public Referee(String name, String surname, LocalDate dateOfBirth, Competition tournament, String nickname) {
+    public Referee(String name, String surname, LocalDate dateOfBirth,String nickname) {
         super(name, surname, dateOfBirth);
-        this.tournament = tournament;
         this.nickname = nickname;
     }
 }

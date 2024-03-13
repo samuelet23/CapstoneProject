@@ -1,5 +1,6 @@
 package it.epicode.capstone.Services;
 
+import it.epicode.capstone.Config.ProvinceConfig;
 import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Models.DTO.BeforeGameDTO;
 import it.epicode.capstone.Models.DTO.DuringGameDTO;
@@ -12,6 +13,8 @@ import it.epicode.capstone.Models.Enums.Role;
 import it.epicode.capstone.Models.Enums.Round;
 import it.epicode.capstone.Repositories.GameRepository;
 import it.epicode.capstone.Repositories.TeamRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +26,7 @@ import java.util.UUID;
 
 @Service
 public class GameService {
+    public static final Logger logger = LoggerFactory.getLogger(GameService.class);
 
     @Autowired
     private GameRepository gameRp;
@@ -59,10 +63,6 @@ public class GameService {
 
         Game match = new Game(homeTeam, awayTeam, 0, 0);
         match.setStatus(GameStatus.STARTED);
-
-        String round = game.round().toUpperCase().trim();
-        match.setRound(Round.valueOf(round));
-
 
         return gameRp.save(match);
     }
@@ -151,6 +151,10 @@ public class GameService {
         game = gameRp.save(game);
 
         game.getWinner().setWonGames(Set.of(game));
+
+        if (game.getRound() == Round.FINAL) {
+            logger.info("Il toneo è stato vinto dalla squadra: "+game.getWinner().getName()+ " Complimenti da tutto lo staff");
+        }
 
         return game.getWinner();
     }

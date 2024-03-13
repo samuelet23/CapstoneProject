@@ -29,63 +29,40 @@ public class RoundController {
     @Autowired
     private TournamentService tournamentSv;
 
-    @GetMapping("/octave-final/{tournament-name}")
-    @Operation(
-            description = "Generate octave finals for a tournament.",
-            summary = "Generate Octave Finals"
-    )
-    public RoundsGeneratedRes generateOctaveFinals(@PathVariable("tournament-name") String nameTournament, BindingResult bindingResult)throws BadRequestException {
-        Tournament t = tournamentSv.getByName(nameTournament);
-        HandlerException.badRequestException(bindingResult);
-        List<Game> games = tournamentSv.generateOttaviMatches(t);
-        return new RoundsGeneratedRes(
-                "Octave finals generated successfully.",
-                games
-        );
-    }
 
-    @GetMapping("/quarter-final/{tournament-name}")
+    @PostMapping("/quarter-final/{tournament-name}")
     @Operation(
             description = "Generate quarter finals for a tournament.",
             summary = "Generate Quarter Finals"
     )
-    public RoundsGeneratedRes generateQuarterFinals(@PathVariable("tournament-name")String nameTournament, BindingResult bindingResult) throws BadRequestException, TournamentDataException {
-        Tournament t = tournamentSv.getByName(nameTournament);
-        HandlerException.tournamentDataException(bindingResult);
-        HandlerException.badRequestException(bindingResult);
-        List<Game> games = tournamentSv.generateQuarterFinalMatches(t);
+    public RoundsGeneratedRes generateQuarterFinals(@PathVariable("tournament-name")String nameTournament) throws BadRequestException, TournamentDataException {
+        List<Game> games = tournamentSv.generateQuartiMatches(nameTournament);
         return new RoundsGeneratedRes(
                 "Quarter finals generated successfully.",
                 games
         );
     }
 
-    @GetMapping("/semi-final/{tournament-name}")
+    @PostMapping("/semi-final/{tournament-name}")
     @Operation(
             description = "Generate semi finals for a tournament.",
             summary = "Generate Semi Finals"
     )
-    public RoundsGeneratedRes generateSemiFinals(@PathVariable("tournament-name")String nameTournament, BindingResult bindingResult) throws BadRequestException, TournamentDataException {
-        Tournament t = tournamentSv.getByName(nameTournament);
-        HandlerException.tournamentDataException(bindingResult);
-        HandlerException.badRequestException(bindingResult);
-        List<Game> games = tournamentSv.generateSemiFinalMatches(t);
+    public RoundsGeneratedRes generateSemiFinals(@PathVariable("tournament-name")String nameTournament) throws BadRequestException, TournamentDataException {
+        List<Game> games = tournamentSv.generateSemiFinals(nameTournament);
         return new RoundsGeneratedRes(
                 "Semi finals generated successfully.",
                 games
         );
     }
 
-    @GetMapping("/final/{tournament-name}")
+    @PostMapping("/final/{tournament-name}")
     @Operation(
             description = "Generate final match for a tournament.",
             summary = "Generate Final Match"
     )
-    public RoundsGeneratedRes generateFinal(@PathVariable("tournament-name")String nameTournament, BindingResult bindingResult) throws BadRequestException, TournamentDataException {
-        Tournament t = tournamentSv.getByName(nameTournament);
-        HandlerException.tournamentDataException(bindingResult);
-        HandlerException.badRequestException(bindingResult);
-        List<Game> games = tournamentSv.generateFinalMatch(t);
+    public RoundsGeneratedRes generateFinal(@PathVariable("tournament-name")String nameTournament) throws BadRequestException, TournamentDataException {
+        List<Game> games = tournamentSv.generateFinale(nameTournament);
         return new RoundsGeneratedRes(
                 "Final generated successfully.",
                 games

@@ -38,6 +38,7 @@ public class Team {
     @OneToMany(mappedBy = "winner")
     private Set<Game> wonGames = new HashSet<>();
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tournament_id")
     private Competition tournament;
