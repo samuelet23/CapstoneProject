@@ -1,1 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
+.logo-container {
+  margin-right: auto;
+  width: 80px;
+  .logo {
+    width: 100%;
+  }
+}
+
+.error-message {
+  font-size: 9px;
+  margin: 3px 2px;
+}
+
+.error-text {
+  color: red;
+}

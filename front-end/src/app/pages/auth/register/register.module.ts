@@ -6,6 +6,9 @@ import { RegisterUserComponent } from './register-user/register-user.component';
 import { RegisterCaptainComponent } from './register-captain/register-captain.component';
 import { RegisterManagerComponent } from './register-manager/register-manager.component';
 import { RegisterComponent } from './register.component';
+import { SharedModule } from '../../../shared/shared.module';
+import { RegisterPageComponent } from '../../../components/register-page/register-page.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -13,11 +16,12 @@ import { RegisterComponent } from './register.component';
     RegisterUserComponent,
     RegisterCaptainComponent,
     RegisterManagerComponent,
-    RegisterComponent
+    RegisterComponent,
   ],
   imports: [
     CommonModule,
-    RegisterRoutingModule
+    RegisterRoutingModule,
+    SharedModule
   ]
 })
 export class RegisterModule { }
