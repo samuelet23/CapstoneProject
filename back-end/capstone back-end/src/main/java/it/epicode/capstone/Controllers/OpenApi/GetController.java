@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@Tag(name = "OPEN GET API (accessible to everyone)")
+@Tag(name = "OPEN GET ")
 @RequestMapping("/api/open")
 public class GetController {
     @Autowired

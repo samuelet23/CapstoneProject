@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/generate")
-@Tag(name = "GENERATE ROUND API (only for managers)")
+@Tag(name = "ROUND ")
 @PreAuthorize("hasAuthority('MANAGER')")
 @SecurityRequirement(name = "Easy3vs3Auth")
 //@Hidden

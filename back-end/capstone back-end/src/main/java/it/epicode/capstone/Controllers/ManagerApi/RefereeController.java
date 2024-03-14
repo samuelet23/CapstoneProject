@@ -22,7 +22,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/referee")
-@Tag(name = "REFEREE API (only for managers)")
+@Tag(name = "REFEREE")
 @SecurityRequirement(name = "Easy3vs3Auth")
 @PreAuthorize("hasAuthority('MANAGER')")
 public class RefereeController {

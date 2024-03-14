@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/api")
-@Tag(name = "CAPTAIN ROLE API (only  for Captains and Managers)")
+@Tag(name = "CAPTAIN ")
 @SecurityRequirement(name = "Easy3vs3Auth")
 @PreAuthorize("hasAnyAuthority('CAPTAIN','MANAGER')")
 public class CaptainController {

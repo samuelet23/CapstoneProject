@@ -23,7 +23,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/game")
-@Tag(name = "GAME API (only for Managers)")
+@Tag(name = "GAME")
 @SecurityRequirement(name = "Easy3vs3Auth")
 @PreAuthorize("hasAuthority('MANAGER')")
 public class GameController {

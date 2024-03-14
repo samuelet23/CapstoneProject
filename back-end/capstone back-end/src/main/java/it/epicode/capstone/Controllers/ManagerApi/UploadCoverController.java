@@ -21,7 +21,7 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/upload")
-@Tag(name = "UPLOAD COVER TOURNAMENT API (only for managers)")
+@Tag(name = "UPLOAD COVER TOURNAMENT ")
 @SecurityRequirement(name = "Easy3vs3Auth")
 @PreAuthorize("hasAuthority('MANAGER')")
 public class UploadCoverController {

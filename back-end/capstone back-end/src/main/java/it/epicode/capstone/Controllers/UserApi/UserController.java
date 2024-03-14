@@ -32,7 +32,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/user")
-@Tag(name = "USER API (accessible with normal authentication)")
+@Tag(name = "USER")
 @SecurityRequirement(name = "Easy3vs3Auth")
 @PreAuthorize("hasAuthority('MANAGER')")
 public class UserController {

@@ -26,7 +26,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/tournament")
-@Tag(name = "TOURNAMENT API (only for managers)")
+@Tag(name = "TOURNAMENT ")
 @SecurityRequirement(name = "Easy3vs3Auth")
 @PreAuthorize("hasAuthority('MANAGER')")
 public class TournamentController {
