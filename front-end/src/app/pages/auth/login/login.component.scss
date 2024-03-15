@@ -1,0 +1,47 @@
+@import "../../../shared/_variables";
+
+.login-container {
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ background-color: green;
+
+}
+.nav-link{
+  text-decoration: underline $primary;
+}
+.nav-link:hover{
+  text-decoration:underline;
+}
+.form-control:focus{
+  box-shadow: none;
+  border: 2px solid $primary;
+}
+
+.login-box {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+button, h1 {
+  margin-top: 1rem;
+}
+
+button {
+  margin-bottom: 1rem;
+  position: relative;
+  left: 40%;
+}
+.btn:disabled{
+  box-shadow: none;
+}
+.btn{
+  background-color: $primary ;
+  box-shadow: 2px 2px 10px black;
+}
+.btn:hover{
+  box-shadow: none;
+  border: 2px solid black;
+}

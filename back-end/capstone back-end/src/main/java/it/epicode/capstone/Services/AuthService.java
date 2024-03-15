@@ -37,7 +37,7 @@ public class AuthService {
     }
 
     public User register(UserDTO userDTO) throws BadRequestException, InternalServerErrorException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         User u = new User(
                 userDTO.name(),
                 userDTO.surname(),
@@ -82,12 +82,12 @@ public class AuthService {
     public AccessTokenRes login(String username, String password) throws BadRequestException, UnauthorizedException {
         User u = userRep.findByUsername(username)
                 .orElseThrow(
-                        () -> new BadRequestException("Incorrect email/password")
+                        () -> new BadRequestException("username non presente")
                 );
         if (!encoder.matches(password, u.getPassword())) {
-            throw new UnauthorizedException("Incorrect email/password");
+            throw new UnauthorizedException("Incorrect username/password");
         }
-        return new AccessTokenRes(jwtTools.createToken(u), u.getRole().toString());
+        return new AccessTokenRes(jwtTools.createToken(u), String.valueOf(u.getDateOfBirth()),u.getName(), String.valueOf(u.getRole()), u.getSurname(), u.getUsername());
     }
 
 

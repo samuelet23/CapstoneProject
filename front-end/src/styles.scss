@@ -1,0 +1,39 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
+.logo-container {
+  margin-right: auto;
+  width: 80px;
+  .logo {
+    width: 100%;
+  }
+}
+
+.error-message {
+  font-size: 9px;
+  margin: 3px 2px;
+}
+
+.error-text {
+  color: red;
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.app-spinner{
+  max-width: 150px;
+  max-height: 150px;
+}
