@@ -412,7 +412,6 @@ public class GetController {
         return userSv.getAll(pageable);
     }
 
-    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/user/get/byId/{id}")
     @Operation(
             description = "Retrieve a user by their unique identifier.",
@@ -422,7 +421,6 @@ public class GetController {
         return userSv.getById(id);
     }
 
-    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/user/get/byUsername/{username}")
     @Operation(
             description = "Retrieve a user by their username.",
