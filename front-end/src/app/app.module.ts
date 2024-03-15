@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
 import { RegisterPageComponent } from './components/register-page/register-page.component';
 import { FooterComponent } from './footer/footer.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 
 @NgModule({
   declarations: [

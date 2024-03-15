@@ -1,9 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
-import { HttpClient, HttpContext } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
 
 import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
@@ -51,7 +51,7 @@ export class AuthService extends BaseService {
    */
   register(params: Register$Params, context?: HttpContext): Observable<User> {
     return this.register$Response(params, context).pipe(
-      map((r: StrictHttpResponse<User>): User => r.body)
+      map((r: StrictHttpResponse<User>): User => r.body )
     );
   }
 
@@ -84,8 +84,14 @@ export class AuthService extends BaseService {
    */
   login(params: Login$Params, context?: HttpContext): Observable<AccessTokenRes> {
     return this.login$Response(params, context).pipe(
-      map((r: StrictHttpResponse<AccessTokenRes>): AccessTokenRes => r.body)
+      map((response: StrictHttpResponse<AccessTokenRes>) => {
+        return response.body;
+      })
     );
   }
+
+
+
+
 
 }

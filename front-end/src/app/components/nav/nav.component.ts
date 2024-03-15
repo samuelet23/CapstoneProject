@@ -17,15 +17,6 @@ links = [
 constructor(public route: ActivatedRoute) {
 }
 
-@HostListener('window:scroll', [])
-
-
-
-
-onWindowScroll() {
-  const offset = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
-  this.isSticky = offset > 56;
-}
 
 
 protected toggleNav(){

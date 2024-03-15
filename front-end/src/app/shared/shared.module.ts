@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FooterComponent } from '../footer/footer.component';
+import { SpinnerComponent } from '../components/spinner/spinner.component';
 
 
 
@@ -15,6 +16,7 @@ import { FooterComponent } from '../footer/footer.component';
     NavComponent,
     RegisterPageComponent,
     FooterComponent,
+    SpinnerComponent,
   ],
   imports: [
     CommonModule,
@@ -29,6 +31,7 @@ import { FooterComponent } from '../footer/footer.component';
     NavComponent,
     RegisterPageComponent,
     FooterComponent,
+    SpinnerComponent,
 
   ]
 })
