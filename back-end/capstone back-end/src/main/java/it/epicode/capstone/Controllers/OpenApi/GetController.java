@@ -143,6 +143,7 @@ public class GetController {
     public Page<Player> getAllPlayer(Pageable pageable) {
         return playerSv.findAll(pageable);
     }
+    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/player/get/all/team-name")
     @Operation(
             description = "Retrieve all players belonging to a specific team.",
@@ -151,7 +152,7 @@ public class GetController {
     public Page<Player> getAllFromTeamName(@RequestParam("team-name") String teamName, Pageable pageable) {
         return playerSv.findAllByTeamName(teamName, pageable);
     }
-
+    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/player/get/all/tournament-name")
     @Operation(
             description = "Retrieve all players participating in a specific tournament.",
@@ -160,6 +161,7 @@ public class GetController {
     public Page<Player> getAllByTournamentName(@RequestParam("tournament-name") String tournamentName, Pageable pageable) {
         return playerSv.findAllByTournamentName(tournamentName, pageable);
     }
+    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/player/get/averagePoints/name-player")
     @Operation(
             description = "Retrieve the average points per game for a player.",
@@ -169,7 +171,7 @@ public class GetController {
         Player p = playerSv.getByNickname(namePlayer);
         return gameSv.averagePointPerGame(p);
     }
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/player/get/byId/{id}")
     @Operation(
             description = "Retrieve a player by their unique identifier.",
@@ -178,7 +180,7 @@ public class GetController {
     public Player getPlayerById(@PathVariable UUID id)throws BadRequestException{
         return playerSv.getById(id);
     }
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/player/get/byName/{name}")
     @Operation(
             description = "Retrieve a player by their name.",
@@ -187,7 +189,7 @@ public class GetController {
     public Player getPlayerByName(@RequestParam String name)throws BadRequestException{
         return playerSv.getByNickname(name);
     }
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/player/get/{id}/points")
     @Operation(
             description = "Retrieve the points scored by a player.",
@@ -197,7 +199,7 @@ public class GetController {
         int points = playerSv.getPointsByPlayerId(id);
         return new ConfirmPlayerPoints("Player points have been successfully retrieved.",points);
     }
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/player/get/point-player/tournament-name")
     @Operation(
             description = "Retrieve players and their points for a specific tournament.",

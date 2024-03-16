@@ -16,6 +16,7 @@ import it.epicode.capstone.Models.ResponsesDTO.ConfirmRes;
 import it.epicode.capstone.Models.ResponsesDTO.UploadConfirm;
 import it.epicode.capstone.Services.PlayerService;
 import it.epicode.capstone.Services.TeamService;
+import it.epicode.capstone.Services.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,6 +41,9 @@ public class CaptainController {
     private PlayerService playerSv;
     @Autowired
     private TeamService teamSv;
+
+    @Autowired
+    private TournamentService tournamentSv;
     @Autowired
     private Cloudinary cloudinary;
 
@@ -78,6 +82,28 @@ public class CaptainController {
     }
 
 // ***************** TEAM CONTROLLER *************************
+
+    @PostMapping("/subscribe/existing-team/tournament-name")
+    @Operation(
+            summary = "Subscribe an existing team to a tournament",
+            description = "This endpoint subscribe an already existing team into a specified tournament by the team's name and the tournament's name." +
+                    "It's a convenient way to add a team that is already registered in the system to a new or existing tournament without having to recreate the team from scratch."
+    )
+    public Team subscribeExistingTeam(@RequestParam("existing-team") String nameTeam,@RequestParam("tournament-name") String nameTournament) throws BadRequestException {
+
+        return tournamentSv.subscribeExistingTeam(nameTeam,nameTournament);
+
+
+    }
+    @PostMapping("/subscribe/created-team/tournament-name")
+    @Operation(
+            summary = "Create and subscribe a new team to a tournament",
+            description = "This endpoint creates a new team based on the provided TeamDTO information and then subscribes this newly created team to a specified tournament by the tournament's name. It facilitates the process of adding fresh teams to the tournament, streamlining their creation and immediate enrollment in a single step."
+    )
+    public Team createAndSubscribeTeamToTournament(@RequestBody @Validated TeamDTO teamDTO, @RequestParam("tournament-name") String nameTournament, BindingResult bindingResult) throws BadRequestException {
+        HandlerException.badRequestException(bindingResult);
+        return tournamentSv.createAndSubscribeTeamToTournament(teamDTO,nameTournament);
+    }
 
     @PostMapping("/team/create")
     @Operation(

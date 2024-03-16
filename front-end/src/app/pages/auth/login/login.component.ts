@@ -49,7 +49,9 @@ export class LoginComponent implements OnInit{
           }
         },
         (error) => {
+
           Swal.fire(error.error.message)
+          this.isLoading = false;
         })
 
   }

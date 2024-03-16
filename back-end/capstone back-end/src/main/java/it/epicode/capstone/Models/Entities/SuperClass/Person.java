@@ -29,10 +29,23 @@ public abstract class Person {
         this.name = name;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
+        this.age = calculateAge(dateOfBirth);
     }
+
+    public Person(String name, String surname, LocalDate dateOfBirth, int age) {
+        this.name = name;
+        this.surname = surname;
+        this.dateOfBirth = dateOfBirth;
+        this.age = calculateAge(dateOfBirth);
+    }
+
     public Person (String name){
         this.name = name;
     }
 
-
+    private static int calculateAge(LocalDate dateOfBirth) {
+        LocalDate currentDate = LocalDate.now();
+        Period period = Period.between(dateOfBirth, currentDate);
+        return period.getYears();
+    }
 }

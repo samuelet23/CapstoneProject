@@ -83,7 +83,7 @@ public class TournamentService {
     }
 
 
-    public void subscribeExistingTeam(String nameTeam, String nameTournament) throws BadRequestException {
+    public Team subscribeExistingTeam(String nameTeam, String nameTournament) throws BadRequestException {
         Tournament t = getByName(nameTournament);
         if (t.getTeams().size() >= 16) {
             throw new BadRequestException("Il torneo ha già raggiunto il numero massimo di squadre (16)");
@@ -91,10 +91,11 @@ public class TournamentService {
         Team team = teamSv.getByName(nameTeam);
         t.addTeam(team);
         tournamentRp.save(t);
+        return team;
     }
 
 
-    public void createAndSubscribeTeamToTournament(TeamDTO teamDTO, String nameTournament) throws BadRequestException {
+    public Team createAndSubscribeTeamToTournament(TeamDTO teamDTO, String nameTournament) throws BadRequestException {
         Tournament t = getByName(nameTournament);
         if (t.getTeams().size() >= 16) {
             throw new BadRequestException("Il torneo ha già raggiunto il numero massimo di squadre (16)");
@@ -102,6 +103,7 @@ public class TournamentService {
         Team team = teamSv.createTeam(teamDTO);
         team.setTournament(t);
         tournamentRp.save(t);
+        return team;
     }
 
     public List<Game> startTournament(String nameTournament)throws BadRequestException {

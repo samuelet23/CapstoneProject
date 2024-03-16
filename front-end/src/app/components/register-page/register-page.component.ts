@@ -93,14 +93,17 @@ export class RegisterPageComponent implements OnInit {
       if (this.registrationForm && this.registrationForm.valid) {
         this.auth.signup(params).subscribe(
           (response: any) => {
-            console.log(response);
 
             this.router.navigate(['auth/login']);
             this.isLoading = false;
           },
           (error) => {
-            console.error(error.error);
-              this.handleError(error)
+            Swal.fire({
+              title: 'Errore',
+              text: error.error.message,
+              icon: 'error',
+              confirmButtonText: 'RIPROVA'
+            });
             this.isLoading= false
           }
         );
@@ -133,31 +136,6 @@ private checkDateAndFormat():string{
   );
 
   return formattedDateOfBirth
-}
-
-handleError(error:any){
-  let errorMessage: string;
-  switch (error.error.message) {
-    case "Passwords don't match":
-      errorMessage = "Le password non coincidono";
-      break;
-    case "email already exists, cannot be created an account":
-      errorMessage = "Email già esistente, impossibile creare un account";
-      break;
-    case "username already exists, cannot be created an account":
-      errorMessage = "Username già esistente, impossibile creare un account";
-      break;
-    default:
-      errorMessage = "Si è verificato un errore, riprova più tardi";
-      break;
-  }
-
-  Swal.fire({
-    title: 'Errore',
-    text: errorMessage,
-    icon: 'error',
-    confirmButtonText: 'RIPROVA'
-  });
 }
 
 

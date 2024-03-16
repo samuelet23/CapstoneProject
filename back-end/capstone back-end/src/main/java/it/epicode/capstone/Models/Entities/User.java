@@ -54,6 +54,16 @@ public class User extends Person implements UserDetails {
         createdAt = Timestamp.valueOf(LocalDateTime.now());
     }
 
+    public User(String name, String surname, LocalDate dateOfBirth, int age, String username, String email, String password, String confirmPassword, Role role) {
+        super(name, surname, dateOfBirth, age);
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+        this.createdAt = Timestamp.valueOf(LocalDateTime.now());
+        this.role = role;
+    }
+
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;

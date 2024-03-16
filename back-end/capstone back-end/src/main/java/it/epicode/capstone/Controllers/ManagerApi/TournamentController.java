@@ -95,34 +95,7 @@ public class TournamentController {
         );
     }
 
-    @PostMapping("/subscribe/existing-team/tournament-name")
-    @Operation(
-            summary = "Subscribe an existing team to a tournament",
-            description = "This endpoint subscribe an already existing team into a specified tournament by the team's name and the tournament's name." +
-                    "It's a convenient way to add a team that is already registered in the system to a new or existing tournament without having to recreate the team from scratch."
-    )
-    public ConfirmRes subscribeExistingTeam(@RequestParam("existing-team") String nameTeam,@RequestParam("tournament-name") String nameTournament) throws BadRequestException {
 
-        tournamentSv.subscribeExistingTeam(nameTeam,nameTournament);
-
-        return new ConfirmRes(
-                "Existing Team added successfully",
-                HttpStatus.CREATED
-        );
-    }
-    @PostMapping("/subscribe/created-team/tournament-name")
-    @Operation(
-            summary = "Create and subscribe a new team to a tournament",
-            description = "This endpoint creates a new team based on the provided TeamDTO information and then subscribes this newly created team to a specified tournament by the tournament's name. It facilitates the process of adding fresh teams to the tournament, streamlining their creation and immediate enrollment in a single step."
-    )
-    public ConfirmRes createAndSubscribeTeamToTournament(@RequestBody @Validated TeamDTO teamDTO, @RequestParam("tournament-name") String nameTournament, BindingResult bindingResult) throws BadRequestException {
-        HandlerException.badRequestException(bindingResult);
-        tournamentSv.createAndSubscribeTeamToTournament(teamDTO,nameTournament);
-        return new ConfirmRes(
-                "Created Team added successfully",
-                HttpStatus.CREATED
-        );
-    }
 
     @DeleteMapping("/delete/byId/{id}")
     @Operation(

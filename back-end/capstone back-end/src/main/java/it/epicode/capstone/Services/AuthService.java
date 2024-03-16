@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.UUID;
@@ -48,17 +49,18 @@ public class AuthService {
                 encoder.encode(userDTO.password()),
                 encoder.encode(userDTO.confirmPassword())
         );
+
         if (encoder.matches(userDTO.password(), userDTO.confirmPassword())) {
-            throw new BadRequestException("Passwords don't match");
+            throw new BadRequestException("Le password non coincidono");
         }
         try{
             return userRep.save(u);
         }catch (DataIntegrityViolationException e){
             if (userRep.getAllEmails().contains(u.getEmail())) {
-                throw new BadRequestException("email already exists, cannot be created an account");
+                throw new BadRequestException("email già esistente, non si può creare un accounnt. Riprova");
         }
         if (userRep.getAllUsernames().contains(u.getUsername())){
-            throw new BadRequestException("username already exists, cannot be created an account");
+            throw new BadRequestException("username già esistente, non si può creare un account. Riprova");
         }
         throw new InternalServerErrorException("Data Integrity Violation: " + e.getMessage());
         }
@@ -82,13 +84,14 @@ public class AuthService {
     public AccessTokenRes login(String username, String password) throws BadRequestException, UnauthorizedException {
         User u = userRep.findByUsername(username)
                 .orElseThrow(
-                        () -> new BadRequestException("username non presente")
+                        () -> new BadRequestException("passowrd o username errati")
                 );
         if (!encoder.matches(password, u.getPassword())) {
-            throw new UnauthorizedException("Incorrect username/password");
+            throw new UnauthorizedException("passowrd o username errati");
         }
         return new AccessTokenRes(jwtTools.createToken(u), String.valueOf(u.getDateOfBirth()),u.getName(), String.valueOf(u.getRole()), u.getSurname(), u.getUsername());
     }
+
 
 
 
