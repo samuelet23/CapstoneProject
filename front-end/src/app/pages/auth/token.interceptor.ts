@@ -9,13 +9,14 @@ import { Observable, switchMap, take } from 'rxjs';
 import { Router } from '@angular/router';
 import { myAuthService } from './myAuth.service';
 
+@Injectable()
 export class TokenInterceptor implements HttpInterceptor{
   token!: string | null;
   constructor(private authSrv: myAuthService, private router: Router) {}
 
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = localStorage.getItem('Token');
+    const token = localStorage.getItem('token');
 
     if (token) {
       const newRequest = request.clone({

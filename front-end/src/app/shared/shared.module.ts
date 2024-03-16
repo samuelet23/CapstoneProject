@@ -6,8 +6,9 @@ import { RegisterPageComponent } from '../components/register-page/register-page
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { FooterComponent } from '../footer/footer.component';
+import { FooterComponent } from '../components/footer/footer.component';
 import { SpinnerComponent } from '../components/spinner/spinner.component';
+import { NavTournamentComponent } from '../components/nav-tournament/nav-tournament.component';
 
 
 
@@ -17,6 +18,7 @@ import { SpinnerComponent } from '../components/spinner/spinner.component';
     RegisterPageComponent,
     FooterComponent,
     SpinnerComponent,
+    NavTournamentComponent
   ],
   imports: [
     CommonModule,
@@ -32,7 +34,7 @@ import { SpinnerComponent } from '../components/spinner/spinner.component';
     RegisterPageComponent,
     FooterComponent,
     SpinnerComponent,
-
+    NavTournamentComponent
   ]
 })
 export class SharedModule { }
