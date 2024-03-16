@@ -199,13 +199,12 @@ public class GetController {
         int points = playerSv.getPointsByPlayerId(id);
         return new ConfirmPlayerPoints("Player points have been successfully retrieved.",points);
     }
-    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/player/get/point-player/tournament-name")
     @Operation(
             description = "Retrieve players and their points for a specific tournament.",
             summary = "Get players and points by tournament name"
     )
-    public PlayerPointRes getPlayersAndPointsFromTournament(@RequestParam String tournamentName)throws BadRequestException{
+    public PlayerPointRes getPlayersAndPointsFromTournament(@RequestParam("tournament-name") String tournamentName)throws BadRequestException{
         Tournament tournament = tournamentSv.getByName(tournamentName);
         return new PlayerPointRes(
                 "Player points have been successfully retrieved.",
