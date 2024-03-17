@@ -1,0 +1,46 @@
+<div class="app-nav-tournament"></div>
+<div class="container">
+<h2> IL TORNEO È COMPOSTO DA {{teams.length}} SQUADRE </h2>
+<div class="container-iscrivi" *ngIf="!isLoading">
+  <p>Ecco quali le squadre parteciperanno</p>
+  <div class="dropdown">
+    <button *ngIf="isCaptainOrManager" (click)="toggleDropdown()" class="btn btn-success mb-3 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      ISCRIVITI LA TUA SQUADRA
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" [ngClass]="{ 'show': dropdownOpen }">
+      <a class="dropdown-item" routerLink="/team/existing">Iscrivi una squadra esistente</a>
+      <a class="dropdown-item" routerLink="/team/create">Crea una nuova squadra</a>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="isLoading" class="overlay">
+  <div class="spinner" role="status">
+    <span class="app-spinner"></span>
+  </div>
+</div>
+  <div class="row" *ngIf="!isLoading">
+    <div class="col-md-4 col-sm-6 col-12" *ngFor="let team of teams">
+      <div class="card mb-4">
+        <div class="logo-container">
+          <img *ngIf="team.logo; else defaultLogo" class="card-img-top rounded-circle" [src]="team.logo" alt="Logo squadra">
+          <ng-template #defaultLogo>
+            <img class="card-img-top rounded-circle" src="../../../assets/logo team.jpg" alt="Logo predefinito">
+          </ng-template>
+        </div>
+
+        <div class="card-body">
+          <h5 class="card-title">{{ team.name }}</h5>
+        </div>
+
+        <div class="card-footer">
+          <button class="btn btn-primary" (click)="showPlayers(team)">Vedi i giocatori</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

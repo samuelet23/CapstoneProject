@@ -1,0 +1,18 @@
+@import "../../shared/variables";
+
+.container-mini-nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.rounds {
+  text-decoration: none;
+  color: #333;
+  padding: 10px 15px;
+}
+.rounds:hover{
+  cursor: pointer;
+  text-decoration: underline;
+  color: $primary;
+}

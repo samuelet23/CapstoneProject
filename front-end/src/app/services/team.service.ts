@@ -1,0 +1,44 @@
+import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
+import { Team, TeamDto, UpdateCaptainDto, UpdateTeamNameDto, UploadConfirm } from '../api/models';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class TeamService {
+
+  url:string = environment.url
+
+  constructor(private http:HttpClient) { }
+
+
+  createTeam(team: TeamDto):Observable<Team>{
+    //crea un team
+    return this.http.post<Team>(`${this.url}/team/create`,team);
+  }
+
+  updateName(id:string, teamToUpdate: UpdateTeamNameDto):Observable<Team>{
+    return this.http.patch<Team>(`${this.url}/team/update/name/${id}`, teamToUpdate)
+  }
+
+  updateCaptainName(teamName:string, newCaptain:UpdateCaptainDto):Observable<Team>{
+    return this.http.patch<Team>(`${this.url}/update/captain/team-name?team-name=${teamName}`, newCaptain)
+  }
+
+  uploadLogoTeam(teamName:string, file: File):Observable<UploadConfirm>{
+    const img: FormData = new FormData();
+    img.append('file', file, file.name)
+    return this.http.patch<UploadConfirm>(`${this.url}/upload/logo-team/${teamName}`,img)
+  }
+
+  subscribeExsistingTeamToTournament(nameTeam: string, nameTournament: string):Observable<Team>{
+    //seleziona team tramite il nome passato, manda eccezione se non esiste e inserisce il team al torneo selezionato tramite nome
+    return this.http.post<Team>(`${this.url}/subscribe/existing-team/tournament-name?existing-team=${nameTeam}&tournament-name=${nameTournament}`, {});
+  }
+  subscribeCreatedTeamToTournament(team: TeamDto, nameTournament: string ): Observable<Team>{
+    // gli verrà passato da un form un team creato e verrà inserito nel torneo
+    return this.http.post<Team>(`${this.url}/subscribe/created-team/tournament-name?tournament-name=${nameTournament}`, team);
+  }
+}

@@ -1,0 +1,42 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  background-color: #242222;
+}
+.navbar .links {
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+.navbar .links li {
+  margin-right: 10px;
+}
+.navbar .links a {
+  text-decoration: none;
+  color: white;
+  padding: 8px 12px;
+  background-color: #ffa500;
+  border-radius: 5px;
+}
+
+.nav-tabs {
+  border-bottom: none;
+}
+
+.navbar-toggler {
+  background-color: #ffa500;
+  border-color: black;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none;
+}
+
+.sticky {
+  position: fixed;
+  background-color: black;
+  transition: all 1s ease-in-out;
+  top: 0;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}/*# sourceMappingURL=nav.component.css.map */

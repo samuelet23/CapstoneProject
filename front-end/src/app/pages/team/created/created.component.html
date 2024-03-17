@@ -1,0 +1,105 @@
+<div class="my-3 p-2">
+  <form [formGroup]="teamForm" (ngSubmit)="submitForm()">
+    <h2>Crea il tuo team</h2>
+
+    <div formArrayName="players">
+      <div *ngFor="let player of players.controls; let i = index" class="player-container" [formGroupName]="i">
+        <p>Stai creando il giocatore {{i+1}}</p>
+
+          <div class="form-group">
+            <label for="name{{ i }}">Name</label>
+            <input type="text" class="form-control" [id]="'name' + i" formControlName="name">
+            <div *ngIf="!isInvalid('players.' + i + '.name')" class="error-message error-text">
+              <span>
+                {{ teamForm.get('players.' + i + '.name')?.hasError('required') ? 'Questo campo è obbligatorio.' : '' }}
+                {{ teamForm.get('players.' + i + '.name')?.hasError('minlength') ? 'Il nome deve avere almeno 3 caratteri.' : '' }}
+              </span>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label for="surname{{ i }}">Surname</label>
+            <input type="text" class="form-control" [id]="'surname' + i" formControlName="surname">
+            <div *ngIf="isInvalid('players.' + i + '.surname')" class="error-message error-text">
+              <span>
+                {{ teamForm.get('players.' + i + '.surname')?.hasError('required') ? 'Questo campo è obbligatorio.' : '' }}
+                {{ teamForm.get('players.' + i + '.surname')?.hasError('minlength') ? 'Il cognome deve avere almeno 3 caratteri.' : '' }}
+              </span>
+            </div>
+          </div>
+
+
+        <div class="form-group">
+          <label for="nickname{{ i }}">Nickname</label>
+          <input type="text" class="form-control" [id]="'nickname' + i" formControlName="nickname">
+          <div *ngIf="isInvalid('players.' + i + '.nickname')" class="error-message error-text">
+            <span>
+              {{ teamForm.get('players.' + i + '.nickname')?.hasError('required') ? 'Questo campo è obbligatorio.' : '' }}
+              {{ teamForm.get('players.' + i + '.nickname')?.hasError('minlength') ? 'Il nickname deve avere almeno 3 caratteri.' : '' }}
+            </span>
+          </div>
+        </div>
+
+
+        <div class="form-group">
+          <label for="dateOfBirth{{ i }}">Date of Birth</label>
+          <input type="date" class="form-control" [id]="'dateOfBirth' + i" formControlName="dateOfBirth">
+          <div *ngIf="isInvalid('players.' + i + '.dateOfBirth')" class="error-message error-text">
+            <span>
+              {{ teamForm.get('players.' + i + '.dateOfBirth')?.hasError('required') ? 'Questo campo è obbligatorio.' : '' }}
+              {{ teamForm.get('players.' + i + '.dateOfBirth')?.hasError('invalidDate') ? 'La data di nascita non può essere successiva a oggi.' : '' }}
+            </span>
+          </div>
+        </div>
+
+
+        <div class="form-group">
+          <label for="sigla{{ i }}">Sigla</label>
+          <input type="text" class="form-control" [id]="'sigla' + i" formControlName="sigla">
+          <div *ngIf="isInvalid('players.' + i + '.sigla')" class="error-message ">
+            <span class="error-text">
+              {{ teamForm.get('players.' + i + '.sigla')?.hasError('required') ? 'Questo campo è obbligatorio.' : '' }}
+              {{ teamForm.get('players.' + i + '.sigla')?.hasError('pattern') ? 'La sigla inserita non è valida. Si prega di inserire una sigla tra A e E.' : '' }}
+            </span>
+          </div>
+        </div>
+
+
+        <button type="button" (click)="addPlayer()" class="btn btn-primary">
+          <span class="bi bi-plus"></span> Add Player
+        </button>
+        <button type="button" (click)="removePlayer(i)" class="btn btn-danger">Remove Player</button>
+      </div>
+    </div>
+    <button class="btn btn-success">Aggiungi tutti i giocatori alla squadra</button>
+
+    <!-- Name Team -->
+    <div class="form-group">
+      <label for="nameTeam">Nome del team</label>
+      <input type="text" class="form-control" id="nameTeam" formControlName="nameTeam">
+      <div *ngIf="isInvalid('nameTeam')" class="error-message error-text">
+        <span class="error-text">
+          {{ teamForm.get('nameTeam')?.hasError('required') ? 'Questo campo è obbligatorio.' : '' }}
+        </span>
+      </div>
+    </div>
+
+
+
+    <!-- Captain Name -->
+    <div class="form-group">
+      <label for="captainName">Nome del capitano (deve essere uno dei giocatori)</label>
+      <input type="text" class="form-control" id="captainName" formControlName="captainName">
+      <div *ngIf="isInvalid('captainName')" class="error-message error-text">
+        <span class="error-text">
+          {{ teamForm.get('captainName')?.hasError('required') ? 'Questo campo è obbligatorio.' : '' }}
+          {{ teamForm.get('captainName')?.hasError('invalidCaptain') ? 'Il nome del capitano deve essere uno dei giocatori.' : '' }}
+        </span>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="teamForm.invalid">Submit</button>
+  </form>
+
+</div>

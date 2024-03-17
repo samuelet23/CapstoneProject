@@ -1,0 +1,65 @@
+<div *ngIf="isLoading" class="overlay">
+  <div class="spinner" role="status">
+    <span class="app-spinner"></span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div *ngIf="isFinished" class="winner-card my-3">
+    <i class="bi bi-arrow-left-circle-fill pointer" routerLink="/tournament"></i>
+    <h2 class="text-center mb-4">Il vincitore del torneo è: {{ match.winner?.name }}</h2>
+
+    <div class="text-center mb-4">
+      <ng-container *ngIf="match.winner?.logo; else defaultLogo">
+        <img [src]="match.winner?.logo" alt="Home Team Logo" class="winner-logo">
+      </ng-container>
+      <ng-template #defaultLogo>
+        <img class="winner-logo" src="../../../assets/logo team.jpg" alt="Default Logo">
+      </ng-template>
+    </div>
+
+    <div class="text-center mb-4">
+      <p class="lead">Il capitano di questo fantastico team è {{ match.winner?.captain?.nickname }} che ha totalizzato un totale di {{ match.winner?.captain?.point }} punti.</p>
+    </div>
+
+    <div>
+      <h4 class="mb-3">Vi presento tutti i membri della squadra:</h4>
+      <div *ngFor="let player of match.winner?.players" class="player-details mb-4">
+        <h5>{{ player.name }}</h5>
+        <p>All'età di {{ player.age }} anni, {{ player.name }} ha vinto il torneo {{ tournamentString }}. CONGRATULAZIONI!!</p>
+        <p>Caro {{ player.name }}, hai giocato un totale di {{ player.gamesPlayed }} partite segnando {{ player.point }} punti.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container my-3" *ngIf="!isLoading && !isFinished">
+  <i class="bi bi-arrow-left-circle-fill pointer" routerLink="/tournament"></i>
+  <h2 class="text-center">FINALE</h2>
+  <div class="container-match" >
+    <div class="match">
+    <div class="team">
+      <ng-container *ngIf="match.homeTeam?.logo; else defaultLogo">
+        <img [src]="match.homeTeam?.logo" alt="Home Team Logo" class="card-img-top rounded-circle">
+      </ng-container>
+      <ng-template #defaultLogo>
+        <img class="card-img-top rounded-circle" src="../../../assets/logo team.jpg" alt="Default Logo">
+      </ng-template>
+      <span>{{ match.homeTeam?.name }}</span>
+    </div>
+    <div class="vs">VS</div>
+    <div class="team">
+      <ng-container *ngIf="match.awayTeam?.logo; else defaultLogo">
+        <img [src]="match.awayTeam?.logo" alt="Away Team Logo" class="card-img-top rounded-circle">
+      </ng-container>
+      <ng-template #defaultLogo>
+        <img class="card-img-top rounded-circle" src="../../../assets/logo team.jpg" alt="Default Logo">
+      </ng-template>
+      <span>{{ match.awayTeam?.name }}</span>
+    </div>
+  </div>
+    <button class="btn btn-success">INIZIA PARTITA</button>
+  </div>
+</div>
