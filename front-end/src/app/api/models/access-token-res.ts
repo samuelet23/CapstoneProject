@@ -1,9 +1,15 @@
 /* tslint:disable */
-
-import { User } from "./user";
-
 /* eslint-disable */
 export interface AccessTokenRes {
   accessToken: string;
-  user:User;
+  user: UserToken
+
+}
+
+export interface UserToken{
+  dateOfBirth?: string;
+  name?: string;
+  role?: string;
+  surname?: string;
+  username?: string;
 }

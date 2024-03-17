@@ -6,13 +6,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ConfirmRes } from '../../models/confirm-res';
+import { Game } from '../../models/game';
 
 export interface GenerateFinal$Params {
   'tournament-name': string;
 }
 
-export function generateFinal(http: HttpClient, rootUrl: string, params: GenerateFinal$Params, context?: HttpContext): Observable<StrictHttpResponse<ConfirmRes>> {
+export function generateFinal(http: HttpClient, rootUrl: string, params: GenerateFinal$Params, context?: HttpContext): Observable<StrictHttpResponse<Game>> {
   const rb = new RequestBuilder(rootUrl, generateFinal.PATH, 'post');
   if (params) {
     rb.path('tournament-name', params['tournament-name'], {});
@@ -23,7 +23,7 @@ export function generateFinal(http: HttpClient, rootUrl: string, params: Generat
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<ConfirmRes>;
+      return r as StrictHttpResponse<Game>;
     })
   );
 }

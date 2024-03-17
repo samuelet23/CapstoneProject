@@ -207,7 +207,6 @@ public class GetController {
     public PlayerPointRes getPlayersAndPointsFromTournament(@RequestParam("tournament-name") String tournamentName)throws BadRequestException{
         Tournament tournament = tournamentSv.getByName(tournamentName);
         return new PlayerPointRes(
-                "Player points have been successfully retrieved.",
                 playerSv.getPlayersWithNameAndPointsByTournament(tournament)
         );
     }

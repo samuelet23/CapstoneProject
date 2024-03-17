@@ -9,7 +9,7 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { ConfirmRes } from '../models/confirm-res';
+import { Game } from '../models/game';
 import { generateFinal } from '../fn/round/generate-final';
 import { GenerateFinal$Params } from '../fn/round/generate-final';
 import { generateQuarterFinals } from '../fn/round/generate-quarter-finals';
@@ -36,7 +36,7 @@ export class RoundService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  generateSemiFinals$Response(params: GenerateSemiFinals$Params, context?: HttpContext): Observable<StrictHttpResponse<ConfirmRes>> {
+  generateSemiFinals$Response(params: GenerateSemiFinals$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Game>>> {
     return generateSemiFinals(this.http, this.rootUrl, params, context);
   }
 
@@ -50,9 +50,9 @@ export class RoundService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  generateSemiFinals(params: GenerateSemiFinals$Params, context?: HttpContext): Observable<ConfirmRes> {
+  generateSemiFinals(params: GenerateSemiFinals$Params, context?: HttpContext): Observable<Array<Game>> {
     return this.generateSemiFinals$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ConfirmRes>): ConfirmRes => r.body)
+      map((r: StrictHttpResponse<Array<Game>>): Array<Game> => r.body)
     );
   }
 
@@ -69,7 +69,7 @@ export class RoundService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  generateQuarterFinals$Response(params: GenerateQuarterFinals$Params, context?: HttpContext): Observable<StrictHttpResponse<ConfirmRes>> {
+  generateQuarterFinals$Response(params: GenerateQuarterFinals$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Game>>> {
     return generateQuarterFinals(this.http, this.rootUrl, params, context);
   }
 
@@ -83,9 +83,9 @@ export class RoundService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  generateQuarterFinals(params: GenerateQuarterFinals$Params, context?: HttpContext): Observable<ConfirmRes> {
+  generateQuarterFinals(params: GenerateQuarterFinals$Params, context?: HttpContext): Observable<Array<Game>> {
     return this.generateQuarterFinals$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ConfirmRes>): ConfirmRes => r.body)
+      map((r: StrictHttpResponse<Array<Game>>): Array<Game> => r.body)
     );
   }
 
@@ -102,7 +102,7 @@ export class RoundService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  generateFinal$Response(params: GenerateFinal$Params, context?: HttpContext): Observable<StrictHttpResponse<ConfirmRes>> {
+  generateFinal$Response(params: GenerateFinal$Params, context?: HttpContext): Observable<StrictHttpResponse<Game>> {
     return generateFinal(this.http, this.rootUrl, params, context);
   }
 
@@ -116,9 +116,9 @@ export class RoundService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  generateFinal(params: GenerateFinal$Params, context?: HttpContext): Observable<ConfirmRes> {
+  generateFinal(params: GenerateFinal$Params, context?: HttpContext): Observable<Game> {
     return this.generateFinal$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ConfirmRes>): ConfirmRes => r.body)
+      map((r: StrictHttpResponse<Game>): Game => r.body)
     );
   }
 

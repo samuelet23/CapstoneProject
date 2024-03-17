@@ -4,22 +4,16 @@ import {
   AbstractControl,
   FormBuilder,
   FormGroup,
-  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import {
-  NgbCalendar,
   NgbDate,
-  NgbDateParserFormatter,
 } from '@ng-bootstrap/ng-bootstrap';
-import { Observable, of } from 'rxjs';
-import { AuthService } from '../../api/services';
 import { UserDto } from '../../api/models';
-import { Register$Params } from '../../api/fn/auth/register';
 import { Router } from '@angular/router';
 import { formatDate } from '@angular/common';
 import Swal from 'sweetalert2';
-import { myAuthService } from '../../pages/auth/myAuth.service';
+import { myAuthService } from '../../services/myAuth.service';
 
 @Component({
   selector: 'app-register-page',

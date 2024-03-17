@@ -103,7 +103,7 @@ public class TeamService {
         return teamRp.save(team);
     }
 
-    public void updateCaptain(String teamName, String nickname)throws BadRequestException{
+    public Team updateCaptain(String teamName, String nickname)throws BadRequestException{
         Team t = getByName(teamName);
         Player p = playerRp.findByNickname(nickname).orElseThrow(
                 () -> new IllegalArgumentException("Captain player Not Found")
@@ -112,7 +112,7 @@ public class TeamService {
             throw new IllegalArgumentException("The Player with name: "+nickname+" is already a Captain");
         }
         t.setCaptain(p);
-        teamRp.save(t);
+        return teamRp.save(t);
     }
     public void updateLogo(Team team, String url)throws BadRequestException{
         team.setLogo(url);

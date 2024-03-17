@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import { Observable, switchMap, take } from 'rxjs';
 import { Router } from '@angular/router';
-import { myAuthService } from './myAuth.service';
+import { myAuthService } from '../../services/myAuth.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor{

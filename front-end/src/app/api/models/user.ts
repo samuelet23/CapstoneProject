@@ -9,7 +9,7 @@ export interface User {
   email?: string;
   id?: string;
   name?: string;
-  role: 'USER' | 'CAPTAIN' | 'MANAGER';
+  role?: 'USER' | 'CAPTAIN' | 'MANAGER';
   surname?: string;
-  username: string;
+  username?: string;
 }

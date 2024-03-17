@@ -6,13 +6,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ConfirmRes } from '../../models/confirm-res';
+import { Game } from '../../models/game';
 
 export interface GenerateSemiFinals$Params {
   'tournament-name': string;
 }
 
-export function generateSemiFinals(http: HttpClient, rootUrl: string, params: GenerateSemiFinals$Params, context?: HttpContext): Observable<StrictHttpResponse<ConfirmRes>> {
+export function generateSemiFinals(http: HttpClient, rootUrl: string, params: GenerateSemiFinals$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Game>>> {
   const rb = new RequestBuilder(rootUrl, generateSemiFinals.PATH, 'post');
   if (params) {
     rb.path('tournament-name', params['tournament-name'], {});
@@ -23,7 +23,7 @@ export function generateSemiFinals(http: HttpClient, rootUrl: string, params: Ge
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<ConfirmRes>;
+      return r as StrictHttpResponse<Array<Game>>;
     })
   );
 }

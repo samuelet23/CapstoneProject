@@ -43,13 +43,10 @@ public class TeamController {
             description = "Update the captain of a team.",
             summary = "Update team captain"
     )
-    public ConfirmRes updateCaptainFromTeam(@RequestParam("team-name") String teamName, @RequestBody @Validated UpdateCaptainDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
+    public Team updateCaptainFromTeam(@RequestParam("team-name") String teamName, @RequestBody @Validated UpdateCaptainDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
-        teamSv.updateCaptain(teamName, playerDTO.nickname());
-        return new ConfirmRes(
-                "Captain updated successfully. " + playerDTO.nickname() + " is now the captain of the team " + teamName + ".",
-                HttpStatus.CREATED
-        );
+        return teamSv.updateCaptain(teamName, playerDTO.nickname());
+
     }
 
     @DeleteMapping("/delete/byId/{id}")
