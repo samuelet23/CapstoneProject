@@ -64,19 +64,4 @@
 }
 
 
-@media screen and (max-width: 768px) {
-  .nav {
-    flex-direction: column;
-    text-align: center;
-  }
-}
-
-@media screen and (max-width: 576px) {
-  .nav a {
-    display: block;
-    margin-bottom: 10px;
-  }
-}
-
-
 

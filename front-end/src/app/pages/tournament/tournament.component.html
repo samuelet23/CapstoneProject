@@ -4,12 +4,13 @@
 <div class="container-iscrivi" *ngIf="!isLoading">
   <p>Ecco quali le squadre parteciperanno</p>
   <div class="dropdown">
-    <button *ngIf="isCaptainOrManager" (click)="toggleDropdown()" class="btn btn-success mb-3 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <!-- da aggiungere : && teams.length < 16 -->
+    <button *ngIf="isCaptainOrManager  " (click)="toggleDropdown()" class="btn btn-success mb-3 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       ISCRIVITI LA TUA SQUADRA
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" [ngClass]="{ 'show': dropdownOpen }">
-      <a class="dropdown-item" routerLink="/team/existing">Iscrivi una squadra esistente</a>
-      <a class="dropdown-item" routerLink="/team/create">Crea una nuova squadra</a>
+      <a class="dropdown-item" routerLink="/team/existing/tournament/{{tournamentName}}">Iscrivi una squadra esistente</a>
+      <a class="dropdown-item" routerLink="/team/create/tournament/{{tournamentName}}">Crea una nuova squadra</a>
     </div>
   </div>
 </div>
@@ -20,8 +21,9 @@
     <span class="app-spinner"></span>
   </div>
 </div>
+<div class="container">
   <div class="row" *ngIf="!isLoading">
-    <div class="col-md-4 col-sm-6 col-12" *ngFor="let team of teams">
+    <div class="col-12 col-md-6 col-lg-4" *ngFor="let team of teams">
       <div class="card mb-4">
         <div class="logo-container">
           <img *ngIf="team.logo; else defaultLogo" class="card-img-top rounded-circle" [src]="team.logo" alt="Logo squadra">
@@ -35,11 +37,15 @@
         </div>
 
         <div class="card-footer">
-          <button class="btn btn-primary" (click)="showPlayers(team)">Vedi i giocatori</button>
+          <button class="btn btn-primary" routerLink="/team/player/{{team.name}}">Scopri di più del team</button>
+          <button class="btn btn-warning" routerLink="/team/update/{{team.name}}">Modifica il Nome o il capitano</button>
+          <button class="btn btn-danger" (click)="removeTeam(team.name)">Elimina il Team dal Torneo</button>
         </div>
       </div>
     </div>
   </div>
+</div>
+
 </div>
 
 

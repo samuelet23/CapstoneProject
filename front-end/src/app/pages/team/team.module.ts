@@ -5,9 +5,10 @@ import { TeamRoutingModule } from './team-routing.module';
 import { TeamComponent } from './team.component';
 import { CreatedComponent } from './created/created.component';
 import { ExistingComponent } from './existing/existing.component';
-import { PlayerComponent } from './player/player.component';
+import { PlayersComponent } from './players/players.component';
 import { SharedModule } from '../../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UpdatedComponent } from './updated/updated.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     TeamComponent,
     CreatedComponent,
     ExistingComponent,
-    PlayerComponent
+    PlayersComponent,
+    UpdatedComponent,
   ],
   imports: [
     CommonModule,

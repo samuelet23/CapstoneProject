@@ -51,8 +51,17 @@ export class OttaviComponent implements OnInit {
             .subscribe((res: Game[]) => {
               this.games = res;
               this.isLoading = false
+            },
+            (error) =>{
+              Swal.fire(error.error.message)
+              this.isLoading = false;
+              this.router.navigate(['/tournament'])
             });
         }
+      },(error) =>{
+        Swal.fire(error.error.message)
+        this.isLoading = false;
+        this.router.navigate(['/tournament'])
       });
   }
 }

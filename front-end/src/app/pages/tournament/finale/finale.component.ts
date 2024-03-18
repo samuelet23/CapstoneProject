@@ -71,6 +71,7 @@ export class FinaleComponent implements OnInit {
         } else {
           Swal.fire('Il torneo non può iniziare dalla finale');
           this.isLoading = false;
+          this.router.navigate(['/tournament'])
         }
       });
   }

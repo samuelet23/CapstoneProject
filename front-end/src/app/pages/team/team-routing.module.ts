@@ -3,13 +3,15 @@ import { RouterModule, Routes } from '@angular/router';
 import { TeamComponent } from './team.component';
 import { CreatedComponent } from './created/created.component';
 import { ExistingComponent } from './existing/existing.component';
-import { PlayerComponent } from '../player/player.component';
+import { UpdatedComponent } from './updated/updated.component';
+import { PlayersComponent } from './players/players.component';
 
 const routes: Routes = [
   { path: '', component: TeamComponent },
-  { path: 'create', component: CreatedComponent },
-  { path: 'existing', component: ExistingComponent },
-  { path: ' /:id', component: PlayerComponent }
+  { path: 'update/:name', component: UpdatedComponent },
+  { path: 'create/tournament/:name', component: CreatedComponent },
+  { path: 'existing/tournament/:name', component: ExistingComponent },
+  { path: 'player/:name', component: PlayersComponent }
 
 ];
 

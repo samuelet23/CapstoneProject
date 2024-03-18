@@ -25,6 +25,12 @@ export class SemifinaleComponent implements OnInit  {
       this.isLoading = true
       this.tournamentSv.getAllGameFromTournamentName(this.tournamentString)
         .subscribe(games =>{
+          if (games.length === 0) {
+            Swal.fire("Il torneo non è ancora iniziato")
+            this.router.navigate(['/tournament'])
+            this.isLoading = false
+
+          }
           games.forEach(game =>{
             if (game.round !== "QUARTERFINAL" && game.round !== "OCTAVEFINAL" && game.round !== "SEMIFINAL") {
               Swal.fire("Il torneo è finito oppure si deve giocare la finale")
@@ -43,18 +49,25 @@ export class SemifinaleComponent implements OnInit  {
             }
             if (game.round === "QUARTERFINAL" && game.status === "FINISHED") {
               this.tournamentSv.generateSemiFinale(this.tournamentString)
-                .subscribe(data =>{
+                .subscribe((data) =>{
                  this.matches = data
                  this.isLoading = false
                 },
                 (err)=> {
                   Swal.fire(err.error.message)
                  this.isLoading = false
-                })
-            }
-          })
-          this.matches = games
-          this.isLoading = false
+                 this.router.navigate(['/tournament'])
+                },
+                )
+              }
+            })
+            this.matches = games
+            this.isLoading = false
+          },
+          (error) =>{
+            Swal.fire (error.error.message)
+            this.isLoading = false
+            this.router.navigate(['/tournament'])
     })
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Team, TeamDto, UpdateCaptainDto, UpdateTeamNameDto, UploadConfirm } from '../api/models';
 import { Observable } from 'rxjs';
@@ -10,21 +10,32 @@ import { HttpClient } from '@angular/common/http';
 export class TeamService {
 
   url:string = environment.url
+  private http = inject(HttpClient)
+  constructor() { }
 
-  constructor(private http:HttpClient) { }
-
-
+  getAllTeam():Observable<Team[]>{
+    return this.http.get<Team[]>(`${this.url}/open/team/get/all`)
+  }
+  getAllTeamWithoutTournament():Observable<Team[]>{
+    return this.http.get<Team[]>(`${this.url}/open/team/get/all/without-tournament`)
+  }
+  getTeamFromName(name:string):Observable<Team>{
+    return this.http.get<Team>(`${this.url}/open/team/get/byName/${name}`)
+  }
   createTeam(team: TeamDto):Observable<Team>{
     //crea un team
     return this.http.post<Team>(`${this.url}/team/create`,team);
   }
 
+  updateTeam(teamName:string, team: TeamDto):Observable<Team>{
+    return this.http.put<Team>(`${this.url}/team/update/team/${teamName}`, team)
+  }
   updateName(id:string, teamToUpdate: UpdateTeamNameDto):Observable<Team>{
     return this.http.patch<Team>(`${this.url}/team/update/name/${id}`, teamToUpdate)
   }
 
   updateCaptainName(teamName:string, newCaptain:UpdateCaptainDto):Observable<Team>{
-    return this.http.patch<Team>(`${this.url}/update/captain/team-name?team-name=${teamName}`, newCaptain)
+    return this.http.patch<Team>(`${this.url}/team/update/captain/team-name?team-name=${teamName}`, newCaptain)
   }
 
   uploadLogoTeam(teamName:string, file: File):Observable<UploadConfirm>{
@@ -40,5 +51,10 @@ export class TeamService {
   subscribeCreatedTeamToTournament(team: TeamDto, nameTournament: string ): Observable<Team>{
     // gli verrà passato da un form un team creato e verrà inserito nel torneo
     return this.http.post<Team>(`${this.url}/subscribe/created-team/tournament-name?tournament-name=${nameTournament}`, team);
+  }
+
+  deleteTeamFromTournament(teamName:string, tournamentName:string){
+    // elimina un team da un torneo
+    return this.http.delete(`${this.url}/tournament/delete/team-from-tournament/${teamName}/${tournamentName}`)
   }
 }

@@ -34,6 +34,10 @@ export class QuartiComponent implements OnInit {
                   this.games = res;
                   console.log(this.games, 'generati quarti');
                   this.isLoading = false;
+                },
+                (error) =>{
+                  Swal.fire(error.error.message)
+                  this.router.navigate(['/tournament'])
                 });
             }
             if (game.round === "FINAL" && game.status !== "FINISHED") {
@@ -67,7 +71,11 @@ export class QuartiComponent implements OnInit {
           this.isLoading = false;
         } else {
           Swal.fire('Non puoi iniziare un torneo dai quarti');
+          this.isLoading = false
+          this.router.navigate(['/tournament'])
         }
+      },(error) =>{
+        Swal.fire(error.error.message)
       });
   }
 }

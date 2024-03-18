@@ -27,8 +27,13 @@ ngOnInit(): void {
 getClassificaMvp() {
   this.tournamentSv.getClassificaMvp("string").subscribe(
     (data: PlayerPointRes) => {
+      if (data.playerPointsList) {
+        this.router.navigate(['/tournament'])
+        Swal.fire("La classifica sarà disponibile una volta iniziato il torneo")
+        this.isLoading = false
+      }
       this.leadBoard = data;
-      this.player = this.leadBoard?.playerPointsList || []; // Assegna playerPointsList solo se leadBoard è definito
+      this.player = this.leadBoard?.playerPointsList || [];
       this.isLoading = false;
       this.checkIfTournamentisFinished();
     },
@@ -51,6 +56,10 @@ checkIfTournamentisFinished() {
         this.isLoading = false;
       }
     });
+  },
+  (error) =>{
+    Swal.fire(error.error.message)
+    this.isLoading = false
   });
 }
 

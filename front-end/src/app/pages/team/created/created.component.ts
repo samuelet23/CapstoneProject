@@ -1,11 +1,12 @@
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { TeamService } from '../../../services/team.service';
-import { Router } from '@angular/router';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PlayerDto, TeamDto } from '../../../api/models';
+import { ActivatedRoute, NavigationEnd, Event as NavigationEvent, Router } from '@angular/router';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Player, PlayerDto, Team, TeamDto } from '../../../api/models';
 import Swal from 'sweetalert2';
 import { formatDate } from '@angular/common';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-created',
@@ -13,20 +14,43 @@ import { formatDate } from '@angular/common';
   styleUrl: './created.component.scss'
 })
 export class CreatedComponent implements OnInit {
+isLoading:boolean = false;
 players!:FormArray
 teamForm!: FormGroup;
+isUpdating:boolean = false;
+private route = inject(ActivatedRoute);
+private fb = inject(FormBuilder);
+private teamSv = inject(TeamService)
+private router = inject(Router)
+teamName = this.route.snapshot.paramMap.get('name')
+teamToUpdate:Team ={
+  name: '',
+  players: [],
+  captain: {
+    dateOfBirth: '',
+    name: '',
+    nickname: '',
+    sigla: '',
+    surname: '',
+    teamName: ''
+  }
+}
 
-constructor(private fb: FormBuilder) {}
+constructor() {
+}
+
+
+
+
   ngOnInit(): void {
     this.teamForm = this.fb.group({
       nameTeam: ['', Validators.required],
       captainName: ['', Validators.required],
       players: this.fb.array([], Validators.required)
     });
-
       this.addPlayer();
+    }
 
-  }
 
   submitForm() {
     if (this.teamForm.valid) {
@@ -44,16 +68,60 @@ constructor(private fb: FormBuilder) {}
           return playerDto;
         })
       };
-
-      console.log(team);
-    } else {
-      console.log('Il form non è valido');
+      const nameTournament = this.route.snapshot.paramMap.get('name');
+      if (nameTournament) {
+        this.subscribeCreatedTeam(team, nameTournament)
+      } else{
+        throw new Error ('Il nome del torneo è inesistente')
+      }
     }
   }
 
-isInvalid(field: string): boolean {
-  const formControl = this.teamForm.get(field)?.value;
-  return formControl.invalid && (formControl.dirty || formControl.touched);
+
+
+
+  subscribeCreatedTeam(team:TeamDto, tournamentName:string){
+    this.teamSv.subscribeCreatedTeamToTournament(team, tournamentName).subscribe(team =>{
+        Swal.fire("Il team è stato creato con successo nel torneo", tournamentName).then(() =>{
+          this.router.navigate(['/tournament'])
+        });
+
+    },
+    (error) => {
+      Swal.fire (error.error.message);
+    })
+  }
+
+
+
+
+  isValid(fieldName:string){
+    return this.teamForm.get(fieldName)?.valid
+  }
+
+  isTouched(fieldName:string){
+    return this.teamForm.get(fieldName)?.touched
+  }
+
+  getPlayerControl(index: number, fieldName: string) {
+    return (this.teamForm.get('players') as FormArray).at(index).get(fieldName);
+  }
+  getUpdateControl(fieldName: string) {
+    const playersArray = this.teamForm.get('players') as FormArray;
+    for (let i = 0; i < playersArray.length; i++) {
+      const playerFormGroup = playersArray.at(i) as FormGroup;
+      if (playerFormGroup.controls[fieldName]) {
+        return playerFormGroup.controls[fieldName];
+      }
+    }
+    return null;
+  }
+
+isCaptainNameValid(): boolean {
+  const captainName = this.teamForm.value.captainName;
+  const players = this.teamForm.value.players;
+
+  return players.some((player: { nickname: any; }) => player.nickname === captainName);
 }
 
 
@@ -77,27 +145,27 @@ removePlayer(index: number) {
   } else{
     Swal.fire('Erorre: inserisci minimo 3 giocatori')
   }
-
   }
 
+  removePlayerById(id:string){
+
+  }
 
 createPlayer(): FormGroup {
   return this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
     surname: ['', [Validators.required, Validators.minLength(3)]],
     nickname: ['', [Validators.required, Validators.minLength(3)]],
-    dateOfBirth: ['', [Validators.required,]],
+    dateOfBirth: ['', [Validators.required, this.dateOfBirthValidator]],
     sigla: ['', [Validators.required, Validators.pattern(/[A-E]/)]]
   });
 }
 
 
+
 private checkDateAndFormat(dateOfBirth: string): string {
-  console.log('Data di nascita fornita:', dateOfBirth);
   const dateOfBirthDate: Date = new Date(dateOfBirth);
-  console.log('Data di nascita convertita:', dateOfBirthDate);
   const today: Date = new Date();
-  console.log('Data corrente:', today);
   if (isNaN(dateOfBirthDate.getTime()) || dateOfBirthDate > today) {
     Swal.fire({
       title: 'Errore',
@@ -110,9 +178,28 @@ private checkDateAndFormat(dateOfBirth: string): string {
 
   return formatDate(
     dateOfBirthDate,
-    'dd-MM-yyyy',
+    'dd/MM/yyyy',
     'en-US'
   );
+}
+private dateOfBirthValidator(control: FormControl) {
+  const inputDate = new Date(control.value);
+  const currentDate = new Date();
+  return inputDate <= currentDate ? null : { invalidDateOfBirth: true };
+}
+protected arePlayersValid() {
+  if (this.players.length < 3 || this.players.length > 5) {
+    return false;
+  }
+
+  for (let i = 0; i < this.players.length; i++) {
+    const playerFormGroup = this.players.at(i) as FormGroup;
+    if (playerFormGroup.invalid) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 }

@@ -1,0 +1,32 @@
+.team-card {
+  .card-header {
+    img {
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+    h5 {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #333;
+    }
+  }
+  .card-body {
+    ul {
+      list-style-type: none;
+      padding: 0;
+      li {
+        margin-bottom: 10px;
+        p {
+          margin: 0;
+        }
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
