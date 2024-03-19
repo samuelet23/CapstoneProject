@@ -8,7 +8,6 @@ import { PlayersComponent } from './players/players.component';
 
 const routes: Routes = [
   { path: '', component: TeamComponent },
-  { path: 'update/:name', component: UpdatedComponent },
   { path: 'create/tournament/:name', component: CreatedComponent },
   { path: 'existing/tournament/:name', component: ExistingComponent },
   { path: 'player/:name', component: PlayersComponent }

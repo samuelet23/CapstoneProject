@@ -28,6 +28,10 @@ ngOnInit(): void {
 
         this.isLoading = false;
         this.teams = teams;
+      },(error) =>{
+        Swal.fire (error.error.message)
+        this.isLoading = false
+        this.router.navigate(['/tournament'])
       })
   } else{
     this.isLoading = false;

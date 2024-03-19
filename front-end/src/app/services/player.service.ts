@@ -17,8 +17,8 @@ export class PlayerService {
     return this.http.post<Player>(`${this.url}/player/create`, player)
   }
 
-  updateCredentialPlayer(player: PlayerDto, playerName:string):Observable<Player>{
-    return this.http.patch<Player>(`${this.url}/player/update/credential/${playerName}`, player)
+  updateCredentialPlayer(player: PlayerDto, id:string):Observable<Player>{
+    return this.http.patch<Player>(`${this.url}/player/update/credential/${id}`, player)
   }
   removePlayerFromTeam(nickname: string ){
     return this.http.delete<Player>(`${this.url}/player/delete/byName/${nickname}`)

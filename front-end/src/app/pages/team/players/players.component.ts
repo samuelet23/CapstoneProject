@@ -17,12 +17,9 @@ export class PlayersComponent {
   private teamSv = inject (TeamService);
   private playerSv = inject (PlayerService);
   isLoading: boolean = false;
-
-  teamDto:TeamDto ={
-    captainName: '',
-    nameTeam: '',
-    players: []
-  }
+  isUpdating: boolean = false;
+  isCaptainOrManager: boolean = false;
+  players: Player[] = [];
   teamToUpdate: Team  ={
     name: '',
     players: [],
@@ -32,21 +29,21 @@ export class PlayersComponent {
       nickname: '',
       sigla: '',
       surname: '',
-      teamName: ''
+      teamName: '',
+      id: ''
     }
   }
-  playerDto:PlayerDto ={
-    dateOfBirth: '',
-    name: '',
-    nickname: '',
-    sigla: '',
-    surname: ''
-  }
+
   teamName: string | null = this.route.snapshot.paramMap.get('name');
 
 
   ngOnInit(): void {
+    this.isCaptainOrManagaer()
     this.getTeamFromName();
+    console.log(this.players);
+    this.checkIfPlayerExists()
+    console.log(this.players, "2");
+
   }
 
   getTeamFromName(): void {
@@ -54,7 +51,6 @@ export class PlayersComponent {
     if (this.teamName) {
       this.teamSv.getTeamFromName(this.teamName).subscribe(
         team => {
-
           this.teamToUpdate = team;
           this.isLoading = false;
         },
@@ -68,15 +64,48 @@ export class PlayersComponent {
     }
   }
 
+  checkIfPlayerExists(): void {
+    this.isLoading = true;
+
+    if (this.teamName) {
+      this.teamSv.getAllPlayersFromTeam(this.teamName).subscribe((teamPlayers) => {
+        this.players = teamPlayers;
+        this.isLoading = false;
+      });
+    }
+  }
+  isPlayerInDatabase(player: Player): boolean {
+    return this.players.findIndex(p => p.id === player.id) !== -1;
+  }
+  hasNickname(player: Player): boolean {
+    return player.nickname !== null && player.nickname !== undefined && player.nickname.trim() !== '';
+  }
+  isNicknameInTeam(player: Player, playersOfTeam: Player[]): boolean {
+    return playersOfTeam.some(p => p.nickname === player.nickname);
+  }
+  hasNicknameAndIsInDatabase(player: Player): boolean {
+    return this.hasNickname(player) && this.isPlayerInDatabase(player);
+  }
 
 
-  updatePlayer(player: PlayerDto , playerName: string){
+  updatePlayer(player: PlayerDto , id: string){
+
+    const formattedDateOfBirth = this.checkDateAndFormat(player.dateOfBirth);
+
+    player.dateOfBirth = formattedDateOfBirth;
+
+    console.log(player);
+
+
     this.isLoading = true
-    this.playerSv.updateCredentialPlayer(player, playerName).subscribe(result => {
-      const index = this.teamToUpdate.players.findIndex(p => p.name === playerName);
+    this.playerSv.updateCredentialPlayer(player, id).subscribe(result => {
+      console.log(player, "update 2");
+
+      const index = this.teamToUpdate.players.findIndex(p => p.id === id);
       if (index !== -1) {
         this.teamToUpdate.players[index] = result;
       }
+      Swal.fire("Il giocatore è stato aggiornato correttamente")
       this.isLoading = false;
     },
     (error) =>{
@@ -97,41 +126,76 @@ export class PlayersComponent {
     };
     this.teamToUpdate.players.push(newPlayer);
 
-    this.playerDto ={
-      dateOfBirth: this.checkDateAndFormat(newPlayer.dateOfBirth),
-      name: newPlayer.name,
-      nickname: newPlayer.nickname,
-      sigla: newPlayer.sigla,
-      surname: newPlayer.surname
-    }
-
   }
 
-  createPlayer(){
-    this.playerSv.createPlayer(this.playerDto).subscribe(player =>{
-      console.log(player);
+  createPlayer(player:Player){
+    const formattedDateOfBirth = this.checkDateAndFormat(player.dateOfBirth);
 
+    player.dateOfBirth = formattedDateOfBirth;
+    console.log(player, "create");
+
+    this.playerSv.createPlayer(player).subscribe(player =>{
+    console.log(player, "create2");
+      this.players.push(player)
+
+
+    },
+    (error) => {
 
     })
   }
 
 
-  saveTeam(){
-    this.teamDto ={
-      nameTeam: this.teamToUpdate.name,
-      captainName:  this.teamToUpdate.captain?.name,
-      players:this.teamToUpdate.players
-    }
-    this.teamSv.updateTeam(this.teamToUpdate.name ,this.teamDto)
-      .subscribe((team) => {
-        console.log(team);
-        Swal.fire("Il team è stato salvato correttament")
+  saveTeam(players: Player[]): void {
+    players.forEach((player) => {
+      const formattedDateOfBirth = this.checkDateAndFormat(player.dateOfBirth);
+      player.dateOfBirth = formattedDateOfBirth;
+    });
 
-      },
-      (error) =>{
-        Swal.fire(error.error.message)
-      })
+    const teamDto: TeamDto = {
+      nameTeam: this.teamToUpdate.name,
+      captainName: this.teamToUpdate.captain?.name,
+      players: this.teamToUpdate.players
+    };
+
+    let playersOfTeam: Player[] = [];
+
+    this.teamSv.getAllPlayersFromTeam(teamDto.nameTeam).subscribe(players => {
+      playersOfTeam = players;
+
+      teamDto.players.forEach((playerDto) => {
+        if (this.teamName) {
+
+          const player: Player = {
+            id: '',
+            name: playerDto.name,
+            surname: playerDto.surname,
+          nickname: playerDto.nickname,
+          dateOfBirth: playerDto.dateOfBirth,
+          sigla: playerDto.sigla,
+          teamName: this.teamName
+        };
+
+        if (!this.isNicknameInTeam(player, playersOfTeam)) {
+          this.createPlayer(player);
+          playersOfTeam.push(player);
+        }
+      }
+      });
+
+      this.teamSv.updateTeam(this.teamToUpdate.name, teamDto).subscribe(
+        (team) => {
+          Swal.fire("Il team è stato salvato correttamente");
+          console.log(team);
+
+        },
+        (error) => {
+          Swal.fire(error.error.message);
+        }
+      );
+    });
   }
+
 
   deletePlayer(nickname:string){
     this.isLoading = true
@@ -158,7 +222,35 @@ export class PlayersComponent {
       Swal.fire('Errore', 'La data di nascita non è valida o è successiva a oggi.', 'error');
       throw new Error('La data di nascita non è valida o è successiva a oggi.');
     }
-    return formatDate(dateOfBirthDate, 'dd/MM/yyyy', 'en-US');
+    return formatDate(dateOfBirthDate, 'dd-MM-yyyy', 'en-US');
   }
 
+  formatDateOfBirth(newDate: string) {
+    try {
+      this.teamToUpdate.players.forEach((player) =>{
+        player.dateOfBirth = this.checkDateAndFormat(newDate);
+      })
+    } catch (error) {
+      // Gestisci l'errore qui se necessario
+      console.error(error);
+    }
+  }
+  passaModifica(){
+    this.isUpdating = !this.isUpdating;
+  }
+
+  private isCaptainOrManagaer(): boolean {
+    const userString = localStorage.getItem('utente');
+    if (userString !== null) {
+      const user = JSON.parse(userString);
+      if (user.role === 'MANAGER' || user.role === 'CAPTAIN') {
+        return this.isCaptainOrManager = true;
+      } else {
+        return this.isCaptainOrManager = false;
+      }
+    } else {
+      Swal.fire('Utente non loggato');
+      return false;
+    }
+  }
 }

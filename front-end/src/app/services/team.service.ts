@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Team, TeamDto, UpdateCaptainDto, UpdateTeamNameDto, UploadConfirm } from '../api/models';
+import { Player, Team, TeamDto, UpdateCaptainDto, UpdateTeamNameDto, UploadConfirm } from '../api/models';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
@@ -27,6 +27,9 @@ export class TeamService {
     return this.http.post<Team>(`${this.url}/team/create`,team);
   }
 
+  getAllPlayersFromTeam(teamName:string):Observable<Player[]>{
+    return this.http.get<Player[]>(`${this.url}/open/player/get/all/team-name?team-name=${teamName}`)
+  }
   updateTeam(teamName:string, team: TeamDto):Observable<Team>{
     return this.http.put<Team>(`${this.url}/team/update/team/${teamName}`, team)
   }

@@ -38,8 +38,7 @@
 
         <div class="card-footer">
           <button class="btn btn-primary" routerLink="/team/player/{{team.name}}">Scopri di più del team</button>
-          <button class="btn btn-warning" routerLink="/team/update/{{team.name}}">Modifica il Nome o il capitano</button>
-          <button class="btn btn-danger" (click)="removeTeam(team.name)">Elimina il Team dal Torneo</button>
+          <button class="btn btn-danger" (click)="removeTeam(team.name)" *ngIf="isCaptainOrManager">Elimina il Team dal Torneo</button>
         </div>
       </div>
     </div>

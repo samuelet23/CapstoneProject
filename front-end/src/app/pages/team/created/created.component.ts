@@ -32,7 +32,8 @@ teamToUpdate:Team ={
     nickname: '',
     sigla: '',
     surname: '',
-    teamName: ''
+    teamName: '',
+    id: ''
   }
 }
 
@@ -68,7 +69,10 @@ constructor() {
           return playerDto;
         })
       };
+      console.log(team);
+
       const nameTournament = this.route.snapshot.paramMap.get('name');
+      console.log(team);
       if (nameTournament) {
         this.subscribeCreatedTeam(team, nameTournament)
       } else{
@@ -178,7 +182,7 @@ private checkDateAndFormat(dateOfBirth: string): string {
 
   return formatDate(
     dateOfBirthDate,
-    'dd/MM/yyyy',
+    'dd-MM-yyyy',
     'en-US'
   );
 }

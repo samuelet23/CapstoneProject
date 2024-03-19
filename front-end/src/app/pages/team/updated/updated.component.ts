@@ -29,7 +29,8 @@ export class UpdatedComponent implements OnInit{
       nickname: '',
       sigla: '',
       surname: '',
-      teamName: ''
+      teamName: '',
+      id: ''
     }
   }
   isUpdating: boolean = false;
@@ -72,8 +73,8 @@ export class UpdatedComponent implements OnInit{
     this.isLoading = true
     if (this.teamToUpdate.id && this.newName.teamName.length > 2) {
       this.teamSv.updateName(this.teamToUpdate.id, this.newName).subscribe(() =>{
-          this.router.navigate(['/tournament'])
-          this.isLoading = false
+        Swal.fire("Nome del team aggiornato correttamente")
+        this.isLoading = false
       },
       (error)=>{
         Swal.fire("Errore nella modifica, prova con un altro nome")
@@ -87,13 +88,16 @@ export class UpdatedComponent implements OnInit{
   }
 
   updateCaptain(): void {
-      this.isLoading = true;
-      this.teamSv.updateCaptainName(this.teamToUpdate.name, this.newCaptain ).subscribe((data) =>{
-          this.router.navigate(['/tournament']);
-          this.isLoading = false;
+
+    this.isLoading = true;
+    this.teamSv.updateCaptainName(this.teamToUpdate.name, this.newCaptain ).subscribe((data) =>{
+        console.log(data);
+        Swal.fire("Nome del capitano aggiornato correttamente")
+        this.isLoading = false;
       },
       (error) => {
-        Swal.fire("Errore nella modifica, prova con un altro nickname")
+        Swal.fire(error.error.message)
+        console.log(this.newCaptain);
         this.isLoading = false;
       });
 

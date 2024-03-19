@@ -19,7 +19,7 @@
             <h5 class="card-title">{{ team.name }}</h5>
           </div>
           <div class="card-body">
-            <p class="card-text">Il direttore d'orchestra sarà il signor: {{ team.captain?.name }}, {{ team.captain?.surname }}.</p>
+            <p class="card-text">Il direttore d'orchestra sarà il signor: {{ team.captain.name }}, {{ team.captain.surname }}.</p>
             <p class="card-text">I giocatori della squadra {{ team.name }} sono:</p>
             <ul class="list-group">
               <li *ngFor="let player of team.players" class="list-group-item">

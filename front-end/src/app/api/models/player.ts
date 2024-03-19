@@ -4,7 +4,7 @@ export interface Player {
   age?: number;
   dateOfBirth: string;
   gamesPlayed?: number;
-  id?: string;
+  id: string;
   name: string;
   nickname: string;
   point?: number;
