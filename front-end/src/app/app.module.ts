@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
 import { TokenInterceptor } from './pages/auth/token.interceptor';
+import { AllTournamentsComponent } from './pages/tournament/all-tournaments/all-tournaments.component';
 
 @NgModule({
   declarations: [

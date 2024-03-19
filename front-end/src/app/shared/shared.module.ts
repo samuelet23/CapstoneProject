@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FooterComponent } from '../components/footer/footer.component';
 import { SpinnerComponent } from '../components/spinner/spinner.component';
 import { NavTournamentComponent } from '../components/nav-tournament/nav-tournament.component';
+import { AllTournamentsComponent } from '../pages/tournament/all-tournaments/all-tournaments.component';
 
 
 
@@ -18,7 +19,8 @@ import { NavTournamentComponent } from '../components/nav-tournament/nav-tournam
     RegisterPageComponent,
     FooterComponent,
     SpinnerComponent,
-    NavTournamentComponent
+    NavTournamentComponent,
+    AllTournamentsComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +36,8 @@ import { NavTournamentComponent } from '../components/nav-tournament/nav-tournam
     RegisterPageComponent,
     FooterComponent,
     SpinnerComponent,
-    NavTournamentComponent
+    NavTournamentComponent,
+    AllTournamentsComponent
   ]
 })
 export class SharedModule { }

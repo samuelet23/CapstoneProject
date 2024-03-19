@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
-import { Game, Player, Team, TeamDto } from '../api/models';
+import { Competition, Game, Player, Team, TeamDto, Tournament } from '../api/models';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,9 @@ export class TournamentService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-
+getAllTournamentFromProvinceName(provinceName:string):Observable<Competition[]>{
+  return this.http.get<Competition[]>(`${this.url}/open/tournament/get/all/auto-complete/province/${provinceName}`)
+}
   getAllTeamFromTournament(tournamentName: string ):Observable<Team[]>{
      return  this.http.get<Team[]>(`${this.url}/open/team/get/all/tournament-name?tournament-name=${tournamentName}`)
   }

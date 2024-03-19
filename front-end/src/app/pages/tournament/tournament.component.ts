@@ -60,10 +60,7 @@ ngOnInit(): void {
   }
 }
 
-updateTeam(arg0: string) {
-  }
 
- showPlayers(team: Team){}
 
 
  removeTeam(teamName: string){

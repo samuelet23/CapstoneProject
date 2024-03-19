@@ -6,6 +6,7 @@ import { QuartiComponent } from './quarti/quarti.component';
 import { SemifinaleComponent } from './semifinale/semifinale.component';
 import { FinaleComponent } from './finale/finale.component';
 import { ClassificaComponent } from './classifica/classifica.component';
+import { AllTournamentsComponent } from './all-tournaments/all-tournaments.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,10 @@ const routes: Routes = [
   {
    path: 'classifica',
    component: ClassificaComponent
+  },
+  {
+    path:'province/:provinceName',
+    component: AllTournamentsComponent
   }
   ];
 

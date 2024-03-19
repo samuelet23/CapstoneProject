@@ -86,7 +86,7 @@ constructor() {
 
   subscribeCreatedTeam(team:TeamDto, tournamentName:string){
     this.teamSv.subscribeCreatedTeamToTournament(team, tournamentName).subscribe(team =>{
-        Swal.fire("Il team è stato creato con successo nel torneo", tournamentName).then(() =>{
+        Swal.fire("Il team è stato creato con successo nel torneo").then(() =>{
           this.router.navigate(['/tournament'])
         });
 

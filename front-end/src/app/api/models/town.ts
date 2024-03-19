@@ -3,6 +3,6 @@
 import { Province } from '../models/province';
 export interface Town {
   id?: string;
-  name?: string;
+  name: string;
   province?: Province;
 }
