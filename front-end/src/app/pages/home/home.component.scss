@@ -51,3 +51,15 @@
 button {
   margin-top: 10px;
 }
+.container.create {
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  .description {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+}

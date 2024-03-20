@@ -4,6 +4,7 @@ import { TournamentService } from '../../services/tournament.service';
 import { Team } from '../../api/models';
 import Swal from 'sweetalert2';
 import { TeamService } from '../../services/team.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-tournament',
@@ -14,11 +15,12 @@ export class TournamentComponent implements OnInit{
 
   private tournamentSv = inject(TournamentService)
   private teamSv = inject(TeamService)
+  private route = inject(ActivatedRoute)
 
+  tournamentName:string | null = this.route.snapshot.paramMap.get('name')
   isLoading:boolean = false;
   teams:Team[] = []
   isCaptainOrManager:boolean = false;
-  tournamentName:string = "string"
   dropdownOpen: boolean = false;
 
  constructor(){
@@ -29,19 +31,23 @@ toggleDropdown(){
 }
 
 ngOnInit(): void {
+
    this.isCaptainOrManagaer()
   this.isLoading = true
-   this.tournamentSv.getAllTeamFromTournament(this.tournamentName)
-    .subscribe((team: Team[]) => {
-      this.isLoading = false
-     this.teams = team
-    },
-    (error) => {
-      Swal.fire(error.error.message)
-      this.isLoading = false
-    }
+  if (this.tournamentName) {
+    this.tournamentSv.getAllTeamFromTournament(this.tournamentName)
+     .subscribe((team: Team[]) => {
+       this.isLoading = false
+      this.teams = team
+     },
+     (error) => {
+       Swal.fire(error.error.message)
+       this.isLoading = false
+     }
 
-    )
+     )
+  }
+  this.isLoading = false
  }
 
 
@@ -64,13 +70,15 @@ ngOnInit(): void {
 
 
  removeTeam(teamName: string){
-  this.teamSv.deleteTeamFromTournament(teamName, this.tournamentName)
-    .subscribe(() =>{
-      const index = this.teams.findIndex(team => team.name === teamName);
-      if (index !== -1) {
-        this.teams.splice(index, 1);
-      }
-      Swal.fire("Team"+teamName+"eliminato correttamente dal torneo");
-  })
+  if (this.tournamentName) {
+    this.teamSv.deleteTeamFromTournament(teamName, this.tournamentName)
+      .subscribe(() =>{
+        const index = this.teams.findIndex(team => team.name === teamName);
+        if (index !== -1) {
+          this.teams.splice(index, 1);
+        }
+        Swal.fire("Team"+teamName+"eliminato correttamente dal torneo");
+    })
+  }
  }
 }

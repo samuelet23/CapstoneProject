@@ -40,23 +40,21 @@ export class PlayersComponent {
   ngOnInit(): void {
     this.isCaptainOrManagaer()
     this.getTeamFromName();
-    console.log(this.players);
     this.checkIfPlayerExists()
-    console.log(this.players, "2");
 
   }
 
   getTeamFromName(): void {
     this.isLoading = true;
     if (this.teamName) {
-      this.teamSv.getTeamFromName(this.teamName).subscribe(
+      this.teamSv.getTeamFromName(this.teamName.trim().toLocaleLowerCase()).subscribe(
         team => {
           this.teamToUpdate = team;
           this.isLoading = false;
         },
         error => {
           Swal.fire('Errore', error.error.message, 'error').then(() => {
-            this.router.navigate(['/tournament'])
+
           });
           this.isLoading = false;
         }
@@ -141,7 +139,7 @@ export class PlayersComponent {
 
     },
     (error) => {
-
+        Swal.fire(error.error.message)
     })
   }
 
@@ -225,16 +223,7 @@ export class PlayersComponent {
     return formatDate(dateOfBirthDate, 'dd-MM-yyyy', 'en-US');
   }
 
-  formatDateOfBirth(newDate: string) {
-    try {
-      this.teamToUpdate.players.forEach((player) =>{
-        player.dateOfBirth = this.checkDateAndFormat(newDate);
-      })
-    } catch (error) {
-      // Gestisci l'errore qui se necessario
-      console.error(error);
-    }
-  }
+
   passaModifica(){
     this.isUpdating = !this.isUpdating;
   }

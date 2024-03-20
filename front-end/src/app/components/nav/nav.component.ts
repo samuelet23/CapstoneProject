@@ -8,10 +8,12 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class NavComponent {
 active: boolean = false
-isSticky = false;
+isSticky:boolean  = false;
+isLoggedIn:boolean = false;
 links = [
   { title: 'Login', fragment: 'auth/login' },
-  { title: 'Register', fragment: 'auth/register' }
+  { title: 'Registrazione', fragment: 'auth/register' },
+  { title: 'Il Mio Account', fragment: 'user' ,  },
 ];
 
 constructor(public route: ActivatedRoute) {

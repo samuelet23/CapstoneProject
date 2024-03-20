@@ -9,6 +9,8 @@ import { QuartiComponent } from './quarti/quarti.component';
 import { SemifinaleComponent } from './semifinale/semifinale.component';
 import { FinaleComponent } from './finale/finale.component';
 import { ClassificaComponent } from './classifica/classifica.component';
+import { CreateComponent } from './create/create.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -18,11 +20,13 @@ import { ClassificaComponent } from './classifica/classifica.component';
     QuartiComponent,
     SemifinaleComponent,
     FinaleComponent,
-    ClassificaComponent
+    ClassificaComponent,
+    CreateComponent
   ],
   imports: [
     CommonModule,
     TournamentRoutingModule,
+    ReactiveFormsModule,
     SharedModule
   ]
 })

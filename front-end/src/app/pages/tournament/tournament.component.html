@@ -1,11 +1,17 @@
-<div class="app-nav-tournament"></div>
+<div class="container-mini-nav">
+  <a class="text-uppercase rounds" routerLink="/tournament/{{tournamentName}}/ottavi-finale" >ottavi di finale</a>
+  <a class="text-uppercase rounds" routerLink="/tournament/{{tournamentName}}/quarti-finale" >quarti di finale</a>
+  <a class="text-uppercase rounds" routerLink="/tournament/{{tournamentName}}/semi-finale" >semifinale</a>
+  <a class="text-uppercase rounds" routerLink="/tournament/{{tournamentName}}/finale" >finale</a>
+  <a class="text-uppercase rounds" routerLink="/tournament/{{tournamentName}}/classifica">Classica MVP</a>
+</div>
+
 <div class="container">
 <h2> IL TORNEO È COMPOSTO DA {{teams.length}} SQUADRE </h2>
 <div class="container-iscrivi" *ngIf="!isLoading">
   <p>Ecco quali le squadre parteciperanno</p>
   <div class="dropdown">
-    <!-- da aggiungere : && teams.length < 16 -->
-    <button *ngIf="isCaptainOrManager  " (click)="toggleDropdown()" class="btn btn-success mb-3 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button *ngIf="isCaptainOrManager && teams.length < 16 " (click)="toggleDropdown()" class="btn btn-success mb-3 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       ISCRIVITI LA TUA SQUADRA
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" [ngClass]="{ 'show': dropdownOpen }">
@@ -44,7 +50,7 @@
     </div>
   </div>
 </div>
-
+<router-outlet></router-outlet>
 </div>
 
 

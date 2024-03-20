@@ -6,7 +6,7 @@
 
 
 <div class="container my-3" *ngIf="!isLoading">
-  <i class="bi bi-arrow-left-circle-fill pointer" routerLink="/tournament"></i>
+  <i class="bi bi-arrow-left-circle-fill pointer" routerLink="/tournament/{{tournamentString}}"></i>
   <h2 class="text-center">OTTAVI DI FINALE</h2>
   <div class="container-match" *ngFor="let match of games">
     <div class="match">

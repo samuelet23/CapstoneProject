@@ -1,0 +1,105 @@
+<form [formGroup]="tournamentForm" (ngSubmit)="submitForm()" class="m-4 bg-dark p-3 rounded-3 text-white">
+<h2>Inizia a Creare il tuo torneo</h2>
+    <div class="form-group">
+    <label for="name">Nome:</label>
+    <input type="text" id="name" formControlName="name" class="form-control" placeholder="Inserisci il nome del torneo">
+    <div *ngIf="tournamentForm.get('name')?.invalid && tournamentForm.get('name')?.touched" class="error-message error-text" >
+      <span *ngIf="tournamentForm.get('name')?.errors?.['required']">Il nome del torneo è richiesto.</span>
+      <span *ngIf="tournamentForm.get('name')?.errors?.['minlength']">Il nome del torneo deve essere lungo almeno 3 caratteri.</span>
+    </div>
+  </div>
+
+  <!-- Campo Immagine di copertina -->
+  <div class="form-group">
+    <label for="coverImage">Immagine di copertina del torneo (PNG o JPG)</label>
+    <input type="file" id="coverImage" class="form-control" #fileInput (change)="onFileSelected($event)">
+  </div>
+
+  <!-- Campo Data Inizio -->
+  <div class="form-group">
+    <label for="startDate">Data Inizio:</label>
+    <input type="date" id="startDate" formControlName="startDate" class="form-control">
+    <div *ngIf="tournamentForm.get('startDate')?.invalid && tournamentForm.get('startDate')?.touched" class="error-message error-text">
+      La data di inizio è richiesta.
+    </div>
+  </div>
+
+  <!-- Campo Livello -->
+  <div class="form-group">
+    <label for="level">Livello:</label>
+    <select id="level" formControlName="level" class="form-control">
+      <option value="" disabled selected>Scegli il livello del torneo</option>
+      <option *ngFor="let level of levels" [value]="level">{{ level }}</option>
+    </select>
+    <div *ngIf="tournamentForm.get('level')?.invalid && tournamentForm.get('level')?.touched" class="error-message error-text">
+      Il livello del torneo è richiesto.
+    </div>
+  </div>
+
+  <div formGroupName="place">
+    <div formGroupName="address">
+      <h2>Dove si svolgerà questo torneo?</h2>
+
+      <!-- Campo Nome Campo -->
+      <div class="form-group" [class.error]="tournamentForm.get('place.address.courtName')?.invalid && tournamentForm.get('place.address.courtName')?.touched">
+        <label for="courtName">Nome del Campetto:</label>
+        <input type="text" id="courtName" formControlName="courtName" class="form-control" placeholder="inserisci il nome del campetto">
+        <div *ngIf="tournamentForm.get('place.address.courtName')?.invalid && tournamentForm.get('place.address.courtName')?.touched" class="error-message error-text">
+          Il nome del campetto è richiesto.
+        </div>
+      </div>
+
+      <!-- Campo Provincia -->
+      <div class="form-group" [class.error]="tournamentForm.get('place.address.siglaProvince')?.invalid && tournamentForm.get('place.address.siglaProvince')?.touched">
+        <label for="siglaProvince">Sigla Provincia:</label>
+        <input type="text" id="siglaProvince" formControlName="siglaProvince" class="form-control" placeholder="inserisci la sigla  ">
+        <div *ngIf="tournamentForm.get('place.address.siglaProvince')?.invalid && tournamentForm.get('place.address.siglaProvince')?.touched" class="error-message error-text">
+          La sigla della provincia è richiesta.
+        </div>
+      </div>
+
+      <!-- Campo Città -->
+      <div class="form-group" [class.error]="tournamentForm.get('place.address.townName')?.invalid && tournamentForm.get('place.address.townName')?.touched">
+        <label for="townName">Città:</label>
+        <input type="text" id="townName" formControlName="townName" class="form-control" placeholder="inserisci la città">
+        <div *ngIf="tournamentForm.get('place.address.townName')?.invalid && tournamentForm.get('place.address.townName')?.touched" class="error-message error-text">
+          La città è richiesta.
+        </div>
+      </div>
+
+      <!-- Campo Via -->
+      <div class="form-group" [class.error]="tournamentForm.get('place.address.via')?.invalid && tournamentForm.get('place.address.via')?.touched">
+        <label for="via">Via:</label>
+        <input type="text" id="via" formControlName="via" class="form-control" placeholder="inserisci la via">
+        <div *ngIf="tournamentForm.get('place.address.via')?.invalid && tournamentForm.get('place.address.via')?.touched" class="error-message error-text">
+          La via è richiesta.
+        </div>
+      </div>
+
+      <!-- Campo Civico -->
+      <div class="form-group" [class.error]="tournamentForm.get('place.address.civico')?.invalid && tournamentForm.get('place.address.civico')?.touched">
+        <label for="civico">Civico <span class="mini-font-size">(facoltativo)</span></label>
+        <input type="number" id="civico" formControlName="civico" class="form-control" placeholder="inserisci il civico">
+        <div *ngIf="tournamentForm.get('place.address.civico')?.invalid && tournamentForm.get('place.address.civico')?.touched" class="error-message error-text">
+          Il civico è richiesto.
+        </div>
+      </div>
+
+      <!-- Campo CAP -->
+      <div class="form-group" [class.error]="tournamentForm.get('place.address.cap')?.invalid && tournamentForm.get('place.address.cap')?.touched">
+        <label for="cap">CAP <span  class="mini-font-size">(facoltativo)</span></label>
+        <input type="number" id="cap" formControlName="cap" class="form-control" placeholder="inserisci il cap">
+        <div *ngIf="tournamentForm.get('place.address.cap')?.invalid && tournamentForm.get('place.address.cap')?.touched" class="error-message error-text">
+          Il CAP è richiesto.
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+  <button type="submit" class="btn btn-primary" [disabled]="!tournamentForm.valid || !tournamentForm.get('level')?.value">Invia</button>
+</form>

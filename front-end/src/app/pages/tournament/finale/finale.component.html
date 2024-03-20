@@ -7,7 +7,7 @@
 <div class="container">
 
   <div *ngIf="isFinished" class="winner-card my-3">
-    <i class="bi bi-arrow-left-circle-fill pointer" routerLink="/tournament"></i>
+    <i class="bi bi-arrow-left-circle-fill pointer" routerLink="/tournament/{{tournamentString}}"></i>
     <h2 class="text-center mb-4">Il vincitore del torneo è: {{ match.winner?.name }}</h2>
 
     <div class="text-center mb-4">

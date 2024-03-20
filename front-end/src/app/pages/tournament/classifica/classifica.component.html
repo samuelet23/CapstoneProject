@@ -3,7 +3,7 @@
     <span class="app-spinner"></span>
   </div>
 </div>
-<i class="bi bi-arrow-left-circle-fill pointer" routerLink="/tournament"></i>
+<i class="bi bi-arrow-left-circle-fill pointer" routerLink="/tournament/{{tournamentName}}"></i>
 <div *ngIf="isTournamentFinished">
   <h2> L'MVP del torneo {{tournamentName}} è</h2>
   <p class="fw-bold fs-1">{{player[0].playerName}}</p>

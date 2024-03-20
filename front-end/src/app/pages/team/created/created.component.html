@@ -1,9 +1,5 @@
 <div class="my-3 p-2" *ngIf="!isUpdating">
   <form [formGroup]="teamForm" (ngSubmit)="submitForm()">
-    <div routerLink="/tournament" class="d-flex ">
-      <i class="bi bi-arrow-left-circle-fill pointer mx-2"></i>
-      <p>torna indietro</p>
-    </div>
     <h2 *ngIf="isUpdating">Crea il tuo team</h2>
 
     <div formArrayName="players" class="bg-dark p-3 rounded-3 text-white ">

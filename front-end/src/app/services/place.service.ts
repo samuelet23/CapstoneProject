@@ -18,4 +18,8 @@ export class PlaceService {
     return this.http.get<Province[]>(`${this.url}/open/place/get/province/${nameProvince}`)
   }
 
+  getAllProvince():Observable<Province[]>{
+    return this.http.get<Province[]>(`${this.url}/open/place/get/all/province`)
+  }
+
 }

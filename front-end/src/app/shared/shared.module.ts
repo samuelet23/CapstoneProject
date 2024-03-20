@@ -8,8 +8,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FooterComponent } from '../components/footer/footer.component';
 import { SpinnerComponent } from '../components/spinner/spinner.component';
-import { NavTournamentComponent } from '../components/nav-tournament/nav-tournament.component';
 import { AllTournamentsComponent } from '../pages/tournament/all-tournaments/all-tournaments.component';
+import { RefereesComponent } from '../components/referees/referees.component';
 
 
 
@@ -19,8 +19,8 @@ import { AllTournamentsComponent } from '../pages/tournament/all-tournaments/all
     RegisterPageComponent,
     FooterComponent,
     SpinnerComponent,
-    NavTournamentComponent,
-    AllTournamentsComponent
+    AllTournamentsComponent,
+    RefereesComponent,
   ],
   imports: [
     CommonModule,
@@ -36,8 +36,8 @@ import { AllTournamentsComponent } from '../pages/tournament/all-tournaments/all
     RegisterPageComponent,
     FooterComponent,
     SpinnerComponent,
-    NavTournamentComponent,
-    AllTournamentsComponent
+    AllTournamentsComponent,
+    RefereesComponent,
   ]
 })
 export class SharedModule { }

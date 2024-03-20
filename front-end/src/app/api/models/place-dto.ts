@@ -2,6 +2,6 @@
 /* eslint-disable */
 import { AddressDto } from '../models/address-dto';
 export interface PlaceDto {
-  address?: AddressDto;
+  address: AddressDto;
   courtName: string;
 }

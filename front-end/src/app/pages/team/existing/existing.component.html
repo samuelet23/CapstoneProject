@@ -5,10 +5,6 @@
 </div>
 
 <div class="container my-3" *ngIf="!isLoading">
-  <div routerLink="/tournament" class="d-flex ">
-    <i class="bi bi-arrow-left-circle-fill pointer mx-2"></i>
-    <p>torna indietro</p>
-   </div>
   <div class="row">
     <ng-container *ngFor="let team of teams">
       <div class="col-lg-4 col-md-6 col-sm-12">

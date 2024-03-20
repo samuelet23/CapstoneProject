@@ -11,8 +11,8 @@
     <p class="tournament-start-date">Data di Inizio: <span>{{ tournament.startDate }}</span></p>
     <p class="tournament-place">Luogo: <span>{{ tournament.place?.address?.via }}, {{ tournament.place?.address?.civico }} {{ tournament.place?.address?.cap }}</span></p>
     <p class="tournament-court-name">Nome Campo: <span>{{ tournament.place?.courtName }}</span></p>
+    <h4 class="tournament-teams" >Squadre:</h4>
     <div *ngFor="let team of tournament.teams">
-      <h4 class="tournament-teams" >Squadre:</h4>
       <p>{{team.logo}}</p>
       <p>{{team.name}}</p>
       <p>{{team.captain.name}}</p>
@@ -27,5 +27,7 @@
   <div class="tournament-cover">
     <img [src]="tournament.coverUrl || '../../../../assets/logo tournament.png'" alt="Cover del torneo">
   </div>
+   <button routerLink="/tournament/{{tournament.name}}/referee" class="btn btn-outline-success" *ngIf="!isWithReferee">Aggiungi Arbitro/i</button>
+   <button routerLink="/tournament/{{tournament.name}}" class="btn btn-outline-success" *ngIf="isWithReferee">INIZIA TORNEO</button>
 </div>
 

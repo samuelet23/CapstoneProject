@@ -1,5 +1,6 @@
 <nav class="navbar p-3">
   <div class="container ">
+    <h2>Trova la tua città e scopri i tornei di basket in corso o in arrivo!</h2>
     <form class="search-bar" role="search" >
       <input class="form-control me-2" type="search" placeholder="Cerca città..."
              aria-label="Search" [(ngModel)]="searchTerm" name="searchTerm" (input)="onSearch()">
@@ -9,7 +10,7 @@
 </nav>
 
 
-<div *ngIf="provinces.length > 0; else noProvinces">
+<div *ngIf="provinces.length > 0">
   <div *ngFor="let province of provinces" class="province-card">
   <div class="province-details">
     <p class="province-name">Nome: <span>{{province.name | uppercase}}</span></p>
@@ -18,12 +19,30 @@
   <div class="province-action">
     <h6>Scopri quali tornei ci sono in questa città</h6>
     <button class="btn btn-outline-warning" routerLink="/tournament/province/{{province.name}}">SCOPRI</button>
+    <button  class="btn btn-outline-warning"  (click)="createTournament()">CREA TORNEO</button>
   </div>
 </div>
 </div>
-<ng-template #noProvinces>
-  <div class="province-details no-provinces-found">
-    <p class="province-name">Nessuna provincia trovata.</p>
-  </div>
-</ng-template>
 
+  <div class="container create " >
+    <p class="description">
+      Organizza un torneo di basket nella tua città natale e porta divertimento a piccoli e grandi! Creare un torneo di basket offre un'opportunità unica per riunire la comunità, promuovere lo spirito sportivo e l'attività fisica, e celebrare la passione per questo sport affascinante. I tornei di basket non solo offrono un'esperienza competitiva e divertente per i partecipanti, ma possono anche aiutare a creare legami duraturi tra gli amanti dello sport e promuovere la salute e il benessere nella tua comunità. Che tu sia un giocatore appassionato, un appassionato di sport o un semplice appassionato di divertimento, organizzare un torneo di basket è un modo fantastico per coinvolgere la tua città e creare ricordi indelebili per tutti i partecipanti. Scopri il potenziale di creare qualcosa di straordinario e unisciti a noi nel promuovere il divertimento, l'amicizia e la passione per il basket!
+    </p>
+    <button class="btn btn-primary" (click)="createTournament()">Crea Torneo</button>
+  </div>
+
+  <div class="container create">
+    <h2 class="section-title">Diventa Capitano di Squadra!</h2>
+    <p class="description">
+      Sei un appassionato di basket e vuoi guidare la tua squadra alla vittoria? Diventa capitano di squadra e iscrivi il tuo team al nostro torneo! Metti alla prova le tue abilità di leadership, crea legami con i tuoi compagni di squadra e vivi un'esperienza sportiva indimenticabile.
+    </p>
+    <button class="btn btn-primary">Diventa Capitano</button>
+  </div>
+
+  <div class="container create">
+    <h2 class="section-title">Segui l'Andamento del Torneo!</h2>
+    <p class="description">
+      Sei un giocatore appassionato ma non sei un capitano di squadra? Nessun problema! Segui l'andamento del torneo, scopri quanti punti hai fatto e in quale posizione sei nella classifica MVP. Resta aggiornato sulle ultime partite, le classifiche e le prestazioni delle squadre.
+    </p>
+    <button class="btn btn-primary">Segui il Torneo</button>
+  </div>

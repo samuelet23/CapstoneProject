@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { TournamentService } from '../../../services/tournament.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Game } from '../../../api/models';
 import Swal from 'sweetalert2';
 
@@ -12,7 +12,8 @@ import Swal from 'sweetalert2';
 export class FinaleComponent implements OnInit {
   isLoading: boolean = false;
   isFinished: boolean = false;
-  tournamentString: string = 'string'; //da passare dinamicamente
+  private route = inject(ActivatedRoute)
+  tournamentString:string | null = this.route.snapshot.paramMap.get('name')
   match: Game = {};
 
   constructor(
@@ -21,7 +22,8 @@ export class FinaleComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isLoading = true;
+    if (this.tournamentString) {
+          this.isLoading = true;
     this.tournamentSv
       .getAllGameFromTournamentName(this.tournamentString)
       .subscribe((games) => {
@@ -32,7 +34,7 @@ export class FinaleComponent implements OnInit {
               this.isLoading = false;
               return;
             }
-            if (game.round === 'SEMIFINAL' && game.status === 'FINISHED') {
+            if (game.round === 'SEMIFINAL' && game.status === 'FINISHED' && this.tournamentString) {
               this.tournamentSv
                 .generateFinale(this.tournamentString)
                 .subscribe((game) => {
@@ -47,7 +49,7 @@ export class FinaleComponent implements OnInit {
             } else {
               this.isLoading = false;
               Swal.fire('Il torneo non è ancora arrivato alle finale').then(
-                () => this.router.navigate(['/tournament'])
+                () => this.router.navigate(['/tournament/'+this.tournamentString])
               );
             }
           });
@@ -66,13 +68,15 @@ export class FinaleComponent implements OnInit {
               return;
             }
             this.isLoading = false;
-            console.log(this.match);
           });
         } else {
           Swal.fire('Il torneo non può iniziare dalla finale');
           this.isLoading = false;
-          this.router.navigate(['/tournament'])
+          this.router.navigate(['/tournament/'+ this.tournamentString])
         }
       });
   }
+  this.isLoading = false;
+  this.router.navigate(['/'])
+}
 }

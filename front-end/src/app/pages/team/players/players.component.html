@@ -1,7 +1,4 @@
-<div routerLink="/tournament" *ngIf="teamToUpdate.players.length >=3" class="d-flex">
-  <i class="bi bi-arrow-left-circle-fill pointer mx-2"></i>
-  <p>torna indietro</p>
-</div>
+
 <div *ngIf="!isUpdating" class="container bg-dark  my-3 p-3 rounded-3">
   <h2 class="mb-4 text-white">La squadra ha <span class="player-count">{{teamToUpdate.players.length}}</span> giocatori:
   </h2>
@@ -12,7 +9,7 @@
     <p><strong>Data di nascita:</strong> {{player.dateOfBirth}}</p>
     <p><strong>Sigla:</strong> {{player.sigla}}</p>
   </div>
-  <button class="btn btn-warning" (click)="passaModifica()" *ngIf="isCaptainOrManager">Modifica Giocatori</button>
+  <button class="btn btn-warning" (click)="passaModifica()" *ngIf="isCaptainOrManager">Modifica Team</button>
 </div>
 
 

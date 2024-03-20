@@ -1,6 +1,6 @@
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TournamentService } from '../../../services/tournament.service';
 import { Game } from '../../../api/models';
 import Swal from 'sweetalert2';
@@ -12,8 +12,9 @@ import Swal from 'sweetalert2';
 })
 export class SemifinaleComponent implements OnInit  {
   isLoading: boolean = false;
+  private route = inject(ActivatedRoute);
 
-  tournamentString: string = 'string'; //da passare dinamicamente
+  tournamentString: string | null =this.route.snapshot.paramMap.get('name');
   matches: Game[] = [];
 
   constructor(
@@ -22,32 +23,33 @@ export class SemifinaleComponent implements OnInit  {
   ) {}
 
     ngOnInit(): void {
-      this.isLoading = true
+      if (this.tournamentString) {
+     this.isLoading = true
       this.tournamentSv.getAllGameFromTournamentName(this.tournamentString)
         .subscribe(games =>{
           if (games.length === 0) {
             Swal.fire("Il torneo non è ancora iniziato")
-            this.router.navigate(['/tournament'])
+            this.router.navigate(['/tournament/'+this.tournamentString])
             this.isLoading = false
 
           }
           games.forEach(game =>{
             if (game.round !== "QUARTERFINAL" && game.round !== "OCTAVEFINAL" && game.round !== "SEMIFINAL") {
               Swal.fire("Il torneo è finito oppure si deve giocare la finale")
-              this.router.navigate(['/tournament/finale'])
+              this.router.navigate([`/tournament/${this.tournamentString}/finale`])
               this.isLoading = false
 
             }
             if (game.round === "OCTAVEFINAL") {
-              Swal.fire("Siamo arrivati agli ottavi").then(() => this.router.navigate(['/tournament/ottavi-finale']))
+              Swal.fire("Siamo arrivati agli ottavi").then(() => this.router.navigate([`/tournament/${this.tournamentString}/ottavi-finale`]))
               this.isLoading = false
 
             }
             if (game.round === "QUARTERFINAL" && game.status !== "FINISHED") {
-              Swal.fire("Siamo arrivati ai quarti").then(() => this.router.navigate(['/tournament/quarti-finale']))
+              Swal.fire("Siamo arrivati ai quarti").then(() => this.router.navigate([`/tournament/${this.tournamentString}/quarti-finale`]))
               this.isLoading = false
             }
-            if (game.round === "QUARTERFINAL" && game.status === "FINISHED") {
+            if (game.round === "QUARTERFINAL" && game.status === "FINISHED" && this.tournamentString) {
               this.tournamentSv.generateSemiFinale(this.tournamentString)
                 .subscribe((data) =>{
                  this.matches = data
@@ -56,7 +58,7 @@ export class SemifinaleComponent implements OnInit  {
                 (err)=> {
                   Swal.fire(err.error.message)
                  this.isLoading = false
-                 this.router.navigate(['/tournament'])
+                 this.router.navigate(['/tournament/'+this.tournamentString])
                 },
                 )
               }
@@ -67,7 +69,10 @@ export class SemifinaleComponent implements OnInit  {
           (error) =>{
             Swal.fire (error.error.message)
             this.isLoading = false
-            this.router.navigate(['/tournament'])
+            this.router.navigate(['/tournament/'+this.tournamentString])
     })
   }
+  this.isLoading = false;
+  this.router.navigate(['/'])
+}
 }

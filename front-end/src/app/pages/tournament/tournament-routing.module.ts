@@ -7,32 +7,42 @@ import { SemifinaleComponent } from './semifinale/semifinale.component';
 import { FinaleComponent } from './finale/finale.component';
 import { ClassificaComponent } from './classifica/classifica.component';
 import { AllTournamentsComponent } from './all-tournaments/all-tournaments.component';
+import { CreateComponent } from './create/create.component';
+import { RefereesComponent } from '../../components/referees/referees.component';
 
 const routes: Routes = [
   {
-   path: '',
-   component: TournamentComponent
+   path: 'create',
+   component: CreateComponent,
   },
   {
-   path: 'ottavi-finale',
-   component: OttaviComponent
+   path: ':name',
+   component: TournamentComponent,
   },
   {
-   path: 'quarti-finale',
-   component: QuartiComponent
+   path: ':name/referee',
+   component: RefereesComponent,
   },
   {
-   path: 'semi-finale',
-   component: SemifinaleComponent
-  },
-  {
-   path: 'finale',
-   component: FinaleComponent
-  },
-  {
-   path: 'classifica',
-   component: ClassificaComponent
-  },
+    path: ':name/ottavi-finale',
+    component: OttaviComponent
+   },
+   {
+    path: ':name/quarti-finale',
+    component: QuartiComponent
+   },
+   {
+    path: ':name/semi-finale',
+    component: SemifinaleComponent
+   },
+   {
+    path: ':name/finale',
+    component: FinaleComponent
+   },
+   {
+    path: ':name/classifica',
+    component: ClassificaComponent
+   },
   {
     path:'province/:provinceName',
     component: AllTournamentsComponent

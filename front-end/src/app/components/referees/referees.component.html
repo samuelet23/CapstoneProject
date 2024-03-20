@@ -1,0 +1,38 @@
+<div *ngIf="isLoading" class="overlay">
+  <div class="spinner" role="status">
+    <span class="app-spinner"></span>
+  </div>
+</div>
+
+<div class="form-group p-3 m-3 " *ngIf="!isLoading">
+  <div class="flex">
+    <h4>Crea Arbitro</h4>
+    <button routerLink="/tournament/{{nameTournament}}" class="btn btn-outline-primary" *ngIf="remainingReferees === 0">Vai Al Torneo</button>
+  </div>
+  <div *ngIf="remainingReferees !== null">
+    <h5>Arbitri da creare: {{ remainingReferees }}</h5>
+  </div>
+  <form [formGroup]="refereeForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Nome:</label>
+      <input type="text" id="name" formControlName="name" class="form-control" placeholder="Inserisci il nome dell'arbitro">
+      <div *ngIf="isNotValidAndTouched('name')" class="error-message error-text">Il nome deve essere almeno di 3 caratteri</div>
+    </div>
+    <div class="form-group">
+      <label for="surname">Cognome:</label>
+      <input type="text" id="surname" formControlName="surname" class="form-control" placeholder="Inserisci il cognome dell'arbitro">
+      <div *ngIf="isNotValidAndTouched('surname')" class="error-message error-text">Il cognome deve essere almeno di 3 caratteri</div>
+    </div>
+    <div class="form-group">
+      <label for="nickname">Soprannome:</label>
+      <input type="text" id="nickname" formControlName="nickname" class="form-control" placeholder="Inserisci il soprannome dell'arbitro">
+      <div *ngIf="isNotValidAndTouched('nickname')" class="error-message error-text">Il nickname deve essere almeno di 3 caratteri</div>
+    </div>
+    <div class="form-group">
+      <label for="dateOfBirth">Data di nascita:</label>
+      <input type="date" id="dateOfBirth" formControlName="dateOfBirth" class="form-control" placeholder="Inserisci la data di nascita (dd-MM-yyyy)">
+      <div *ngIf="isNotValidAndTouched('dateOfBirth')" class="error-message error-text">Devi essere maggiorenne</div>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="refereeForm.invalid">Crea Arbitro</button>
+  </form>
+</div>

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
-import { Competition, Game, Player, Team, TeamDto, Tournament } from '../api/models';
+import { Competition, Game, Player, Team, TeamDto, Tournament, TournamentDto, UploadConfirm } from '../api/models';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +23,19 @@ getAllTournamentFromProvinceName(provinceName:string):Observable<Competition[]>{
 
   getAllGameFromTournamentName(tournamentName: string):Observable<Game[]>{
     return this.http.get<Game[]>(`${this.url}/open/game/get/all/tournament/${tournamentName}`)
+  }
+
+  getTournamentByName(tournamentName:string):Observable<Tournament>{
+    return this.http.get<Tournament>(`${this.url}/open/tournament/get/byName/${tournamentName}`)
+  }
+
+  createTournament(tournament: TournamentDto):Observable<Tournament>{
+    return this.http.post<Tournament>(`${this.url}/tournament/create`, tournament)
+  }
+  uploadCoverTournament(file :File){
+    const formData = new FormData();
+    formData.append('file', file)
+    return this.http.patch<UploadConfirm>(`${this.url}/upload/cover-tournament`, formData)
   }
 
   generateOttavi(tournamentName:string):Observable<Game[]>{

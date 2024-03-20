@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NavTournamentComponent } from './nav-tournament.component';
+import { RefereesComponent } from './referees.component';
 
-describe('NavTournamentComponent', () => {
-  let component: NavTournamentComponent;
-  let fixture: ComponentFixture<NavTournamentComponent>;
+describe('RefereesComponent', () => {
+  let component: RefereesComponent;
+  let fixture: ComponentFixture<RefereesComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NavTournamentComponent]
+      declarations: [RefereesComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(NavTournamentComponent);
+    fixture = TestBed.createComponent(RefereesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
