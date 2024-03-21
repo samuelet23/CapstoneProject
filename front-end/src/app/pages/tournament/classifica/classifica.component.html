@@ -1,0 +1,55 @@
+<div *ngIf="isLoading" class="overlay">
+  <div class="spinner" role="status">
+    <span class="app-spinner"></span>
+  </div>
+</div>
+<i class="bi bi-arrow-left-circle-fill pointer" routerLink="/tournament/{{tournamentName}}"></i>
+<div *ngIf="isTournamentFinished">
+  <h2> L'MVP del torneo {{tournamentName}} è</h2>
+  <p class="fw-bold fs-1">{{player[0].playerName}}</p>
+
+  <div class="podium" >
+
+    <div class="position gold" >
+      <p>1°</p>
+      <p>{{ player[0].playerName }}</p>
+      <p>{{ player[0].points }}</p>
+    </div>
+    <div class="position silver" >
+      <p>2°</p>
+      <p>{{ player[1].playerName }}</p>
+      <p>{{ player[1].points }}</p>
+    </div>
+    <div class="position bronze" >
+      <p>3°</p>
+      <p>{{ player[2].points }}</p>
+      <p>{{ player[2].points }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="leaderboard my-3 container rounded-2" *ngIf="!isLoading">
+  <h2 >CLASSIFICA MVP</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Posizione</th>
+        <th>Nome</th>
+        <th>Punti</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let player of leadBoard.playerPointsList; let i=index">
+        <tr>
+          <td>{{ i + 1 }}</td>
+          <td>{{ player.playerName }}</td>
+          <td>{{ player.points }}</td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>
+
+
+
+

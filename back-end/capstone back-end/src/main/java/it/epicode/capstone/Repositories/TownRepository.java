@@ -15,12 +15,12 @@ import java.util.UUID;
 
 @Repository
 public interface TownRepository extends JpaRepository<Town, UUID>, PagingAndSortingRepository<Town, UUID> {
-     Page<Town> findByNameContainingIgnoreCase(String name, Pageable pageable);
-     List<Town> findByProvince(Province province);
+     List<Town> findByNameContainingIgnoreCase(String name);
 
+     @Query("SELECT t FROM Town t WHERE LOWER(t.name) LIKE LOWER(%:name%)")
      Optional<Town> findByName(String name);
      @Query("SELECT t FROM Town t WHERE t.name = :name AND t.province.sigla= :province")
-     Optional<Town> findTownByNameAndProvince(String name, String province);
+     List<Town> findByProvince(Province province);
 
      @Query("SELECT t FROM Town t ORDER BY name ASC")
      public List<Town> findAllOrderByNomeAsc();

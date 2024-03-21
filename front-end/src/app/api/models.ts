@@ -25,6 +25,7 @@ export { Place } from './models/place';
 export { PlaceDto } from './models/place-dto';
 export { Player } from './models/player';
 export { PlayerDto } from './models/player-dto';
+export { PlayerPoint } from './models/player-point';
 export { PlayerPointRes } from './models/player-point-res';
 export { Province } from './models/province';
 export { Referee } from './models/referee';

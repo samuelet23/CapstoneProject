@@ -6,7 +6,7 @@ import { AccessTokenRes, LoginDto, User } from '../../../api/models';
 import { AuthService } from '../../../api/services';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { myAuthService } from '../myAuth.service';
+import { myAuthService } from '../../../services/myAuth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -49,7 +49,9 @@ export class LoginComponent implements OnInit{
           }
         },
         (error) => {
+
           Swal.fire(error.error.message)
+          this.isLoading = false;
         })
 
   }

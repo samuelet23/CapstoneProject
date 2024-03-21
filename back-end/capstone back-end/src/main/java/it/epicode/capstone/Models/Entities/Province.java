@@ -1,6 +1,7 @@
 package it.epicode.capstone.Models.Entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.Hidden;
 import it.epicode.capstone.Models.Entities.Town;
 import jakarta.persistence.*;
@@ -22,6 +23,7 @@ public class Province {
     private String region;
     private String name;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "province")
     private List<Town> towns;
 

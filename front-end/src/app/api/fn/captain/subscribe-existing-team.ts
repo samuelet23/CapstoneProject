@@ -6,14 +6,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ConfirmRes } from '../../models/confirm-res';
+import { Team } from '../../models/team';
 
 export interface SubscribeExistingTeam$Params {
   'existing-team': string;
   'tournament-name': string;
 }
 
-export function subscribeExistingTeam(http: HttpClient, rootUrl: string, params: SubscribeExistingTeam$Params, context?: HttpContext): Observable<StrictHttpResponse<ConfirmRes>> {
+export function subscribeExistingTeam(http: HttpClient, rootUrl: string, params: SubscribeExistingTeam$Params, context?: HttpContext): Observable<StrictHttpResponse<Team>> {
   const rb = new RequestBuilder(rootUrl, subscribeExistingTeam.PATH, 'post');
   if (params) {
     rb.query('existing-team', params['existing-team'], {});
@@ -25,9 +25,9 @@ export function subscribeExistingTeam(http: HttpClient, rootUrl: string, params:
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<ConfirmRes>;
+      return r as StrictHttpResponse<Team>;
     })
   );
 }
 
-subscribeExistingTeam.PATH = '/api/tournament/subscribe/existing-team/tournament-name';
+subscribeExistingTeam.PATH = '/api/subscribe/existing-team/tournament-name';

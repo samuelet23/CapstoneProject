@@ -3,9 +3,8 @@
 import { PlaceDto } from '../models/place-dto';
 export interface TournamentDto {
   coverUrl?: string;
-  level?: string;
+  level: string;
   name: string;
-  place?: PlaceDto;
-  referees: Array<string>;
+  place: PlaceDto;
   startDate: string;
 }

@@ -1,0 +1,89 @@
+
+
+<div *ngIf="isLoading" class="overlay">
+  <div class="spinner" role="status">
+    <span class="app-spinner"></span>
+  </div>
+</div>
+
+
+<div *ngIf="!isUpdating && !isLoading" class="container bg-dark  my-3 p-3 rounded-3" >
+  <h2 class="mb-4 text-white">La squadra ha <span class="player-count">{{teamToUpdate.players.length}}</span> giocatori:
+  </h2>
+  <div *ngFor="let player of teamToUpdate.players; let i = index" class="player-container bg-light p-3 mb-3 rounded-3">
+    <p><strong>Nome:</strong> {{player.name}}</p>
+    <p><strong>Cognome:</strong> {{player.surname}}</p>
+    <p><strong>Nickname:</strong> {{player.nickname}}</p>
+    <p><strong>Data di nascita:</strong> {{player.dateOfBirth}}</p>
+    <p><strong>Sigla:</strong> {{player.sigla}}</p>
+  </div>
+  <button class="btn btn-warning" (click)="passaModifica()" *ngIf="isCaptainOrManager">Modifica Team</button>
+</div>
+
+
+<div class="bg-dark p-3 rounded-3 text-white m-3" *ngIf="isUpdating && !isLoading">
+
+  <app-updated></app-updated>
+
+  <h2>Modifica i giocatori</h2>
+  <div *ngFor="let player of teamToUpdate.players; let i = index" class="player-container m-3">
+    <p>I {{teamToUpdate.players.length}} giocatori della squadra sono:</p>
+    <h6 class="pt-2">Giocatore N. {{i+1}} </h6>
+    <!-- Campo Name -->
+    <div class="form-group">
+      <label for="name{{i}}">Nome</label>
+      <input type="text" class="form-control" id="name{{i}}" [(ngModel)]="player.name" name="name{{i}}"
+        #nameInput="ngModel">
+
+      </div>
+
+
+    <div class="form-group">
+      <label for="surname{{i}}">Cognome</label>
+      <input type="text" class="form-control" id="surname{{i}}" [(ngModel)]="player.surname" name="surname{{i}}"
+        #surnameInput="ngModel">
+
+    </div>
+
+    <div class="form-group">
+      <label for="nickname{{i}}">Nickname</label>
+      <input type="text" class="form-control" id="nickname{{i}}" [(ngModel)]="player.nickname" name="nickname{{i}}"
+        #nicknameInput="ngModel">
+
+    </div>
+
+    <div class="form-group">
+      <label for="dateOfBirth{{i}}">Data di Nascita</label>
+      <input type="date" class="form-control" id="dateOfBirth{{i}}" [(ngModel)]="player.dateOfBirth"
+        name="dateOfBirth{{i}}" #dateInput="ngModel">
+
+    </div>
+
+
+    <div class="form-group">
+      <label for="sigla{{i}}">Sigla</label>
+      <input type="text" class="form-control" id="sigla{{i}}" [(ngModel)]="player.sigla" name="sigla{{i}}"
+        #siglaInput="ngModel">
+
+    </div>
+
+    <div>
+      <button class="btn btn-warning" *ngIf="hasNicknameAndIsInDatabase(player)"
+        (click)="updatePlayer(player, player.id)">Modifica Giocatore</button>
+
+      <button
+        *ngIf="teamToUpdate.players.length > 3 && teamToUpdate.players.length <= 5 &&hasNicknameAndIsInDatabase(player)"
+        class=" btn btn-danger" (click)="deletePlayer(player.nickname)">Rimuovi Giocatore</button>
+      <button
+        *ngIf="teamToUpdate.players.length > 3 && teamToUpdate.players.length <= 5 &&!hasNicknameAndIsInDatabase(player)"
+        class=" btn btn-danger" (click)="deletePlayer(player.nickname)">Rimuovi tutti i giocatori senza
+        soprannome</button>
+    </div>
+  </div>
+  <div class="d-flex">
+    <button *ngIf="teamToUpdate.players.length >= 0 && teamToUpdate.players.length < 5"
+      class=" btn btn-primary mt-4 mx-2" (click)="addPlayer()">Aggiungi Giocatore</button>
+  </div>
+  <button *ngIf="teamToUpdate.players.length >= 3 " class=" btn btn-primary mt-4"
+    (click)="saveTeam(teamToUpdate.players)">Salva Team</button>
+</div>

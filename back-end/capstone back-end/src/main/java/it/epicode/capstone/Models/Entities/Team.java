@@ -21,7 +21,7 @@ public class Team {
     @Setter(AccessLevel.NONE)
     private UUID id;
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "team")
     private Set<Player> players = new HashSet<>();
 
     private String logo;
@@ -29,7 +29,7 @@ public class Team {
     @Column(unique = true)
     private String name;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne()
     @JoinColumn(name = "captain_id" )
     private Player captain;
 
@@ -52,8 +52,8 @@ public class Team {
         this.players = players;
     }
     public void addPlayer(Player player) throws IllegalArgumentException {
-        if (players.size() >= 5) {
-            throw new IllegalArgumentException("A team cannot have more than 5 players.");
+        if (players.size() > 5) {
+            throw new IllegalArgumentException("Un team non può avere più di 5 giocatori");
         }
         players.add(player);
     }
@@ -69,7 +69,7 @@ public class Team {
 
     public void setCaptain(Player player) throws IllegalArgumentException {
         if (!players.contains(player)) {
-            throw new IllegalArgumentException("The player must be part of the team to be set as captain.");
+            throw new IllegalArgumentException("Il giocatore deve far parte della squadra per essere impostato come capitano.");
         }
         this.captain = player;
     }

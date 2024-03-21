@@ -5,6 +5,7 @@ import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
 import it.epicode.capstone.Models.Enums.Round;
 import it.epicode.capstone.Models.Enums.TournamentLevel;
+import it.epicode.capstone.Models.Enums.TournamentState;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -14,7 +15,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -28,8 +28,12 @@ public class Tournament extends Competition {
     @Enumerated(EnumType.STRING)
     private TournamentLevel level;
 
+    @Enumerated(EnumType.STRING)
     @JsonIgnore
-    private Round initialRound;
+    private Round round;
+
+    @Enumerated(EnumType.STRING)
+    private TournamentState state;
 
 
     public Tournament(LocalDate startDate, String coverUrl, String name, List<Referee> referees, Set<Team> teams, List<Game> games, Place place, List<Player> players) {
@@ -49,6 +53,7 @@ public class Tournament extends Competition {
             throw new BadRequestException("Invalid number of referees for the tournament level - JUNIOR need 1 referee -RISING STARS need 2 referees - ELITE need 3 referees");
         }
     }
+
 
     public int getMaxRefereesForLevel(TournamentLevel level) {
         return switch (level) {

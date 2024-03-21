@@ -31,14 +31,14 @@ public class RefereeController {
     private RefereeService refereeSv;
 
 
-    @PostMapping("/create")
+    @PostMapping("/create/{name}")
     @Operation(
             description = "Create a new referee.",
             summary = "Create Referee"
     )
-    public Referee createReferee(@RequestBody @Validated RefereeDTO refereeDTO, BindingResult bindingResult) throws BadRequestException {
+    public Referee createReferee(@PathVariable("name") String tournamentName,@RequestBody @Validated RefereeDTO refereeDTO, BindingResult bindingResult) throws BadRequestException {
         HandlerException.badRequestException(bindingResult);
-        return refereeSv.createReferee(refereeDTO);
+        return refereeSv.createReferee(refereeDTO, tournamentName);
     }
 
     @PutMapping("/update/byId/{id}")

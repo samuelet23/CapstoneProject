@@ -871,194 +871,6 @@
         ]
       }
     },
-    "/api/tournament/subscribe/existing-team/tournament-name": {
-      "post": {
-        "tags": ["TOURNAMENT "],
-        "summary": "Subscribe an existing team to a tournament",
-        "description": "This endpoint subscribe an already existing team into a specified tournament by the team's name and the tournament's name.It's a convenient way to add a team that is already registered in the system to a new or existing tournament without having to recreate the team from scratch.",
-        "operationId": "subscribeExistingTeam",
-        "parameters": [
-          {
-            "name": "existing-team",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "tournament-name",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConfirmRes"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "405": {
-            "description": "Method Not Allowed",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Easy3vs3Auth": []
-          }
-        ]
-      }
-    },
-    "/api/tournament/subscribe/created-team/tournament-name": {
-      "post": {
-        "tags": ["TOURNAMENT "],
-        "summary": "Create and subscribe a new team to a tournament",
-        "description": "This endpoint creates a new team based on the provided TeamDTO information and then subscribes this newly created team to a specified tournament by the tournament's name. It facilitates the process of adding fresh teams to the tournament, streamlining their creation and immediate enrollment in a single step.",
-        "operationId": "createAndSubscribeTeamToTournament",
-        "parameters": [
-          {
-            "name": "tournament-name",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TeamDTO"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConfirmRes"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "405": {
-            "description": "Method Not Allowed",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Easy3vs3Auth": []
-          }
-        ]
-      }
-    },
     "/api/tournament/start/{tournament-name}": {
       "post": {
         "tags": ["TOURNAMENT "],
@@ -1236,6 +1048,194 @@
         "summary": "Create team",
         "description": "Create a new team.",
         "operationId": "createTeam",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TeamDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Team"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Easy3vs3Auth": []
+          }
+        ]
+      }
+    },
+    "/api/subscribe/existing-team/tournament-name": {
+      "post": {
+        "tags": ["CAPTAIN "],
+        "summary": "Subscribe an existing team to a tournament",
+        "description": "This endpoint subscribe an already existing team into a specified tournament by the team's name and the tournament's name.It's a convenient way to add a team that is already registered in the system to a new or existing tournament without having to recreate the team from scratch.",
+        "operationId": "subscribeExistingTeam",
+        "parameters": [
+          {
+            "name": "existing-team",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tournament-name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Team"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Easy3vs3Auth": []
+          }
+        ]
+      }
+    },
+    "/api/subscribe/created-team/tournament-name": {
+      "post": {
+        "tags": ["CAPTAIN "],
+        "summary": "Create and subscribe a new team to a tournament",
+        "description": "This endpoint creates a new team based on the provided TeamDTO information and then subscribes this newly created team to a specified tournament by the tournament's name. It facilitates the process of adding fresh teams to the tournament, streamlining their creation and immediate enrollment in a single step.",
+        "operationId": "createAndSubscribeTeamToTournament",
+        "parameters": [
+          {
+            "name": "tournament-name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1592,7 +1592,10 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConfirmRes"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Game"
+                  }
                 }
               }
             }
@@ -1677,7 +1680,10 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConfirmRes"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Game"
+                  }
                 }
               }
             }
@@ -1762,7 +1768,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConfirmRes"
+                  "$ref": "#/components/schemas/Game"
                 }
               }
             }
@@ -5842,7 +5848,7 @@
         "operationId": "getPlayersAndPointsFromTournament",
         "parameters": [
           {
-            "name": "tournamentName",
+            "name": "tournament-name",
             "in": "query",
             "required": true,
             "schema": {
@@ -8460,59 +8466,6 @@
           }
         }
       },
-      "PlayerDTO": {
-        "required": ["dateOfBirth", "name", "nickname", "sigla", "surname"],
-        "type": "object",
-        "properties": {
-          "name": {
-            "maxLength": 2147483647,
-            "minLength": 3,
-            "type": "string"
-          },
-          "surname": {
-            "maxLength": 2147483647,
-            "minLength": 3,
-            "type": "string"
-          },
-          "nickname": {
-            "maxLength": 2147483647,
-            "minLength": 3,
-            "type": "string"
-          },
-          "dateOfBirth": {
-            "type": "string"
-          },
-          "sigla": {
-            "pattern": "[A-E]",
-            "type": "string"
-          }
-        }
-      },
-      "TeamDTO": {
-        "required": ["captainName", "nameTeam", "players"],
-        "type": "object",
-        "properties": {
-          "players": {
-            "maxItems": 5,
-            "minItems": 3,
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PlayerDTO"
-            }
-          },
-          "nameTeam": {
-            "type": "string"
-          },
-          "captainName": {
-            "type": "string"
-          },
-          "idTournament": {
-            "type": "string",
-            "format": "uuid"
-          }
-        }
-      },
       "Address": {
         "type": "object",
         "properties": {
@@ -8791,6 +8744,59 @@
           }
         }
       },
+      "PlayerDTO": {
+        "required": ["dateOfBirth", "name", "nickname", "sigla", "surname"],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 2147483647,
+            "minLength": 3,
+            "type": "string"
+          },
+          "surname": {
+            "maxLength": 2147483647,
+            "minLength": 3,
+            "type": "string"
+          },
+          "nickname": {
+            "maxLength": 2147483647,
+            "minLength": 3,
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string"
+          },
+          "sigla": {
+            "pattern": "[A-E]",
+            "type": "string"
+          }
+        }
+      },
+      "TeamDTO": {
+        "required": ["captainName", "nameTeam", "players"],
+        "type": "object",
+        "properties": {
+          "players": {
+            "maxItems": 5,
+            "minItems": 3,
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlayerDTO"
+            }
+          },
+          "nameTeam": {
+            "type": "string"
+          },
+          "captainName": {
+            "type": "string"
+          },
+          "idTournament": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
       "LoginDTO": {
         "required": ["password", "username"],
         "type": "object",
@@ -8809,7 +8815,19 @@
           "accessToken": {
             "type": "string"
           },
+          "dateOfBirth": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
           "role": {
+            "type": "string"
+          },
+          "surname": {
+            "type": "string"
+          },
+          "username": {
             "type": "string"
           }
         }
@@ -9051,11 +9069,11 @@
           "sort": {
             "$ref": "#/components/schemas/SortObject"
           },
-          "pageNumber": {
+          "pageSize": {
             "type": "integer",
             "format": "int32"
           },
-          "pageSize": {
+          "pageNumber": {
             "type": "integer",
             "format": "int32"
           },
@@ -9239,92 +9257,26 @@
           }
         }
       },
+      "PlayerPoint": {
+        "type": "object",
+        "properties": {
+          "playerName": {
+            "type": "string"
+          },
+          "points": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "PlayerPointRes": {
         "type": "object",
         "properties": {
-          "message": {
-            "type": "string"
-          },
-          "playersPoints": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "integer",
-              "format": "int32"
+          "playerPointsList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlayerPoint"
             }
-          },
-          "httpStatus": {
-            "type": "string",
-            "enum": [
-              "100 CONTINUE",
-              "101 SWITCHING_PROTOCOLS",
-              "102 PROCESSING",
-              "103 EARLY_HINTS",
-              "103 CHECKPOINT",
-              "200 OK",
-              "201 CREATED",
-              "202 ACCEPTED",
-              "203 NON_AUTHORITATIVE_INFORMATION",
-              "204 NO_CONTENT",
-              "205 RESET_CONTENT",
-              "206 PARTIAL_CONTENT",
-              "207 MULTI_STATUS",
-              "208 ALREADY_REPORTED",
-              "226 IM_USED",
-              "300 MULTIPLE_CHOICES",
-              "301 MOVED_PERMANENTLY",
-              "302 FOUND",
-              "302 MOVED_TEMPORARILY",
-              "303 SEE_OTHER",
-              "304 NOT_MODIFIED",
-              "305 USE_PROXY",
-              "307 TEMPORARY_REDIRECT",
-              "308 PERMANENT_REDIRECT",
-              "400 BAD_REQUEST",
-              "401 UNAUTHORIZED",
-              "402 PAYMENT_REQUIRED",
-              "403 FORBIDDEN",
-              "404 NOT_FOUND",
-              "405 METHOD_NOT_ALLOWED",
-              "406 NOT_ACCEPTABLE",
-              "407 PROXY_AUTHENTICATION_REQUIRED",
-              "408 REQUEST_TIMEOUT",
-              "409 CONFLICT",
-              "410 GONE",
-              "411 LENGTH_REQUIRED",
-              "412 PRECONDITION_FAILED",
-              "413 PAYLOAD_TOO_LARGE",
-              "413 REQUEST_ENTITY_TOO_LARGE",
-              "414 URI_TOO_LONG",
-              "414 REQUEST_URI_TOO_LONG",
-              "415 UNSUPPORTED_MEDIA_TYPE",
-              "416 REQUESTED_RANGE_NOT_SATISFIABLE",
-              "417 EXPECTATION_FAILED",
-              "418 I_AM_A_TEAPOT",
-              "419 INSUFFICIENT_SPACE_ON_RESOURCE",
-              "420 METHOD_FAILURE",
-              "421 DESTINATION_LOCKED",
-              "422 UNPROCESSABLE_ENTITY",
-              "423 LOCKED",
-              "424 FAILED_DEPENDENCY",
-              "425 TOO_EARLY",
-              "426 UPGRADE_REQUIRED",
-              "428 PRECONDITION_REQUIRED",
-              "429 TOO_MANY_REQUESTS",
-              "431 REQUEST_HEADER_FIELDS_TOO_LARGE",
-              "451 UNAVAILABLE_FOR_LEGAL_REASONS",
-              "500 INTERNAL_SERVER_ERROR",
-              "501 NOT_IMPLEMENTED",
-              "502 BAD_GATEWAY",
-              "503 SERVICE_UNAVAILABLE",
-              "504 GATEWAY_TIMEOUT",
-              "505 HTTP_VERSION_NOT_SUPPORTED",
-              "506 VARIANT_ALSO_NEGOTIATES",
-              "507 INSUFFICIENT_STORAGE",
-              "508 LOOP_DETECTED",
-              "509 BANDWIDTH_LIMIT_EXCEEDED",
-              "510 NOT_EXTENDED",
-              "511 NETWORK_AUTHENTICATION_REQUIRED"
-            ]
           }
         }
       },

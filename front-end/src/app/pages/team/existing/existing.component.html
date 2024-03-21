@@ -1,0 +1,36 @@
+<div *ngIf="isLoading" class="overlay">
+  <div class="spinner" role="status">
+    <span class="app-spinner"></span>
+  </div>
+</div>
+
+<div class="container my-3" *ngIf="!isLoading">
+  <div class="row">
+    <ng-container *ngFor="let team of teams">
+      <div class="col-lg-4 col-md-6 col-sm-12">
+        <div class="card mb-3 team-card">
+          <div class="card-header">
+            <img [src]="team.logo || '../../../../assets/logo team.jpg'" alt="Logo squadra" class="img-fluid" style="max-width: 100px;"
+                 (error)="team.logo = '../../../../assets/logo team.jpg'">
+            <h5 class="card-title">{{ team.name }}</h5>
+          </div>
+          <div class="card-body">
+            <p class="card-text">Il direttore d'orchestra sarà il signor: {{ team.captain.name }}, {{ team.captain.surname }}.</p>
+            <p class="card-text">I giocatori della squadra {{ team.name }} sono:</p>
+            <ul class="list-group">
+              <li *ngFor="let player of team.players" class="list-group-item">
+                <div class="row">
+                  <div class="col">
+                    <p>Mi presento, sono <strong>{{ player.name }}</strong>, detto anche <strong>{{ player.nickname }}</strong>.</p>
+                    <p>Ho {{ player.age }} anni e tanta voglia di vincere.</p>
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <button class="btn btn-success" (click)="addExistingTeam(team.name)">Aggiunti Team al Torneo</button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

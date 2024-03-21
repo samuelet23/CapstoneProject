@@ -33,8 +33,8 @@ public class PlayerService {
     public List<Player> findAll(){
         return playerRp.findAll();
     }
-    public Page<Player> findAllByTeamName(String teamName, Pageable pageable){
-        return playerRp.findAllByTeamName(teamName, pageable);
+    public List<Player> findAllByTeamName(String teamName){
+        return playerRp.findAllByTeamName(teamName);
     }
     public Page<Player> findAllByTournamentName(String tournamentName, Pageable pageable){
         return playerRp.findAllByTournamentName(tournamentName, pageable);
@@ -58,7 +58,7 @@ public class PlayerService {
     }
     public Player create(PlayerDTO playerDTO) throws BadRequestException {
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             Player p = new Player();
             p.setName(playerDTO.name());
             p.setSurname(playerDTO.surname());
@@ -75,12 +75,12 @@ public class PlayerService {
 
             return playerRp.save(p);
         } catch (DateTimeParseException e) {
-            throw new BadRequestException("Formato data di nascita non valido. Assicurati che sia nel formato dd/MM/yyyy");
+            throw new BadRequestException("Formato data di nascita non valido. Assicurati che sia nel formato dd-MM-yyyy");
         }
     }
-    public void updateCredentialPlayer(UUID id, PlayerDTO playerDTO) throws BadRequestException {
+    public Player updateCredentialPlayer(UUID id, PlayerDTO playerDTO) throws BadRequestException {
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             Player p = getById(id);
             p.setName(playerDTO.name());
             p.setSurname(playerDTO.surname());
@@ -89,14 +89,15 @@ public class PlayerService {
                 throw new BadRequestException("Il giocatore deve avere un'eta maggiore di 14 anni");
             }
             p.setAge(calculateAge(p.getDateOfBirth()));
-            playerRp.save(p);
+            updateSigla(p.getNickname(), playerDTO.sigla());
+            return playerRp.save(p);
         } catch (DateTimeParseException e) {
-            throw new BadRequestException("Formato data di nascita non valido. Assicurati che sia nel formato dd/MM/yyyy");
+            throw new BadRequestException("Formato data di nascita non valido. Assicurati che sia nel formato dd-MM-yyyy");
         }
     }
-    public Player updateCredentialPlayer(String name, PlayerDTO playerDTO) throws BadRequestException {
+    public Player updateCredentialPlayerByName(String name, PlayerDTO playerDTO) throws BadRequestException {
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             Player p = getByNickname(name);
             p.setName(playerDTO.name());
             p.setSurname(playerDTO.surname());
@@ -105,9 +106,10 @@ public class PlayerService {
                 throw new BadRequestException("Il giocatore deve avere un'eta maggiore di 14 anni");
             }
             p.setAge(calculateAge(p.getDateOfBirth()));
+            updateSigla(p.getNickname(), playerDTO.sigla());
             return playerRp.save(p);
         } catch (DateTimeParseException e) {
-            throw new BadRequestException("Formato data di nascita non valido. Assicurati che sia nel formato dd/MM/yyyy");
+            throw new BadRequestException("Formato data di nascita non valido. Assicurati che sia nel formato dd-MM-yyyy");
         }
     }
 
@@ -120,9 +122,6 @@ public class PlayerService {
     }
     public void updateSigla(String name, String sigla)throws BadRequestException{
         Player p = getByNickname(name);
-        if (p.getSigla().equals(sigla )) {
-            throw new BadRequestException("Player: "+p.getNickname()+" ha già questa sigla");
-        }
         p.setSigla(sigla);
         playerRp.save(p);
     }

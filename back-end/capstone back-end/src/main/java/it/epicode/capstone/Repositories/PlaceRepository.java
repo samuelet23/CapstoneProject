@@ -21,11 +21,12 @@ public interface PlaceRepository extends JpaRepository<Place, UUID>, PagingAndSo
     Optional<Place> findByTownName(String name);
 
 
-    @Query("SELECT p.address.town FROM Place p ")
+    @Query("SELECT p.address.town.name FROM Place p")
     List<Town> findAllTown();
 
     @Query("SELECT p.address.town.province FROM Place p")
     List<Province> findAllProvince();
+
     @Query("SELECT p.address.town.province.region FROM Place p")
     List<String> findAllRegion();
     @Query("SELECT p.tournaments FROM Place p WHERE p.id = :placeId")
@@ -37,8 +38,8 @@ public interface PlaceRepository extends JpaRepository<Place, UUID>, PagingAndSo
     Page<Competition> findTournamentsByKeywordInCourtName(@Param("keyword") String keyword, Pageable pageable);
 
     //trova tutti i tornei in base al comune
-    @Query("SELECT c FROM Place p JOIN p.tournaments c WHERE LOWER(p.address.town.name) LIKE %:keyword%")
-    Page<Competition> findTournamentsByKeywordInTownName(@Param("keyword") String keyword, Pageable pageable);
+    @Query("SELECT c FROM Place p JOIN p.tournaments c WHERE LOWER(p.address.town.province.name) LIKE %:keyword%")
+    List<Competition> findTournamentsByKeywordInProvinceName(@Param("keyword") String keyword);
 
     //trova tutti i tornei in base alla regione
     @Query("SELECT c FROM Place p JOIN p.tournaments c JOIN p.address.town t JOIN t.province pr WHERE LOWER(pr.region) LIKE %:keyword%")

@@ -16,7 +16,8 @@ import java.util.UUID;
 public interface TeamRepository extends JpaRepository<Team, UUID>, PagingAndSortingRepository<Team, UUID> {
 
     List<Team> findByCaptainIsNull();
-
+    List<Team> findByTournamentIsNull();
+    @Query("SELECT t FROM Team t WHERE LOWER(REPLACE(t.name, ' ', '')) = LOWER(REPLACE(:name, ' ', ''))")
     Optional<Team> findByName(String name);
     @Query("SELECT t FROM Team t WHERE t.tournament.name = :name")
     List<Team> findByTournament(String name);

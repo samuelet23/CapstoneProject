@@ -9,13 +9,13 @@ import { RequestBuilder } from '../../request-builder';
 import { PlayerPointRes } from '../../models/player-point-res';
 
 export interface GetPlayersAndPointsFromTournament$Params {
-  tournamentName: string;
+  'tournament-name': string;
 }
 
 export function getPlayersAndPointsFromTournament(http: HttpClient, rootUrl: string, params: GetPlayersAndPointsFromTournament$Params, context?: HttpContext): Observable<StrictHttpResponse<PlayerPointRes>> {
   const rb = new RequestBuilder(rootUrl, getPlayersAndPointsFromTournament.PATH, 'get');
   if (params) {
-    rb.query('tournamentName', params.tournamentName, {});
+    rb.query('tournament-name', params['tournament-name'], {});
   }
 
   return http.request(

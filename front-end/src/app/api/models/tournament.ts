@@ -8,6 +8,7 @@ export interface Tournament {
   id?: string;
   level?: 'JUNIOR' | 'RISINGSTARS' | 'ELITE';
   name?: string;
+  state?:string
   place?: Place;
   referees?: Array<Referee>;
   startDate?: string;

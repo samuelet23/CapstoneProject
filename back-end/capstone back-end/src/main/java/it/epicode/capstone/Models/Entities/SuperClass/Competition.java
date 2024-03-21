@@ -69,7 +69,9 @@ public abstract class Competition {
         }
 
     }
-
+    public void removeTeam(Team team) {
+        teams.remove(team);
+    }
     public void Referee(Referee referee) throws BadRequestException {
         if (!referees.contains(referee)) {
             referees.add(referee);

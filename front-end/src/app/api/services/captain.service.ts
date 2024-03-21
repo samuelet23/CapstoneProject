@@ -10,11 +10,15 @@ import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
 import { ConfirmRes } from '../models/confirm-res';
+import { createAndSubscribeTeamToTournament } from '../fn/captain/create-and-subscribe-team-to-tournament';
+import { CreateAndSubscribeTeamToTournament$Params } from '../fn/captain/create-and-subscribe-team-to-tournament';
 import { createPlayer } from '../fn/captain/create-player';
 import { CreatePlayer$Params } from '../fn/captain/create-player';
 import { createTeam } from '../fn/captain/create-team';
 import { CreateTeam$Params } from '../fn/captain/create-team';
 import { Player } from '../models/player';
+import { subscribeExistingTeam } from '../fn/captain/subscribe-existing-team';
+import { SubscribeExistingTeam$Params } from '../fn/captain/subscribe-existing-team';
 import { Team } from '../models/team';
 import { updateName } from '../fn/captain/update-name';
 import { UpdateName$Params } from '../fn/captain/update-name';
@@ -59,6 +63,72 @@ export class CaptainService extends BaseService {
    */
   createTeam(params: CreateTeam$Params, context?: HttpContext): Observable<Team> {
     return this.createTeam$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Team>): Team => r.body)
+    );
+  }
+
+  /** Path part for operation `subscribeExistingTeam()` */
+  static readonly SubscribeExistingTeamPath = '/api/subscribe/existing-team/tournament-name';
+
+  /**
+   * Subscribe an existing team to a tournament.
+   *
+   * This endpoint subscribe an already existing team into a specified tournament by the team's name and the tournament's name.It's a convenient way to add a team that is already registered in the system to a new or existing tournament without having to recreate the team from scratch.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `subscribeExistingTeam()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  subscribeExistingTeam$Response(params: SubscribeExistingTeam$Params, context?: HttpContext): Observable<StrictHttpResponse<Team>> {
+    return subscribeExistingTeam(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Subscribe an existing team to a tournament.
+   *
+   * This endpoint subscribe an already existing team into a specified tournament by the team's name and the tournament's name.It's a convenient way to add a team that is already registered in the system to a new or existing tournament without having to recreate the team from scratch.
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `subscribeExistingTeam$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  subscribeExistingTeam(params: SubscribeExistingTeam$Params, context?: HttpContext): Observable<Team> {
+    return this.subscribeExistingTeam$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Team>): Team => r.body)
+    );
+  }
+
+  /** Path part for operation `createAndSubscribeTeamToTournament()` */
+  static readonly CreateAndSubscribeTeamToTournamentPath = '/api/subscribe/created-team/tournament-name';
+
+  /**
+   * Create and subscribe a new team to a tournament.
+   *
+   * This endpoint creates a new team based on the provided TeamDTO information and then subscribes this newly created team to a specified tournament by the tournament's name. It facilitates the process of adding fresh teams to the tournament, streamlining their creation and immediate enrollment in a single step.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createAndSubscribeTeamToTournament()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createAndSubscribeTeamToTournament$Response(params: CreateAndSubscribeTeamToTournament$Params, context?: HttpContext): Observable<StrictHttpResponse<Team>> {
+    return createAndSubscribeTeamToTournament(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Create and subscribe a new team to a tournament.
+   *
+   * This endpoint creates a new team based on the provided TeamDTO information and then subscribes this newly created team to a specified tournament by the tournament's name. It facilitates the process of adding fresh teams to the tournament, streamlining their creation and immediate enrollment in a single step.
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `createAndSubscribeTeamToTournament$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createAndSubscribeTeamToTournament(params: CreateAndSubscribeTeamToTournament$Params, context?: HttpContext): Observable<Team> {
+    return this.createAndSubscribeTeamToTournament$Response(params, context).pipe(
       map((r: StrictHttpResponse<Team>): Team => r.body)
     );
   }

@@ -39,13 +39,12 @@ public class PlayerController {
 
     @PatchMapping("/update/credential/{id}")
     @Operation(
-            description = "Update player's credentials by ID.",
-            summary = "Update Player Credentials by ID"
+            description = "Update player's credentials by Name.",
+            summary = "Update Player Credentials by Name"
     )
-    public ConfirmRes updateCredentialPlayers(@PathVariable UUID id,@RequestBody @Validated PlayerDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
+    public Player updateCredentialPlayers(@PathVariable UUID id,@RequestBody @Validated PlayerDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
-        playerSv.updateCredentialPlayer(id, playerDTO);
-        return new ConfirmRes("Player's credential has been updated successfully", HttpStatus.CREATED);
+        return playerSv.updateCredentialPlayer(id, playerDTO);
     }
 
     @PatchMapping("/update/stats/byId/{id}")
@@ -70,7 +69,7 @@ public class PlayerController {
         return new ConfirmRes("Player's stats have been updated successfully", HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/byId/{id}")
     @Operation(
             description = "Delete a player by ID.",
             summary = "Delete Player by ID"
@@ -80,7 +79,7 @@ public class PlayerController {
         return new DeleteRes("Player deletion successful.");
     }
 
-    @DeleteMapping("/delete/{nickname}")
+    @DeleteMapping("/delete/byName/{nickname}")
     @Operation(
             description = "Delete a player by nickname.",
             summary = "Delete Player by nickname"

@@ -1,0 +1,123 @@
+<div class="my-3 p-2" *ngIf="!isUpdating">
+  <form [formGroup]="teamForm" (ngSubmit)="submitForm()">
+    <h2>Crea il tuo team</h2>
+    <p class="avvertenza"> Presta attenzione ad inserire tutti i campi, ricordo che giocatori devono essere minimo 3</p>
+
+    <div formArrayName="players" class="bg-dark p-3 rounded-3 text-white ">
+      <div *ngFor="let player of players.controls; let i = index" class="player-container" [formGroupName]="i">
+        <p>Stai creando il giocatore {{i+1}}</p>
+
+        <div class="form-group">
+          <label for="name{{ i }}">Name</label>
+          <input type="text" class="form-control" [id]="'name' + i" formControlName="name">
+          <div *ngIf="getPlayerControl(i, 'name')?.invalid && getPlayerControl(i, 'name')?.touched"
+            class="error-message ">
+            <span class="error-text">
+              Il nome deve avere almeno 3 caratteri.
+            </span>
+          </div>
+        </div>
+
+
+        <div class="form-group">
+          <label for="surname{{ i }}">Surname</label>
+          <input type="text" class="form-control" [id]="'surname' + i" formControlName="surname">
+          <div *ngIf="getPlayerControl(i, 'surname')?.invalid && getPlayerControl(i, 'surname')?.touched"
+            class="error-message">
+            <span class="error-text">
+              Il cognome deve avere almeno 3 caratteri.
+            </span>
+          </div>
+        </div>
+
+
+        <!-- Campo Nickname -->
+        <div class="form-group">
+          <label for="nickname{{ i }}">Nickname</label>
+          <input type="text" class="form-control" [id]="'nickname' + i" formControlName="nickname">
+          <div *ngIf="getPlayerControl(i, 'nickname')?.invalid && getPlayerControl(i, 'nickname')?.touched"
+            class="error-message">
+            <span class="error-text">
+              Il nickname deve avere almeno 3 caratteri.
+            </span>
+          </div>
+        </div>
+
+        <!-- Campo Data di Nascita -->
+        <div class="form-group">
+          <label for="dateOfBirth{{ i }}">Data di Nascita</label>
+          <input type="date" class="form-control" [id]="'dateOfBirth' + i" formControlName="dateOfBirth">
+          <div
+            *ngIf="getPlayerControl(i, 'dateOfBirth')?.errors?.['invalidDateOfBirth'] && getPlayerControl(i, 'dateOfBirth')?.touched"
+            class="error-message">
+            <span class="error-text">
+              La data di nascita è obbligatoria e non può essere successiva a oggi.
+            </span>
+          </div>
+        </div>
+
+
+        <!-- Campo Sigla -->
+        <div class="form-group my-3">
+          <label for="sigla{{ i }}">Sigla</label>
+          <input type="text" class="form-control" [id]="'sigla' + i" formControlName="sigla">
+          <div *ngIf="getPlayerControl(i, 'sigla')?.invalid && getPlayerControl(i, 'sigla')?.touched"
+            class="error-message">
+            <span class="error-text">
+              La sigla inserita non è valida. Si prega di inserire una sigla tra A e E.
+            </span>
+          </div>
+        </div>
+
+
+        <div class="container-btn">
+          <button type="button" (click)="addPlayer()" class="btn btn-primary">
+            <span class="bi bi-plus"></span> Add Player
+          </button>
+          <button type="button" (click)="removePlayer(i)" class="btn btn-danger">Remove Player</button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="bg-dark rounded-3 p-3 my-2 text-white">
+      <!-- Name Team -->
+      <div class="form-group">
+        <label for="nameTeam">Nome del team</label>
+        <input type="text" class="form-control" id="nameTeam" formControlName="nameTeam">
+        <div *ngIf="!isValid('nameTeam') && isTouched('nameTeam')" class="error-message">
+          <span class="error-text">
+            Questo campo è obbligatorio.
+          </span>
+        </div>
+      </div>
+
+      <!-- Captain Name -->
+      <div class="form-group mb-3">
+        <label for="captainName">Nome del capitano (deve essere il nickname di uno dei giocatori)</label>
+        <input type="text" class="form-control" id="captainName" formControlName="captainName">
+        <div *ngIf="!isValid('captainName') && isTouched('captainName')" class="error-message error-text">
+          <span class="error-text">
+            Questo campo è obbligatorio.
+          </span>
+        </div>
+        <div *ngIf="!isCaptainNameValid() && isTouched('captainName')" class="error-message error-text">
+          <span class="error-text">
+            Il nome del capitano deve essere il nickname di uno dei giocatori.
+          </span>
+        </div>
+        <div class="form-group">
+          <label for="coverImage">Aggiungi il tuo logo  (PNG o JPG) <span>(facoltativo, puoi inserirlo successivamente)</span></label>
+          <input type="file" id="coverImage" class="form-control" #fileInput (change)="onFileSelected($event, teamName)">
+        </div>
+      </div>
+
+
+
+      <button type="submit" class="btn btn-primary"
+        [disabled]="teamForm.invalid || players.length < 3 || players.length > 5 || !arePlayersValid() || !isCaptainNameValid()">Crea
+        e Iscrivi il tuo Team!</button>
+    </div>
+  </form>
+
+</div>

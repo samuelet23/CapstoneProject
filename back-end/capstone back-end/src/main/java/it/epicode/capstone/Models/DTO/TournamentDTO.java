@@ -8,16 +8,13 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 import java.util.Set;
 
-public record TournamentDTO (
-         @NotBlank(message = "The name field cannot be empty/null")
+public record  TournamentDTO (
+         @NotBlank(message = "Il nome non può essere vuoto")
          String name,
-         @NotBlank(message = "The startDat field cannot be empty/null and the date must be dd/MM/yyyy")
+         @NotBlank(message = "La data di inizio non può essere vuota e deve essere di questo formato dd-mm-aaaa")
          String startDate,
          String coverUrl,
-         @NotEmpty(message = "The tournament must have a referee")
-         @Size(min = 1, max = 3, message = "The tournament must have between 1 and 3 referee")
-         @Valid
-         List<String> referees,
+
 
          PlaceDTO place,
 

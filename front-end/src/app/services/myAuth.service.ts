@@ -1,12 +1,12 @@
-import { environment } from '../../../environments/environment';
+import { environment } from '../../environments/environment';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { BehaviorSubject, Observable, map, tap, throwError } from 'rxjs';
-import { OpenGetService } from '../../api/services';
-import { Login$Params } from '../../api/fn/auth/login';
-import { AccessTokenRes, LoginDto, User, UserDto } from '../../api/models';
+import { OpenGetService } from '../api/services';
+import { AccessTokenRes, LoginDto, UpdatePasswordDto, User, UserDto } from '../api/models';
 import { HttpClient } from '@angular/common/http';
+import { UserToken } from '../api/models/access-token-res';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,7 @@ export class myAuthService {
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  userProfile!: User;
+  userProfile!: UserToken;
   userLogged!: AccessTokenRes;
 
   private authSubject = new BehaviorSubject<null | AccessTokenRes>(null);
@@ -111,9 +111,10 @@ export class myAuthService {
     }, expirationMill);
   }
 
-  getUserData(): User {
+  getUserData(): UserToken {
     return this.userProfile;
   }
+
 
   private getUserByUsername(username: string) {
     return this.http.get(`${this.url}/user/get/byUsername/${username}`);

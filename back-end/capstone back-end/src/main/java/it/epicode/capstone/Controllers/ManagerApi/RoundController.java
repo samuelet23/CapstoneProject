@@ -32,12 +32,8 @@ public class RoundController {
             description = "Generate quarter finals for a tournament.",
             summary = "Generate Quarter Finals"
     )
-    public ConfirmRes generateQuarterFinals(@PathVariable("tournament-name")String nameTournament) throws BadRequestException, TournamentDataException {
-        List<Game> games = tournamentSv.generateQuartiMatches(nameTournament);
-        return new ConfirmRes(
-                "Quarter finals generated successfully.",
-                HttpStatus.CREATED
-        );
+    public List<Game> generateQuarterFinals(@PathVariable("tournament-name")String nameTournament) throws BadRequestException, TournamentDataException {
+            return tournamentSv.generateQuartiMatches(nameTournament);
     }
 
     @PostMapping("/semi-final/{tournament-name}")
@@ -45,12 +41,8 @@ public class RoundController {
             description = "Generate semi finals for a tournament.",
             summary = "Generate Semi Finals"
     )
-    public ConfirmRes generateSemiFinals(@PathVariable("tournament-name")String nameTournament) throws BadRequestException, TournamentDataException {
-        List<Game> games = tournamentSv.generateSemiFinals(nameTournament);
-        return new ConfirmRes(
-                "Semi finals generated successfully.",
-                HttpStatus.CREATED
-        );
+    public List<Game> generateSemiFinals(@PathVariable("tournament-name")String nameTournament) throws BadRequestException, TournamentDataException {
+       return tournamentSv.generateSemiFinals(nameTournament);
     }
 
     @PostMapping("/final/{tournament-name}")
@@ -58,12 +50,8 @@ public class RoundController {
             description = "Generate final match for a tournament.",
             summary = "Generate Final Match"
     )
-    public ConfirmRes generateFinal(@PathVariable("tournament-name")String nameTournament) throws BadRequestException, TournamentDataException {
-        Game game = tournamentSv.generateFinale(nameTournament);
-        return new ConfirmRes(
-                "Final generated successfully.",
-                HttpStatus.CREATED
-        );
+    public Game generateFinal(@PathVariable("tournament-name")String nameTournament) throws BadRequestException, TournamentDataException {
+       return tournamentSv.generateFinale(nameTournament);
     }
 
 

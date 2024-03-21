@@ -44,8 +44,8 @@ public class GetController {
             description = "Retrieve all games with pagination support.",
             summary = "Get all games"
     )
-    public Page<Game> getGameAll(Pageable pageable){
-        return gameSv.getAll(pageable);
+    public List<Game> getGameAll(Pageable pageable){
+        return gameSv.getAll();
     }
     @GetMapping("/game/get/all/tournament/{name}")
     @Operation(
@@ -57,7 +57,6 @@ public class GetController {
         return gameSv.getAllByTournament(tournament);
     }
 
-    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/game/get/{id}")
     @Operation(
             description = "Retrieve a game by its unique identifier.",
@@ -78,32 +77,25 @@ public class GetController {
         return placeSv.getAll(pageable);
     }
 
-    @GetMapping("/place/get/all/town")
+    @GetMapping("/place/get/all/province")
     @Operation(
             description = "Retrieve all towns.",
             summary = "Get all towns"
     )
-    public List<Town> getAllTown(){
-        return placeSv.getAllTown();
-    }
-
-    @GetMapping("/place/get/all/province")
-    @Operation(
-            description = "Retrieve all provinces.",
-            summary = "Get all provinces"
-    )
     public List<Province> getAllProvince(){
         return placeSv.getAllProvince();
     }
-
-    @GetMapping("/place/get/all/region")
+    @GetMapping("/place/get/province/{name}")
     @Operation(
-            description = "Retrieve all regions.",
-            summary = "Get all regions"
+            description = "Retrieve all province with that name.",
+            summary = "Get all province with that name"
     )
-    public List<String> getAllRegion(){
-        return placeSv.getAllRegion();
+    public List<Province> getProvince(@PathVariable String name)throws BadRequestException{
+        return placeSv.getProvinceByName(name);
     }
+
+
+
 
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/place/get/{id}")
@@ -143,15 +135,16 @@ public class GetController {
     public Page<Player> getAllPlayer(Pageable pageable) {
         return playerSv.findAll(pageable);
     }
+
     @GetMapping("/player/get/all/team-name")
     @Operation(
             description = "Retrieve all players belonging to a specific team.",
             summary = "Get all players by team name"
     )
-    public Page<Player> getAllFromTeamName(@RequestParam("team-name") String teamName, Pageable pageable) {
-        return playerSv.findAllByTeamName(teamName, pageable);
+    public List<Player> getAllFromTeamName(@RequestParam("team-name") String teamName) {
+        return playerSv.findAllByTeamName(teamName);
     }
-
+    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/player/get/all/tournament-name")
     @Operation(
             description = "Retrieve all players participating in a specific tournament.",
@@ -160,6 +153,7 @@ public class GetController {
     public Page<Player> getAllByTournamentName(@RequestParam("tournament-name") String tournamentName, Pageable pageable) {
         return playerSv.findAllByTournamentName(tournamentName, pageable);
     }
+    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/player/get/averagePoints/name-player")
     @Operation(
             description = "Retrieve the average points per game for a player.",
@@ -169,7 +163,7 @@ public class GetController {
         Player p = playerSv.getByNickname(namePlayer);
         return gameSv.averagePointPerGame(p);
     }
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/player/get/byId/{id}")
     @Operation(
             description = "Retrieve a player by their unique identifier.",
@@ -178,7 +172,7 @@ public class GetController {
     public Player getPlayerById(@PathVariable UUID id)throws BadRequestException{
         return playerSv.getById(id);
     }
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/player/get/byName/{name}")
     @Operation(
             description = "Retrieve a player by their name.",
@@ -187,7 +181,7 @@ public class GetController {
     public Player getPlayerByName(@RequestParam String name)throws BadRequestException{
         return playerSv.getByNickname(name);
     }
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/player/get/{id}/points")
     @Operation(
             description = "Retrieve the points scored by a player.",
@@ -197,16 +191,14 @@ public class GetController {
         int points = playerSv.getPointsByPlayerId(id);
         return new ConfirmPlayerPoints("Player points have been successfully retrieved.",points);
     }
-    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/player/get/point-player/tournament-name")
     @Operation(
             description = "Retrieve players and their points for a specific tournament.",
             summary = "Get players and points by tournament name"
     )
-    public PlayerPointRes getPlayersAndPointsFromTournament(@RequestParam String tournamentName)throws BadRequestException{
+    public PlayerPointRes getPlayersAndPointsFromTournament(@RequestParam("tournament-name") String tournamentName)throws BadRequestException{
         Tournament tournament = tournamentSv.getByName(tournamentName);
         return new PlayerPointRes(
-                "Player points have been successfully retrieved.",
                 playerSv.getPlayersWithNameAndPointsByTournament(tournament)
         );
     }
@@ -282,6 +274,18 @@ public class GetController {
         }
         return teams;
     }
+    @GetMapping("/team/get/all/without-tournament")
+    @Operation(
+            description = "Retrieve all teams without a tournament.",
+            summary = "Get all teams without tournament"
+    )
+    public List<Team> getAllTeamWithoutTournament() throws NotFoundException {
+        List<Team> teams = teamSv.getAllTeamWithoutTournament();
+        if (teams.isEmpty()) {
+            throw new NotFoundException("Nessun team è senza torneo.");
+        }
+        return teams;
+    }
 
     @GetMapping("/team/get/byId/{id}")
     @Operation(
@@ -340,13 +344,13 @@ public class GetController {
         return placeSv.findTournamentsByKeywordInCourtName(courtName, pageable);
     }
 
-    @GetMapping("/tournament/get/all/auto-complete/town-name")
+    @GetMapping("/tournament/get/all/auto-complete/province/{name}")
     @Operation(
             description = "Retrieve tournaments matching a keyword in the town name.",
             summary = "Get tournaments by town name (autocomplete)"
     )
-    public Page<Competition> getAllTournamentByTownName(@RequestParam("town-name") String townName, Pageable pageable){
-        return placeSv.findTournamentsByKeywordInTownName(townName, pageable);
+    public List<Competition> getAllTournamentByProvinceName(@PathVariable("name") String provinceName){
+        return placeSv.findTournamentsByKeywordInProvinceName(provinceName);
     }
 
     @GetMapping("/tournament/get/all/auto-complete/region-name")
