@@ -19,7 +19,7 @@ public record PlayerDTO(
         @Size(min = 3, message = "Il soprannome deve essere composto da almeno 3 caratteri")
         String nickname,
 
-        @NotBlank(message = "Il campo data di nascita non può essere vuoto/null, la data deve essere nel formato gg/MM/aaaa")
+        @NotBlank(message = "Il campo data di nascita non può essere vuoto/null, la data deve essere nel formato gg-MM-aaaa")
         String dateOfBirth,
 
         @NotBlank(message = "Il campo sigla non può essere vuoto/null")

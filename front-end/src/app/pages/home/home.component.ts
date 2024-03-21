@@ -31,7 +31,6 @@ provinces: Province[] = []
       this.placeSv.getProvinceByName(this.searchTerm).subscribe(
         (towns: Province[]) => {
           this.provinces = towns
-          console.log(towns);
         },
         (error) => {
           console.error(error);

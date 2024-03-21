@@ -55,7 +55,7 @@ export class CreateComponent {
       const tournamentName = this.tournamentForm.get('name')?.value;
 
       const tournamentDto: TournamentDto = {
-        name: this.tournamentForm.get('name')?.value,
+        name: this.deletAllSpace(this.tournamentForm.get('name')?.value),
         coverUrl:this.urlImg,
         startDate: this.checkDateAndFormat(this.tournamentForm.get('startDate')?.value),
         level: this.tournamentForm.get('level')?.value,
@@ -80,6 +80,10 @@ export class CreateComponent {
       })
   }
   }
+
+  deletAllSpace(name:string){
+      return name.replace(/\s+/g, '').toLowerCase();
+    }
 
 
 

@@ -9,6 +9,8 @@ import it.epicode.capstone.Exceptions.NotFoundException;
 import it.epicode.capstone.Models.DTO.PlayerDTO;
 import it.epicode.capstone.Models.DTO.TeamDTO;
 import it.epicode.capstone.Models.DTO.UpdateCaptainDTO;
+import it.epicode.capstone.Models.DTO.UpdateTeamNameDTO;
+import it.epicode.capstone.Models.Entities.Player;
 import it.epicode.capstone.Models.Entities.Team;
 import it.epicode.capstone.Models.ResponsesDTO.ConfirmRes;
 import it.epicode.capstone.Models.ResponsesDTO.DeleteRes;
@@ -38,12 +40,32 @@ public class TeamController {
     private TeamService teamSv;
 
 
+    @PutMapping("/update/team/{team-name}")
+    @Operation(
+            description = "Update team.",
+            summary = "Update team "
+    )
+    public Team updateTeam(@PathVariable("team-name") String name, @RequestBody @Validated TeamDTO teamDTO, BindingResult bindingResult)throws BadRequestException{
+        HandlerException.badRequestException(bindingResult);
+        return teamSv.updateTeam(name, teamDTO);
+
+    }
+    @PatchMapping("/update/{id}/team-name")
+    @Operation(
+            description = "Update the captain of a team.",
+            summary = "Update team captain"
+    )
+    public Team updateCaptainFromTeam(@PathVariable("id") UUID id, @RequestBody @Validated UpdateTeamNameDTO nameDTO, BindingResult bindingResult)throws BadRequestException{
+        HandlerException.badRequestException(bindingResult);
+        return teamSv.updateName(id, nameDTO.teamName());
+
+    }
     @PatchMapping("/update/captain/team-name")
     @Operation(
             description = "Update the captain of a team.",
             summary = "Update team captain"
     )
-    public Team updateCaptainFromTeam(@RequestParam("team-name") String teamName, @RequestBody @Validated UpdateCaptainDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
+    public Player updateCaptainFromTeam(@RequestParam("team-name") String teamName, @RequestBody @Validated UpdateCaptainDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         return teamSv.updateCaptain(teamName, playerDTO.nickname());
 
@@ -72,6 +94,7 @@ public class TeamController {
                 "Team with name: " + name + " has been deleted successfully"
         );
     }
+
 
 
 }

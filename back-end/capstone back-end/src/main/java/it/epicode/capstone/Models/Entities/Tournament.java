@@ -50,6 +50,7 @@ public class Tournament extends Competition {
         }
     }
 
+
     public int getMaxRefereesForLevel(TournamentLevel level) {
         return switch (level) {
             case JUNIOR -> 1;

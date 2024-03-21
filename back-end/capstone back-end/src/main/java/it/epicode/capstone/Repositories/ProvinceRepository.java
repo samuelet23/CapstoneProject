@@ -23,5 +23,6 @@ public interface ProvinceRepository extends JpaRepository<Province, String>, Pag
     List<String> extractAllRegions();
     Optional<Province> findBySigla(String sigla);
 
-
+    @Query("SELECT p FROM Province p WHERE LOWER(p.name) LIKE LOWER(CONCAT(:name, '%'))")
+    List<Province> findByNameComplete(String name);
 }

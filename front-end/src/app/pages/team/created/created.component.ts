@@ -22,6 +22,7 @@ private route = inject(ActivatedRoute);
 private fb = inject(FormBuilder);
 private teamSv = inject(TeamService)
 private router = inject(Router)
+urlImg:string = ''
 teamName = this.route.snapshot.paramMap.get('name')
 teamToUpdate:Team ={
   name: '',
@@ -69,10 +70,8 @@ constructor() {
           return playerDto;
         })
       };
-      console.log(team);
 
       const nameTournament = this.route.snapshot.paramMap.get('name');
-      console.log(team);
       if (nameTournament) {
         this.subscribeCreatedTeam(team, nameTournament)
       } else{
@@ -82,21 +81,48 @@ constructor() {
   }
 
 
+  onFileSelected(event: any, teamName: string | null) {
+    const file: File = event.target.files[0];
+    console.log("File selezionato:", file);
+
+    this.isLoading = true;
+    if (teamName) {
+      this.teamSv.uploadLogoTeam(teamName, file).subscribe(
+        response => {
+          this.urlImg = response.url;
+          this.isLoading = false;
+        },
+        (error) => {
+          Swal.fire("Errore nel caricamento dell'immagine. Prova con un immagine con dimensioni inferiori");
+          this.isLoading = false;
+        }
+      );
+    } else {
+      this.isLoading = false;
+    }
+  }
+
 
 
   subscribeCreatedTeam(team:TeamDto, tournamentName:string){
     this.teamSv.subscribeCreatedTeamToTournament(team, tournamentName).subscribe(team =>{
         Swal.fire("Il team è stato creato con successo nel torneo").then(() =>{
-          this.router.navigate(['/tournament'])
+          this.router.navigate(['/tournament/'+tournamentName])
         });
 
     },
     (error) => {
-      Swal.fire (error.error.message);
-    })
+      let errorMessage = 'Si è verificato un errore durante l\'esecuzione dell\'operazione. Si prega di riprovare più tardi.';
+      if (error.status === 500 && error.error.message && error.error.message.includes('un valore chiave duplicato viola il vincolo univoco')) {
+        errorMessage = 'Il nome utente o il nome del team inseriti sono  già in uso. Si prega di scegliere un altro nome utente.';
+      }
+      Swal.fire({
+        icon: 'error',
+        title: 'Errore!',
+        text: errorMessage
+      });
+    });
   }
-
-
 
 
   isValid(fieldName:string){

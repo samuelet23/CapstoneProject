@@ -57,6 +57,9 @@ public class TeamService {
     public List<Team> getAllTeamWithoutCaptain(){
         return teamRp.findByCaptainIsNull();
     }
+     public List<Team> getAllTeamWithoutTournament(){
+        return teamRp.findByTournamentIsNull();
+    }
 
     @Transactional
     public Team createTeam(TeamDTO teamDTO) throws BadRequestException {
@@ -88,7 +91,40 @@ public class TeamService {
 
         savedTeam.setPlayers(players);
         Player captain = playerRp.findByNickname(teamDTO.captainName())
-                .orElseThrow(() -> new IllegalArgumentException("Captain player not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Capitano non trovato"));
+        savedTeam.setCaptain(captain);
+
+        return teamRp.save(savedTeam);
+    }
+    @Transactional
+    public Team updateTeam(String nameTeam, TeamDTO teamDTO) throws BadRequestException {
+
+        Team team = getByName(nameTeam);
+        team.setName(teamDTO.nameTeam());
+
+
+        Team savedTeam = teamRp.save(team);
+
+        Set<Player> players = new HashSet<>();
+        Set<String> usedSiglas = new HashSet<>();
+
+        for (PlayerDTO playerDTO : teamDTO.players()) {
+            Player player = playerSv.updateCredentialPlayerByName(playerDTO.nickname(),playerDTO);
+            player.setTeam(savedTeam);
+            player.setTeamName(savedTeam.getName());
+            if (!usedSiglas.contains(playerDTO.sigla()) && usedSiglas.size() < 5) {
+               playerSv.updateSigla(player.getNickname(), playerDTO.sigla());
+                usedSiglas.add(playerDTO.sigla());
+            } else {
+                throw new IllegalArgumentException("Errore nel salvare il team. - La sigla deve essere diversa per ogni giocatore");
+            }
+            Player savedPlayer = playerRp.save(player);
+            players.add(savedPlayer);
+            savedTeam.addPlayer(savedPlayer);
+        }
+
+        savedTeam.setPlayers(players);
+        Player captain = updateCaptain(team.getName(), savedTeam.getCaptain().getNickname());
         savedTeam.setCaptain(captain);
 
         return teamRp.save(savedTeam);
@@ -103,16 +139,14 @@ public class TeamService {
         return teamRp.save(team);
     }
 
-    public Team updateCaptain(String teamName, String nickname)throws BadRequestException{
+    public Player updateCaptain(String teamName, String nickname)throws BadRequestException{
         Team t = getByName(teamName);
         Player p = playerRp.findByNickname(nickname).orElseThrow(
-                () -> new IllegalArgumentException("Captain player Not Found")
+                () -> new IllegalArgumentException("Capitano non trovato")
         );
-        if (t.getCaptain() ==  p) {
-            throw new IllegalArgumentException("The Player with name: "+nickname+" is already a Captain");
-        }
         t.setCaptain(p);
-        return teamRp.save(t);
+       teamRp.save(t);
+       return t.getCaptain();
     }
     public void updateLogo(Team team, String url)throws BadRequestException{
         team.setLogo(url);

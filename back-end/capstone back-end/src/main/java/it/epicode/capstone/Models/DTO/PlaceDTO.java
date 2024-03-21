@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotEmpty;
 public record PlaceDTO(
 
             AddressDTO address,
-            @NotBlank(message = "The court name field cannot be empty/null")
+            @NotBlank(message = "Il nome del campo non può essere vuoto")
             String courtName
 
 ) {

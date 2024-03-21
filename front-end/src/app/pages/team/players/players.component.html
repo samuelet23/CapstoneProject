@@ -1,5 +1,13 @@
 
-<div *ngIf="!isUpdating" class="container bg-dark  my-3 p-3 rounded-3">
+
+<div *ngIf="isLoading" class="overlay">
+  <div class="spinner" role="status">
+    <span class="app-spinner"></span>
+  </div>
+</div>
+
+
+<div *ngIf="!isUpdating && !isLoading" class="container bg-dark  my-3 p-3 rounded-3" >
   <h2 class="mb-4 text-white">La squadra ha <span class="player-count">{{teamToUpdate.players.length}}</span> giocatori:
   </h2>
   <div *ngFor="let player of teamToUpdate.players; let i = index" class="player-container bg-light p-3 mb-3 rounded-3">
@@ -13,11 +21,14 @@
 </div>
 
 
-<div class="bg-dark p-3 rounded-3 text-white m-3" *ngIf="isUpdating">
+<div class="bg-dark p-3 rounded-3 text-white m-3" *ngIf="isUpdating && !isLoading">
+
   <app-updated></app-updated>
-  <div *ngFor="let player of teamToUpdate.players; let i = index" class="player-container">
+
+  <h2>Modifica i giocatori</h2>
+  <div *ngFor="let player of teamToUpdate.players; let i = index" class="player-container m-3">
     <p>I {{teamToUpdate.players.length}} giocatori della squadra sono:</p>
-    <h6 class="pt-2">Giocatore N. {{i+1}}</h6>
+    <h6 class="pt-2">Giocatore N. {{i+1}} </h6>
     <!-- Campo Name -->
     <div class="form-group">
       <label for="name{{i}}">Nome</label>

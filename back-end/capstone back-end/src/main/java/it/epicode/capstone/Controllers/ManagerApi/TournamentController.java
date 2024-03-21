@@ -47,6 +47,8 @@ public class TournamentController {
         return tournamentSv.createTournament(dto);
     }
 
+
+
     @PatchMapping("/update/level/junior/tournament-name")
     @Operation(
             description = "Update the level of a tournament to Junior and update the number of referees accordingly.",
@@ -60,6 +62,8 @@ public class TournamentController {
                 HttpStatus.CREATED
         );
     }
+
+
 
     @PatchMapping("/update/level/rising-stars/tournament-name")
     @Operation(
@@ -121,7 +125,17 @@ public class TournamentController {
         );
     }
 
-
+    @DeleteMapping("/delete/team-from-tournament/{teamName}/{tournamentName}")
+    @Operation(
+            description = "Remove a team from a tournament.",
+            summary = "Remove team from tournament"
+    )
+    public DeleteRes deleteTeamFromTournament(@PathVariable String teamName, @PathVariable String tournamentName) throws BadRequestException {
+        tournamentSv.deleteTeamFromTournament(teamName, tournamentName);
+        return new DeleteRes(
+                "Team with name: " + teamName + " has been removed from tournament: " + tournamentName + " successfully"
+        );
+    }
 
 
 }

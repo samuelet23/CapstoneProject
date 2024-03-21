@@ -43,7 +43,7 @@ export class TeamService {
 
   uploadLogoTeam(teamName:string, file: File):Observable<UploadConfirm>{
     const img: FormData = new FormData();
-    img.append('file', file, file.name)
+    img.append('file', file)
     return this.http.patch<UploadConfirm>(`${this.url}/upload/logo-team/${teamName}`,img)
   }
 

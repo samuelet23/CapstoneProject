@@ -11,18 +11,21 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 public record AddressDTO(
-        @NotBlank(message = "The via field cannot be empty/null")
+        @NotBlank(message = "Il campo Via non può essere vuoto o nullo")
         String via,
 
-        @NotBlank(message = "The civico field cannot be empty/null")
+        @NotBlank(message = "Il campo Civico non può essere vuoto o nullo")
         String civico,
 
-        @Pattern(regexp = "\\d{5}", message = "Cap must be of 5 characters")
+        @Pattern(regexp = "\\d{5}", message = "Il CAP deve essere composto da 5 cifre")
         String cap,
-        @NotBlank(message = "The password field cannot be empty/null")
+
+        @NotBlank(message = "Il campo Nome Città non può essere vuoto o nullo")
         String townName,
-        @NotBlank(message = "The password field cannot be empty/null")
-        @Pattern(regexp = "[A-Z]{2}", message = "Sigla of Province must be of 2 characters")
+
+        @NotBlank(message = "Il campo Sigla Provincia non può essere vuoto o nullo")
+        @Pattern(regexp = "[A-Z]{2}", message = "La Sigla della Provincia deve essere composta da 2 caratteri maiuscoli")
         String  siglaProvince
+
 ) {
 }

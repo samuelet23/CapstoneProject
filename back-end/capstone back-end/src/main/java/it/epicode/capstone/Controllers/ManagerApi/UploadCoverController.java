@@ -35,19 +35,15 @@ public class UploadCoverController {
     private Cloudinary cloudinary;
 
 
-    @PatchMapping("/cover-tournament/{tournament-name}")
+    @PatchMapping("/cover-tournament")
     @Operation(
             description = "Upload a cover image for a tournament.",
             summary = "Upload tournament cover image"
     )
-    public UploadConfirm uploadCoverTournament(@RequestParam("file") MultipartFile file, @PathVariable("tournament-name") String tournamentName, BindingResult bindingResult) throws IOException, BadRequestException {
-        HandlerException.ioException(bindingResult);
-        HandlerException.badRequestException(bindingResult);
-        Tournament t = tournamentSv.getByName(tournamentName);
+    public UploadConfirm uploadCoverTournament(@RequestParam("file") MultipartFile file) throws IOException, BadRequestException {
         String url = (String) cloudinary.uploader().upload(file.getBytes(), new HashMap<>()).get("url");
-        tournamentSv.uploadCoverUrl(t, url);
         return new UploadConfirm(
-                "Cover for " + tournamentName + " uploaded successfully",
+                "Cover was uploaded successfully",
                 url
         );
     }

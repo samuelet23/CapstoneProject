@@ -6,11 +6,17 @@
 
 
 <div class="my-3 p-2" *ngIf="!isLoading">
-  <form >
-
+  <form>
     <div class="bg-dark p-2 text-white my-2">
-
     <h2>Modifica il team {{teamName}}</h2>
+
+    <div class="form-group">
+      <label for="coverImage">Modifica il tuo logo  (PNG o JPG)</label>
+      <input type="file" id="coverImage" class="form-control" #fileInput (change)="onFileSelected($event, teamName)">
+    </div>
+
+
+
     <div class="form-group">
       <label for="nameTeam">Nome del Team</label>
       <input type="text" class="form-control" id="nameTeam" [(ngModel)]="newName.teamName" name="nameTeam" required minlength="2" maxlength="50" placeholder="{{ teamToUpdate.name }}" #nameInput="ngModel">

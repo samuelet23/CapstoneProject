@@ -1,6 +1,7 @@
 <div class="my-3 p-2" *ngIf="!isUpdating">
   <form [formGroup]="teamForm" (ngSubmit)="submitForm()">
-    <h2 *ngIf="isUpdating">Crea il tuo team</h2>
+    <h2>Crea il tuo team</h2>
+    <p class="avvertenza"> Presta attenzione ad inserire tutti i campi, ricordo che giocatori devono essere minimo 3</p>
 
     <div formArrayName="players" class="bg-dark p-3 rounded-3 text-white ">
       <div *ngFor="let player of players.controls; let i = index" class="player-container" [formGroupName]="i">
@@ -91,8 +92,6 @@
         </div>
       </div>
 
-
-
       <!-- Captain Name -->
       <div class="form-group mb-3">
         <label for="captainName">Nome del capitano (deve essere il nickname di uno dei giocatori)</label>
@@ -107,7 +106,13 @@
             Il nome del capitano deve essere il nickname di uno dei giocatori.
           </span>
         </div>
+        <div class="form-group">
+          <label for="coverImage">Aggiungi il tuo logo  (PNG o JPG) <span>(facoltativo, puoi inserirlo successivamente)</span></label>
+          <input type="file" id="coverImage" class="form-control" #fileInput (change)="onFileSelected($event, teamName)">
+        </div>
       </div>
+
+
 
       <button type="submit" class="btn btn-primary"
         [disabled]="teamForm.invalid || players.length < 3 || players.length > 5 || !arePlayersValid() || !isCaptainNameValid()">Crea

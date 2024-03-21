@@ -1,4 +1,4 @@
-<div class="container-mini-nav">
+<div class="container-mini-nav" *ngIf="!isLoading">
   <a class="text-uppercase rounds" routerLink="/tournament/{{tournamentName}}/ottavi-finale" >ottavi di finale</a>
   <a class="text-uppercase rounds" routerLink="/tournament/{{tournamentName}}/quarti-finale" >quarti di finale</a>
   <a class="text-uppercase rounds" routerLink="/tournament/{{tournamentName}}/semi-finale" >semifinale</a>
@@ -6,8 +6,8 @@
   <a class="text-uppercase rounds" routerLink="/tournament/{{tournamentName}}/classifica">Classica MVP</a>
 </div>
 
-<div class="container">
-<h2> IL TORNEO È COMPOSTO DA {{teams.length}} SQUADRE </h2>
+<div class="container" [ngClass]="{'height': teams.length === 0}" *ngIf="!isLoading">
+  <h2> IL TORNEO È COMPOSTO DA {{teams.length}} SQUADRE </h2>
 <div class="container-iscrivi" *ngIf="!isLoading">
   <p>Ecco quali le squadre parteciperanno</p>
   <div class="dropdown">

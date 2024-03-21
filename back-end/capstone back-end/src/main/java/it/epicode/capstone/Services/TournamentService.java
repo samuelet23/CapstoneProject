@@ -64,25 +64,29 @@ public class TournamentService {
     }
 
     public Tournament createTournament(TournamentDTO dto) throws Exception {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         Tournament t = new Tournament();
         t.setName(dto.name());
         isStartDateValid(dto);
         t.setStartDate(LocalDate.parse(dto.startDate(), formatter));
         t.setLevel(TournamentLevel.valueOf(dto.level()));
-        try {
-
-            List<Referee> referees = createReferee(dto.referees());
-            t.setNumOfRefereeForTournament(referees, t.getLevel());
-        } catch (Exception e) {
-            throw new Exception("Error creating tournament: " + e.getMessage());
-        }
+        t.setCoverUrl(dto.coverUrl());
         t.setPlace(placeSv.create(dto.place()));
         t.setInitialRound(Round.OCTAVEFINAL);
         return tournamentRp.save(t);
     }
-
-
+    private List<Referee> createReferee(List<String> refereeNames) throws BadRequestException {
+        List<Referee> referees = new ArrayList<>();
+        for (String name : refereeNames) {
+            Referee referee = refereeSv.getByNickname(name);
+            if (referee.getRole() != RoleInTheGame.REFEREE) {
+                throw new IllegalArgumentException("La persona con il nome " + referee.getName() + " non è un arbitro");
+            }
+            referees.add(referee);
+        }
+        refereeRp.saveAll(referees);
+        return referees;
+    }
     public Team subscribeExistingTeam(String nameTeam, String nameTournament) throws BadRequestException {
         Tournament t = getByName(nameTournament);
         if (t.getTeams().size() >= 16) {
@@ -291,13 +295,12 @@ public class TournamentService {
             try {
                 referee = refereeSv.getByNickname(refereeDTO.nickname());
             } catch (BadRequestException e) {
-                referee = refereeSv.createReferee(refereeDTO);
+                referee = refereeSv.createReferee(refereeDTO, t.getName());
             }
             referees.add(referee);
             referee.setTournament(t);
         }
 
-        t.setNumOfRefereeForTournament(referees, TournamentLevel.JUNIOR);
 
         t.setLevel(TournamentLevel.JUNIOR);
 
@@ -325,13 +328,12 @@ public class TournamentService {
             try {
                 referee = refereeSv.getByNickname(refereeDTO.nickname());
             } catch (BadRequestException e) {
-                referee = refereeSv.createReferee(refereeDTO);
+                referee = refereeSv.createReferee(refereeDTO, t.getName());
             }
             referees.add(referee);
             referee.setTournament(t);
         }
 
-        t.setNumOfRefereeForTournament(referees, TournamentLevel.RISINGSTARS);
         t.setLevel(TournamentLevel.RISINGSTARS);
 
         tournamentRp.save(t);
@@ -358,13 +360,12 @@ public class TournamentService {
             try {
                 referee = refereeSv.getByNickname(refereeDTO.nickname());
             } catch (BadRequestException e) {
-                referee = refereeSv.createReferee(refereeDTO);
+                referee = refereeSv.createReferee(refereeDTO, t.getName());
             }
             referees.add(referee);
             referee.setTournament(t);
         }
 
-        t.setNumOfRefereeForTournament(referees, TournamentLevel.ELITE);
         t.setLevel(TournamentLevel.ELITE);
 
 
@@ -375,10 +376,7 @@ public class TournamentService {
 
 
 
-    public void uploadCoverUrl(Tournament tournament, String url) {
-        tournament.setCoverUrl(url);
-        tournamentRp.save(tournament);
-    }
+
 
     public List<Tournament> getByLevel(String level) throws BadRequestException {
         TournamentLevel tournamentLevel = null;
@@ -414,6 +412,21 @@ public class TournamentService {
         return tournaments;
     }
 
+    public void deleteTeamFromTournament(String teamName, String tournamentName) throws BadRequestException {
+        Team team  = teamSv.getByName(teamName);
+        Tournament t = getByName(tournamentName);
+
+        if (t.getTeams().contains(team)) {
+            team.setTournament(null);
+            t.removeTeam(team);
+            tournamentRp.save(t);
+        }else{
+            throw new BadRequestException("La squadra specificata non partecipa al torneo specificato.");
+
+        }
+
+    }
+
     public void deleteById(UUID id) throws BadRequestException {
         Tournament t = getById(id);
         tournamentRp.delete(t);
@@ -426,18 +439,7 @@ public class TournamentService {
 
 
 
-    private List<Referee> createReferee(List<String> refereeNames) throws BadRequestException {
-        List<Referee> referees = new ArrayList<>();
-        for (String name : refereeNames) {
-            Referee referee = refereeSv.getByNickname(name);
-            if (referee.getRole() != RoleInTheGame.REFEREE) {
-                throw new IllegalArgumentException("The person with name " + referee.getName() + " isn't a Referee");
-            }
-            referees.add(referee);
-        }
-        refereeRp.saveAll(referees);
-        return referees;
-    }
+
 
 
 

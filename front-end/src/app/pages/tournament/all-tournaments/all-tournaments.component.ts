@@ -19,43 +19,55 @@ provinceName: string | null = this.route.snapshot.paramMap.get('provinceName');
 tournaments:Tournament[] =[]
 
 ngOnInit(): void {
-  console.log(this.isWithReferee);
 
-  this.isLoading = true;
+  this.isLoading = true
   if (this.provinceName) {
-    console.log(this.provinceName);
 
-    let hasReferee = false; // Variabile di supporto per tenere traccia della presenza di arbitri
-
-    this.tournamentSv.getAllTournamentFromProvinceName(this.provinceName.trim().toLowerCase()).subscribe((tournaments) => {
-      this.isLoading = false;
-
-      tournaments.forEach(tournament => {
-        if (tournament.referees?.length === 0) {
-          console.log("Non ci sono arbitri per il torneo:", tournament);
-        } else {
-          hasReferee = true; // Se trovi anche un torneo con arbitri, imposta hasReferee a true
-          console.log("Ci sono arbitri per il torneo:", tournament);
-        }
-      });
-
-      this.isWithReferee = hasReferee;
-
-      console.log("isWithReferee:", this.isWithReferee);
-
+    this.tournamentSv.getAllTournamentFromProvinceName(this.provinceName.trim().toLowerCase()).subscribe((tournaments)=>{
+      this.isLoading = false
       if (tournaments.length > 0) {
-        this.tournaments = tournaments;
-      } else {
-        Swal.fire("Non ci sono tornei disponibili per questa città").then(() => {
-          this.router.navigate(['/']);
-        });
+        this.tournaments = tournaments
+      } else{
+        Swal.fire("Non ci sono tornei disponibili per questa città").then(() =>{
+            this.router.navigate(['/'])
+        })
       }
+      this.isLoading = false
+
     },
-    (error) => {
-      this.isLoading = false;
-      Swal.fire("Errore interno nel cercare i tornei per questa città");
-    });
+    (error)=>{
+      Swal.fire("Errore interno nel cercare i tornei per questà città")
+    })
+
   }
 }
+
+checkTheRefereeForTournament(tournament: Tournament): string {
+  if (tournament.level == "JUNIOR") {
+    if (tournament.referees?.length !== 1) {
+      return "Aggiungi arbitro";
+    } else {
+      return "Inizia torneo";
+    }
+  }
+  if (tournament.level == "RISINGSTARS") {
+    if (tournament.referees?.length !== 2) {
+      return "Aggiungi arbitro";
+    } else {
+      return "Inizia torneo";
+    }
+  }
+  if (tournament.level == "ELITE") {
+    if (tournament.referees?.length !== 3) {
+      return "Aggiungi arbitro";
+    } else {
+      return "Inizia torneo";
+    }
+  }
+  return "Livello torneo non valido";
+}
+
+
+
 
 }

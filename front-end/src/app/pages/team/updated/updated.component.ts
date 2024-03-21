@@ -19,7 +19,7 @@ export class UpdatedComponent implements OnInit{
   private teamSv = inject (TeamService);
   private playerSv = inject (PlayerService);
   isLoading: boolean = false;
-
+urlImg:string ='';
   teamToUpdate: Team  ={
     name: '',
     players: [],
@@ -60,7 +60,7 @@ export class UpdatedComponent implements OnInit{
         },
         error => {
           Swal.fire('Errore', error.error.message, 'error').then(() => {
-            this.router.navigate(['/tournament'])
+            this.router.navigate(['/'])
           });
           this.isLoading = false;
         }
@@ -74,6 +74,7 @@ export class UpdatedComponent implements OnInit{
     if (this.teamToUpdate.id && this.newName.teamName.length > 2) {
       this.teamSv.updateName(this.teamToUpdate.id, this.newName).subscribe(() =>{
         Swal.fire("Nome del team aggiornato correttamente")
+        this.router.navigate(['/team/player/', this.newName.teamName]);
         this.isLoading = false
       },
       (error)=>{
@@ -111,6 +112,29 @@ export class UpdatedComponent implements OnInit{
     return players?.some(player => player.nickname?.toLowerCase() === captainName);
   }
 
+
+  onFileSelected(event: any, teamName: string | null) {
+
+    const file: File = event.target.files[0];
+
+    this.isLoading = true;
+    if (teamName) {
+      this.teamSv.uploadLogoTeam(teamName, file).subscribe(
+        response => {
+          this.urlImg = response.url;
+          Swal.fire("Il logo è stato modificato con successo");
+          this.isLoading = false;
+        },
+        (error) => {
+          console.error("Errore durante il caricamento dell'immagine:", error);
+          Swal.fire("Errore nel caricamento dell'immagine. Prova con un immagine con dimensioni inferiori");
+          this.isLoading = false;
+        }
+      );
+    } else {
+      this.isLoading = false;
+    }
+  }
 
 
 

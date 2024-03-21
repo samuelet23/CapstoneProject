@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { formatDate } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { TournamentService } from '../../services/tournament.service';
+import { Tournament } from '../../api/models';
 
 @Component({
   selector: 'app-referees',
@@ -17,8 +18,9 @@ export class RefereesComponent implements OnInit  {
   private tournamentSv = inject(TournamentService)
   isLoading: boolean = false
   refereeForm: FormGroup;
-  remainingReferees: number | null = null;
+  refereCreated!: number | undefined
   private route = inject(ActivatedRoute);
+  tournament!:Tournament
   nameTournament:string | null = this.route.snapshot.paramMap.get('name')
 
   constructor(private fb: FormBuilder) {
@@ -31,7 +33,10 @@ export class RefereesComponent implements OnInit  {
   }
 
   ngOnInit(): void {
+    console.log(this.nameTournament);
+
     this.updateRemainingReferees()
+
   }
 
 
@@ -51,16 +56,17 @@ export class RefereesComponent implements OnInit  {
       };
 
       if (this.refereeForm.valid && this.nameTournament) {
-        this.refereeSv.createReferee(this.nameTournament.trim().toLowerCase(),refereeDto).subscribe((referee) => {
+        this.refereeSv.createReferee(this.nameTournament,refereeDto).subscribe((referee) => {
             console.log(referee);
             this.isLoading = false;
-            Swal.fire("Referee creato correttamente");
+            Swal.fire(`Arbitro ${referee.name} creato correttamente`);
             this.refereeForm.reset();
             this.updateRemainingReferees();
+
           },
           (error) => {
             this.isLoading = false;
-            Swal.fire(error);
+            Swal.fire(error.error.message);
           }
         );
       } else {
@@ -69,19 +75,31 @@ export class RefereesComponent implements OnInit  {
     }
 
     updateRemainingReferees(): void {
-      if (this.nameTournament && this.remainingReferees) {
+      if (this.nameTournament ) {
         this.tournamentSv.getTournamentByName(this.nameTournament).subscribe(data => {
+          console.log(data);
+          this.tournament = data
           if (data.level === "JUNIOR") {
-            this.remainingReferees = 1;
+            this.refereCreated = data.referees?.length;
           } else if (data.level === "RISINGSTARS") {
-            this.remainingReferees = 2;
+            this.refereCreated = data.referees?.length;
           } else if (data.level === "ELITE") {
-            this.remainingReferees = 3;
+            this.refereCreated = data.referees?.length;
           }
 
-          this.remainingReferees!--;
-          console.log("Remaining Referees:");
         });
+      }
+    }
+
+    checkTheRefereeForTournament(tournament: Tournament): { requiredReferees: number } {
+      if (tournament.level === "JUNIOR") {
+        return { requiredReferees: 1 };
+      } else if (tournament.level === "RISINGSTARS") {
+        return { requiredReferees: 2 };
+      } else if (tournament.level === "ELITE") {
+        return { requiredReferees: 3 };
+      } else {
+        return { requiredReferees: 0 };
       }
     }
 

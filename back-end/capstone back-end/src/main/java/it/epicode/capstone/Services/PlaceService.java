@@ -40,17 +40,12 @@ public class PlaceService {
     public Page<Competition> getAllTournamentsByPlaceId(UUID id, Pageable pageable){
         return placeRp.findAllTournamentsByPlaceId(id, pageable);
     }
-
-    public List<Town> getAllTown(){
-        return placeRp.findAllTown();
+    public List<Province> getProvinceByName(String name){
+        return  provinceRp.findByNameComplete(name);
     }
-    public List<Province> getAllProvince(){
-        return placeRp.findAllProvince();
-    }
-    public List<String> getAllRegion(){
-        return placeRp.findAllRegion();
-    }
-
+        public List<Province> getAllProvince(){
+        return provinceRp.findAll();
+        }
     public Place getById(UUID id)throws BadRequestException{
         return placeRp.findById(id).orElseThrow(
                 () -> new BadRequestException("Place Not Found")
@@ -123,8 +118,8 @@ public class PlaceService {
     public Page<Competition> findTournamentsByKeywordInCourtName(String keyword, Pageable pageable){
         return placeRp.findTournamentsByKeywordInCourtName(keyword, pageable);
     }
-    public Page<Competition> findTournamentsByKeywordInTownName(String keyword, Pageable pageable){
-        return placeRp.findTournamentsByKeywordInTownName(keyword, pageable);
+    public List<Competition> findTournamentsByKeywordInProvinceName(String keyword){
+        return placeRp.findTournamentsByKeywordInProvinceName(keyword);
     }
     public Page<Competition> findTournamentsByKeywordInRegion(String keyword, Pageable pageable){
         return placeRp.findTournamentsByKeywordInRegion(keyword, pageable);

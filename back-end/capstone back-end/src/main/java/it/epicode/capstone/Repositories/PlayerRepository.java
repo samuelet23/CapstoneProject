@@ -21,7 +21,7 @@ public interface PlayerRepository extends JpaRepository<Player, UUID>, PagingAnd
 
     Optional<Player> findByNickname(String nickname);
     @Query("SELECT p FROM Player p WHERE p.team.name = :teamName")
-    Page<Player> findAllByTeamName(@Param("teamName")String teamName, Pageable pageable);
+    List<Player> findAllByTeamName(@Param("teamName")String teamName);
 
     @Query("SELECT p FROM Player p WHERE p.team.tournament.name = :name")
     Page<Player> findAllByTournamentName(@Param("name") String name, Pageable pageable);
