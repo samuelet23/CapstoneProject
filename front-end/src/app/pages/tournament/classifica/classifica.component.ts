@@ -28,9 +28,11 @@ ngOnInit(): void {
 
 getClassificaMvp() {
   if (this.tournamentName) {
-  this.tournamentSv.getClassificaMvp("string").subscribe(
+  this.tournamentSv.getClassificaMvp(this.tournamentName).subscribe(
     (data: PlayerPointRes) => {
-      if (data.playerPointsList) {
+      console.log(data);
+
+      if (!data.playerPointsList) {
         this.router.navigate(['/tournament/'+this.tournamentName])
         Swal.fire("La classifica sarà disponibile una volta iniziato il torneo")
         this.isLoading = false
@@ -47,7 +49,6 @@ getClassificaMvp() {
   );
 }
 this.isLoading = false
-this.router.navigate(['/'])
 }
 
 checkIfTournamentisFinished() {

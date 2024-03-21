@@ -1,1 +1,99 @@
-<p>game works!</p>
+<div *ngIf="isLoading" class="overlay">
+  <div class="spinner" role="status">
+    <span class="app-spinner"></span>
+  </div>
+</div>
+
+<div class="container-fluid  p-3  rounded-3  my-3" *ngIf="!isLoading && !isFinished">
+  <div class="row justify-content-center">
+    <div class="col-lg-5 col-md-6 col-sm-12">
+      <div class="card mb-3">
+        <div class="card-header bg-primary text-white">
+          {{ partita.homeTeam?.name }}
+        </div>
+        <div class="card-body text-center">
+          <img *ngIf="partita.homeTeam?.logo; else placeholderLogo" [src]="partita.homeTeam?.logo" alt="{{ partita.homeTeam?.name }} Logo" class="team-logo">
+          <ng-template #placeholderLogo>
+            <img src="../../../assets/logo team.jpg" alt="Placeholder Logo" class="team-logo">
+          </ng-template>
+          <p class="card-text points" *ngIf="isStarted">{{ partita.homePoints }}</p>
+          <p class="card-text">Captain: {{ partita.homeTeam?.captain?.nickname }}</p>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" *ngFor="let player of partita.homeTeam?.players">
+              <span class="name-player player-home"> {{ player.nickname }}</span><span class="sigla sigla-home">{{ player.sigla }}</span>
+
+             <button class="btn btn-primary my-2" *ngIf="isStarted" (click)="addHomePoints(1, player.sigla)">1</button>
+             <button class="btn btn-primary my-2" *ngIf="isStarted" (click)="addHomePoints(2, player.sigla)">2</button>
+             <button class="btn btn-primary my-2" *ngIf="isStarted" (click)="addHomePoints(3, player.sigla)">3</button>
+
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-1  d-block align-self-center text-center mb-md-3 mb-sm-3">
+      <h2 class="vs-text">vs</h2>
+    </div>
+
+    <div class="col-lg-5 col-md-6 col-12">
+      <div class="card mb-3">
+        <div class="card-header bg-primary text-white">
+          {{ partita.awayTeam?.name }}
+        </div>
+        <div class="card-body text-center">
+          <img *ngIf="partita.awayTeam?.logo; else placeholderLogo" [src]="partita.awayTeam?.logo" alt="{{ partita.awayTeam?.name }} Logo" class="team-logo">
+          <ng-template #placeholderLogo>
+            <img src="../../../assets/logo_team.jpg" alt="Placeholder Logo" class="team-logo">
+          </ng-template>
+          <p class="card-text points" *ngIf="isStarted"> {{ partita.awayPoints }}</p>
+          <p class="card-text">Capitano: {{ partita.awayTeam?.captain?.nickname }}</p>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" *ngFor="let player of partita.awayTeam?.players">
+             <span class="name-player player-away "> {{ player.nickname }}</span> <span class="sigla sigla-away">{{ player.sigla }}</span>
+
+             <button class="btn btn-primary my-2" *ngIf="isStarted" (click)="addAwayPoints(1, player.sigla)">1</button>
+             <button class="btn btn-primary my-2" *ngIf="isStarted" (click)="addAwayPoints(2, player.sigla)">2</button>
+             <button class="btn btn-primary my-2" *ngIf="isStarted" (click)="addAwayPoints(3, player.sigla)">3</button>
+
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-5 col-md-6 col-sm-12">
+    <button class="btn btn-primary" *ngIf="isScheduled" (click)="startGame()">INIZIA PARITIA</button>
+    <button class="btn btn-warning" *ngIf="isStarted" (click)= "finishedGame()"> TERMINA PARITIA</button>
+      </div>
+  </div>
+  </div>
+
+</div>
+
+
+<div *ngIf="isFinished" class="text-center p-3 m-3">
+  <h3 class="text-success">Il vincitore è {{ winnerTeam?.name }}</h3>
+
+  <div class="container-img d-flex justify-content-center align-items-center">
+    <img *ngIf="winnerTeam?.logo; else fallbackImage" [src]="winnerTeam?.logo" alt="Logo Squadra Vincitrice" class="img rounded-circle winner-logo">
+    <ng-template #fallbackImage>
+      <img src="../../../assets/logo team.jpg" alt="Fallback Image" class="img rounded-circle winner-logo">
+    </ng-template>
+  </div>
+
+  <div>
+    <h6>Il capitano è {{winnerTeam?.captain?.name}}</h6>
+    <p *ngIf="winnerTeam && winnerTeam.captain && winnerTeam.captain.point && winnerTeam.captain.point > 2" class="captain-info"> Ha segnato un totale di  {{winnerTeam.captain.point}} punti</p>
+  </div>
+
+  <h3>VI presento i membri del team:</h3>
+  <div *ngFor="let player of winnerTeam?.players" class="player-info">
+    <p>{{player.name}} in arte {{player.nickname}}</p>
+  </div>
+  <h3>Punti totali:</h3>
+  <div *ngFor="let player of winnerTeam?.players" class="player-info">
+    <p *ngIf="player && player.point && player.point > 2">{{player.nickname}} =  {{player.point}} punti</p>
+  </div>
+  <h5 class="fw-bold fs-3 mt-3 congrats-message">Congratulazioni!!</h5>
+</div>

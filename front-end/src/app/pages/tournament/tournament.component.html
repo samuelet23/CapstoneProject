@@ -1,57 +1,127 @@
-<div class="container-mini-nav" *ngIf="!isLoading">
-  <a class="text-uppercase rounds" routerLink="/tournament/{{tournamentName}}/ottavi-finale" >ottavi di finale</a>
-  <a class="text-uppercase rounds" routerLink="/tournament/{{tournamentName}}/quarti-finale" >quarti di finale</a>
-  <a class="text-uppercase rounds" routerLink="/tournament/{{tournamentName}}/semi-finale" >semifinale</a>
-  <a class="text-uppercase rounds" routerLink="/tournament/{{tournamentName}}/finale" >finale</a>
-  <a class="text-uppercase rounds" routerLink="/tournament/{{tournamentName}}/classifica">Classica MVP</a>
-</div>
-
-<div class="container" [ngClass]="{'height': teams.length === 0}" *ngIf="!isLoading">
-  <h2> IL TORNEO È COMPOSTO DA {{teams.length}} SQUADRE </h2>
-<div class="container-iscrivi" *ngIf="!isLoading">
-  <p>Ecco quali le squadre parteciperanno</p>
-  <div class="dropdown">
-    <button *ngIf="isCaptainOrManager && teams.length < 16 " (click)="toggleDropdown()" class="btn btn-success mb-3 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      ISCRIVITI LA TUA SQUADRA
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" [ngClass]="{ 'show': dropdownOpen }">
-      <a class="dropdown-item" routerLink="/team/existing/tournament/{{tournamentName}}">Iscrivi una squadra esistente</a>
-      <a class="dropdown-item" routerLink="/team/create/tournament/{{tournamentName}}">Crea una nuova squadra</a>
-    </div>
-  </div>
-</div>
-
-
 <div *ngIf="isLoading" class="overlay">
   <div class="spinner" role="status">
     <span class="app-spinner"></span>
   </div>
 </div>
-<div class="container">
-  <div class="row" *ngIf="!isLoading">
-    <div class="col-12 col-md-6 col-lg-4" *ngFor="let team of teams">
-      <div class="card mb-4">
-        <div class="logo-container">
-          <img *ngIf="team.logo; else defaultLogo" class="card-img-top rounded-circle" [src]="team.logo" alt="Logo squadra">
-          <ng-template #defaultLogo>
-            <img class="card-img-top rounded-circle" src="../../../assets/logo team.jpg" alt="Logo predefinito">
-          </ng-template>
-        </div>
 
-        <div class="card-body">
-          <h5 class="card-title">{{ team.name }}</h5>
+<div class="container my-3" [ngClass]="{'height2': teams.length === 0}" *ngIf="!isLoading ">
+  <div *ngIf=" teams.length != 16">
+    <h2> IL TORNEO È COMPOSTO DA {{teams.length}} SQUADRE </h2>
+    <div class="container-iscrivi" *ngIf="!isLoading">
+      <p>Ecco quali le squadre parteciperanno</p>
+      <div class="dropdown">
+        <button *ngIf="isCaptainOrManager && teams.length < 16 " (click)="toggleDropdown()"
+          class="btn btn-success mb-3 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          ISCRIVITI LA TUA SQUADRA
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" [ngClass]="{ 'show': dropdownOpen }">
+          <a class="dropdown-item" routerLink="/team/existing/tournament/{{tournamentName}}">Iscrivi una squadra
+            esistente</a>
+          <a class="dropdown-item" routerLink="/team/create/tournament/{{tournamentName}}">Crea una nuova squadra</a>
         </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row" *ngIf="!isLoading">
+        <div class="col-12 col-md-6 col-lg-4" *ngFor="let team of teams">
+          <div class="card mb-4">
+            <div class="logo-container">
+              <img *ngIf="team.logo; else defaultLogo" class="card-img-top rounded-circle" [src]="team.logo"
+                alt="Logo squadra">
+              <ng-template #defaultLogo>
+                <img class="card-img-top rounded-circle" src="../../../assets/logo team.jpg" alt="Logo predefinito">
+              </ng-template>
+            </div>
 
-        <div class="card-footer">
-          <button class="btn btn-primary" routerLink="/team/player/{{team.name}}">Scopri di più del team</button>
-          <button class="btn btn-danger" (click)="removeTeam(team.name)" *ngIf="isCaptainOrManager">Elimina il Team dal Torneo</button>
+            <div class="card-body">
+              <h5 class="card-title">{{ team.name }}</h5>
+            </div>
+
+            <div class="card-footer">
+              <button class="btn btn-primary" routerLink="/team/player/{{team.name}}">Scopri di più del team</button>
+              <button class="btn btn-danger" (click)="removeTeam(team.name)" *ngIf="isCaptainOrManager">Elimina il Team
+                dal Torneo</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
+
+  <div class="text-center " [ngClass]="{'height': games.length <= 2}" *ngIf="!isFinalFinished">
+    <h3>{{ getTournamentPhase(games.length) }}</h3>
+
+    <div *ngIf="teams.length == 16" class="container text-white"  >
+      <div class="row ">
+        <div class="col-12 col-md-6 col-lg-3  bg" *ngFor="let match of games">
+          <div class="match">
+            <div class="team">
+              <ng-container *ngIf="match.homeTeam?.logo; else defaultLogo">
+                <img [src]="match.homeTeam?.logo" alt="Home Team Logo" class="card-img-top rounded-circle">
+              </ng-container>
+              <ng-template #defaultLogo>
+                <img class="card-img-top rounded-circle" src="../../../assets/logo team.jpg" alt="Default Logo">
+              </ng-template>
+              <span>{{ match.homeTeam?.name }}</span>
+              <span class="fw-bold fs-3" *ngIf="isFinishedGame(match)"> {{match.homePoints}}</span>
+            </div>
+
+            <div class="vs">VS</div>
+
+            <div class="team">
+              <ng-container *ngIf="match.awayTeam?.logo; else defaultLogo">
+                <img [src]="match.awayTeam?.logo" alt="Away Team Logo" class="card-img-top rounded-circle">
+              </ng-container>
+              <ng-template #defaultLogo>
+                <img class="card-img-top rounded-circle" src="../../../assets/logo team.jpg" alt="Default Logo">
+              </ng-template>
+              <span>{{ match.awayTeam?.name }}</span>
+              <span class="fw-bold fs-3" *ngIf="isFinishedGame(match)"> {{match.awayPoints}}</span>
+            </div>
+          </div>
+          <button class="btn btn-success" routerLink="/game/{{match.id}}" *ngIf="!isFinishedGame(match)">Inizia
+            Partita</button>
+          <button class="btn btn-warning" routerLink="/game/{{match.id}}" *ngIf="isFinishedGame(match)">Guarda dettagli
+            Partita</button>
+        </div>
+      </div>
+    <button class=" btn btn-primary mb-3" *ngIf="areFinishedAllGames(games)" [routerLink]="getRouterLink(games.length)">{{getRoundPhase(games.length)}}</button>
+
+    </div>
+  </div>
+
+  <div *ngIf="isFinalFinished" class="winner-card my-3">
+    <div *ngFor="let match of games">
+
+    <i class="bi bi-arrow-left-circle-fill pointer" routerLink="/tournament/{{tournamentName}}"></i>
+    <h2 class="text-center mb-4">Il vincitore del torneo è: {{ match.winner?.name }}</h2>
+
+    <div class="text-center mb-4">
+      <ng-container *ngIf="match.winner?.logo; else defaultLogo">
+        <img [src]="match.winner?.logo" alt="Home Team Logo" class="winner-logo">
+      </ng-container>
+      <ng-template #defaultLogo>
+        <img class="winner-logo" src="../../../assets/logo team.jpg" alt="Default Logo">
+      </ng-template>
+    </div>
+
+    <div class="text-center mb-4">
+      <p class="lead">Il capitano di questo fantastico team è {{ match.winner?.captain?.nickname }} che ha totalizzato un totale di {{ match.winner?.captain?.point }} punti.</p>
+    </div>
+
+    <div>
+      <h4 class="mb-3">Vi presento tutti i membri della squadra:</h4>
+      <div *ngFor="let player of match.winner?.players" class="player-details mb-4">
+        <h5>{{ player.name }}</h5>
+        <p>All'età di {{ player.age }} anni, {{ player.name }} ha vinto il torneo {{ tournamentName }}. CONGRATULAZIONI!!</p>
+        <p>Caro {{ player.name }}, hai giocato un totale di {{ player.gamesPlayed }} partite segnando {{ player.point }} punti.</p>
+      </div>
+    </div>
+  </div>
+
 </div>
-<router-outlet></router-outlet>
 </div>
 
 
-
+  <router-outlet></router-outlet>

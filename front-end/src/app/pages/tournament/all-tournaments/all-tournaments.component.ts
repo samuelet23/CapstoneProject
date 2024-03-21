@@ -25,6 +25,8 @@ ngOnInit(): void {
 
     this.tournamentSv.getAllTournamentFromProvinceName(this.provinceName.trim().toLowerCase()).subscribe((tournaments)=>{
       this.isLoading = false
+      console.log(tournaments);
+
       if (tournaments.length > 0) {
         this.tournaments = tournaments
       } else{
@@ -41,6 +43,11 @@ ngOnInit(): void {
 
   }
 }
+
+isStarted(tournament: Tournament): boolean {
+  return tournament.round !== null && tournament.round !== "OCTAVEFINAL";
+}
+
 
 checkTheRefereeForTournament(tournament: Tournament): string {
   if (tournament.level == "JUNIOR") {

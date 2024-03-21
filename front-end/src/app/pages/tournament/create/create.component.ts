@@ -25,6 +25,24 @@ export class CreateComponent {
 
 
   ngOnInit(): void {
+    this.placeSv.getAllProvince().subscribe((provinces: Province[]) => {
+      this.provinces = provinces;
+
+      const townName = this.tournamentForm.get('place.address.townName')?.value;
+      const selectedProvince = this.provinces.find(province => province.name === townName);
+
+      if (selectedProvince) {
+        this.initializeForm(selectedProvince.sigla);
+      } else {
+        Swal.fire("Provincia inesistente, Riprova!");
+      }
+    }, (error) => {
+      console.error("Errore durante il recupero delle province:", error);
+      Swal.fire("Si è verificato un errore durante il recupero delle province. Riprova più tardi.");
+    });
+  }
+
+  initializeForm(siglaProvince: string): void {
     this.tournamentForm = this.fb.group({
       level: ['', Validators.required],
       name: ['', [Validators.required, Validators.minLength(3)]],
@@ -32,7 +50,7 @@ export class CreateComponent {
       place: this.fb.group({
         address: this.fb.group({
           courtName: ['', [Validators.required, Validators.minLength(3)]],
-          siglaProvince: ['', [Validators.required, Validators.pattern(/[A-Z]{2}/)]],
+          siglaProvince: [siglaProvince, Validators.required], // Assegna la sigla della provincia trovata
           townName: ['', Validators.required],
           via: ['', Validators.required],
           civico: ['', Validators.required],
@@ -42,13 +60,11 @@ export class CreateComponent {
       referees: this.fb.array([]),
       startDate: ['', Validators.required]
     });
-    this.tournamentForm.get('place.address.siglaProvince')?.valueChanges.subscribe(value => {
-      if (value.length === 2) {
-        this.getAllProvince();
-      }
-    });
 
+    this.tournamentForm.get('place.address.siglaProvince')?.valueChanges.subscribe(value => {
+    });
   }
+
 
   submitForm(){
     if (this.tournamentForm.valid) {
@@ -62,7 +78,7 @@ export class CreateComponent {
         place: {
           courtName: this.tournamentForm.get('place.address.courtName')?.value,
           address: {
-            siglaProvince: this.tournamentForm.get('place.address.siglaProvince')?.value,
+            siglaProvince: "qui",
             townName: this.tournamentForm.get('place.address.townName')?.value,
             via: this.tournamentForm.get('place.address.via')?.value,
             civico: this.tournamentForm.get('place.address.civico')?.value,
@@ -103,29 +119,11 @@ export class CreateComponent {
   }
 
 
-  existSiglaProvincia(sigla: string): boolean {
-    this.getAllProvince()
-    return this.provinces.some(province => province.sigla === sigla);
-}
-
-  existProvincia(sigla: string): boolean {
-    this.getAllProvince()
-    return this.provinces.some(province => province.name === sigla);
-}
 
 
 
 
-  getAllProvince() {
-    this.placeSv.getAllProvince().subscribe((provinces: Province[]) => {
-      console.log(provinces);
 
-      this.provinces = provinces;
-    },
-    (error) =>{
-      Swal.fire (error.error.message)
-    });
-  }
 
 
 

@@ -49,14 +49,7 @@
         </div>
       </div>
 
-      <!-- Campo Provincia -->
-      <div class="form-group" [class.error]="tournamentForm.get('place.address.siglaProvince')?.invalid && tournamentForm.get('place.address.siglaProvince')?.touched">
-        <label for="siglaProvince">Sigla Provincia:</label>
-        <input type="text" id="siglaProvince" formControlName="siglaProvince" class="form-control" placeholder="inserisci la sigla  ">
-        <div *ngIf="tournamentForm.get('place.address.siglaProvince')?.invalid && tournamentForm.get('place.address.siglaProvince')?.touched" class="error-message error-text">
-          La sigla della provincia è richiesta.
-        </div>
-      </div>
+
 
       <!-- Campo Città -->
       <div class="form-group" [class.error]="tournamentForm.get('place.address.townName')?.invalid && tournamentForm.get('place.address.townName')?.touched">

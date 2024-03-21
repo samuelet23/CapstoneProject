@@ -35,8 +35,8 @@ public class GameService {
     @Autowired
     private TeamRepository teamRp;
 
-    public Page<Game> getAll(Pageable pageable) {
-        return gameRp.findAll(pageable);
+    public List<Game> getAll() {
+        return gameRp.findAll();
     }
     public List<Game> getAllByTournament(Competition tournament){
         return gameRp.findByTournament(tournament);
@@ -48,14 +48,14 @@ public class GameService {
         );
     }
 
-    public void createGame(UUID matchId) throws BadRequestException {
+    public Game createGame(UUID matchId) throws BadRequestException {
         Game match = getById(matchId);
         if (match.getStatus() != GameStatus.SCHEDULED) {
             throw new BadRequestException("Il match si sta giocando o è già finito");
         }
         match.setStatus(GameStatus.STARTED);
 
-        gameRp.save(match);
+        return gameRp.save(match);
     }
     public void updateHomePoints(UUID id, int pointsToAdd, String sigla) throws BadRequestException {
         Game game = getById(id);

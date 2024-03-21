@@ -65,10 +65,17 @@ export class RefereesComponent implements OnInit  {
 
           },
           (error) => {
+            let errorMessage = 'Si è verificato un errore durante l\'esecuzione dell\'operazione. Si prega di riprovare più tardi.';
+            if (error.status === 500 && error.error.message && error.error.message.includes('un valore chiave duplicato viola il vincolo univoco')) {
+              errorMessage = 'il nickname inserito è già in uso. Si prega di scegliere un altro nickname.';
+            }
             this.isLoading = false;
-            Swal.fire(error.error.message);
-          }
-        );
+            Swal.fire({
+              icon: 'error',
+              title: 'Errore!',
+              text: errorMessage
+            });
+          });
       } else {
         this.isLoading = false;
       }

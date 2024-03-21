@@ -72,7 +72,7 @@ public class TournamentService {
         t.setLevel(TournamentLevel.valueOf(dto.level()));
         t.setCoverUrl(dto.coverUrl());
         t.setPlace(placeSv.create(dto.place()));
-        t.setInitialRound(Round.OCTAVEFINAL);
+        t.setRound(Round.OCTAVEFINAL);
         return tournamentRp.save(t);
     }
     private List<Referee> createReferee(List<String> refereeNames) throws BadRequestException {
@@ -149,7 +149,7 @@ public class TournamentService {
         }
 
         tournament.setGames(ottaviMatches);
-        tournament.setInitialRound(initialRound);
+        tournament.setRound(initialRound);
         Tournament t = tournamentRp.save(tournament);
     }
 
@@ -188,7 +188,7 @@ public class TournamentService {
         }
 
         tournament.setGames(quartiMatches);
-        tournament.setInitialRound(initialRound);
+        tournament.setRound(initialRound);
         Tournament t = tournamentRp.save(tournament);
         return  t.getGames();
     }
@@ -232,7 +232,7 @@ public class TournamentService {
         }
 
         tournament.setGames(semiFinalsMatches);
-        tournament.setInitialRound(initialRound);
+        tournament.setRound(initialRound);
         Tournament t = tournamentRp.save(tournament);
         return  t.getGames();
     }
@@ -269,7 +269,7 @@ public class TournamentService {
         gameRp.save(finale);
 
         tournament.setGames(Collections.singletonList(finale));
-        tournament.setInitialRound(Round.FINAL);
+        tournament.setRound(Round.FINAL);
         Tournament t = tournamentRp.save(tournament);
         return  finale;
     }
@@ -448,7 +448,7 @@ public class TournamentService {
         List<Team> qualifiedTeams = teamSv.getAllByTournamentName(tournament.getName());
 
         for (Game game : games) {
-            if (game.getStatus() == GameStatus.FINISHED && game.getRound() != tournament.getInitialRound()) {
+            if (game.getStatus() == GameStatus.FINISHED && game.getRound() != tournament.getRound()) {
                 Team winner = game.getWinner();
                 if (winner != null && !qualifiedTeams.contains(winner)) {
                     qualifiedTeams.add(winner);

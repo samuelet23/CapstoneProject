@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Exceptions.HandlerException;
 import it.epicode.capstone.Models.DTO.AddPointsDTO;
+import it.epicode.capstone.Models.Entities.Game;
 import it.epicode.capstone.Models.Entities.Team;
 import it.epicode.capstone.Models.ResponsesDTO.ConfirmRes;
 import it.epicode.capstone.Models.ResponsesDTO.DeleteRes;
@@ -41,12 +42,9 @@ public class GameController {
             description = "start a game.",
             summary = "Start Game"
     )
-    public ConfirmRes startGame(@RequestParam("game-id") UUID id)throws BadRequestException{
-        gameSv.createGame(id);
-        return new ConfirmRes(
-                "La partita è iniziata, Buona fortuna ai giocatori",
-                HttpStatus.OK
-        );
+    public Game startGame(@RequestParam("game-id") UUID id)throws BadRequestException{
+        return gameSv.createGame(id);
+
     }
 
     @PutMapping("/update/{id}/homePoints")
@@ -54,7 +52,7 @@ public class GameController {
             description = "Update home points of a game.",
             summary = "Update Home Points"
     )
-    public ConfirmRes updateHomePoints(@PathVariable UUID id,@RequestBody @Validated AddPointsDTO addPointsDTO, BindingResult bindingResult)throws BadRequestException{
+    public ConfirmRes updateHomePoints(@PathVariable UUID id,@RequestBody AddPointsDTO addPointsDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         gameSv.updateHomePoints(id, addPointsDTO.pointToAdd(), addPointsDTO.siglaPlayer());
         return new ConfirmRes(

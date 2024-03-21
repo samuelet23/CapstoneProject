@@ -27,8 +27,9 @@
   <div class="tournament-cover">
     <img [src]="tournament.coverUrl || '../../../../assets/logo tournament.png'" alt="Cover del torneo">
   </div>
-  <button routerLink="/tournament/{{tournament.name}}/referee" class="btn btn-outline-success" *ngIf="checkTheRefereeForTournament(tournament) === 'Aggiungi arbitro'">Aggiungi Arbitro/i</button>
-  <button routerLink="/tournament/{{tournament.name}}" class="btn btn-outline-success" *ngIf="checkTheRefereeForTournament(tournament) === 'Inizia torneo'">INIZIA TORNEO</button>
+  <button routerLink="/tournament/{{tournament.name}}/referee" class="btn btn-outline-success" *ngIf="!isStarted(tournament) && checkTheRefereeForTournament(tournament) === 'Aggiungi arbitro'">Aggiungi Arbitro/i</button>
+  <button routerLink="/tournament/{{tournament.name}}" class="btn btn-outline-success" *ngIf="!isStarted(tournament) && checkTheRefereeForTournament(tournament) === 'Inizia torneo'">INIZIA TORNEO</button>
+  <button routerLink="/tournament/{{tournament.name}}" class="btn btn-outline-success" *ngIf="isStarted(tournament)">Guarda l'andamento del torneo</button>
 
 </div>
 

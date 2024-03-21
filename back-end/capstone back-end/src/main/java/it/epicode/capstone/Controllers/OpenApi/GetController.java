@@ -44,8 +44,8 @@ public class GetController {
             description = "Retrieve all games with pagination support.",
             summary = "Get all games"
     )
-    public Page<Game> getGameAll(Pageable pageable){
-        return gameSv.getAll(pageable);
+    public List<Game> getGameAll(Pageable pageable){
+        return gameSv.getAll();
     }
     @GetMapping("/game/get/all/tournament/{name}")
     @Operation(
@@ -57,7 +57,6 @@ public class GetController {
         return gameSv.getAllByTournament(tournament);
     }
 
-    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/game/get/{id}")
     @Operation(
             description = "Retrieve a game by its unique identifier.",
