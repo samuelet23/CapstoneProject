@@ -10,10 +10,12 @@
     <div class="container-iscrivi" *ngIf="!isLoading">
       <p>Ecco quali le squadre parteciperanno</p>
       <div class="dropdown">
-        <button *ngIf="isCaptainOrManager && teams.length < 16 " (click)="toggleDropdown()"
-          class="btn btn-success mb-3 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">
+        <button *ngIf="teams.length < 16 " class="btn btn-success" (click)="toggleDropdown()">
           ISCRIVITI LA TUA SQUADRA
+        </button>
+
+        <button class="btn btn-success" (click)="generaOttavi()" *ngIf="teams.length == 16">
+          AVVIA IL TORNEO
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" [ngClass]="{ 'show': dropdownOpen }">
           <a class="dropdown-item" routerLink="/team/existing/tournament/{{tournamentName}}">Iscrivi una squadra

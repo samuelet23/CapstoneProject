@@ -5,8 +5,10 @@ import it.epicode.capstone.Models.Entities.Game;
 import it.epicode.capstone.Models.Entities.Player;
 import it.epicode.capstone.Models.Entities.SuperClass.Competition;
 import it.epicode.capstone.Models.Entities.Team;
+import it.epicode.capstone.Models.Entities.Tournament;
 import it.epicode.capstone.Models.Enums.GameStatus;
 import it.epicode.capstone.Models.Enums.Round;
+import it.epicode.capstone.Models.Enums.TournamentState;
 import it.epicode.capstone.Repositories.GameRepository;
 import it.epicode.capstone.Repositories.TeamRepository;
 import org.slf4j.Logger;
@@ -138,6 +140,7 @@ public class GameService {
                 }
 
                 matchFinished = true;
+
             } catch (RuntimeException e) {
                throw new Exception(e.getMessage());
             }

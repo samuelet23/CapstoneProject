@@ -158,7 +158,7 @@ addAwayPoints(pointToAdd: number, siglaPlayer:string){
 finishedGame(){
   this.isLoading = true;
   if (this.idGame) {
-    this.gameSv.finishGame(this.idGame).subscribe(result =>{
+    this.gameSv.finishGame(this.idGame, ).subscribe(result =>{
       this.winnerTeam = result
       this.isLoading = false;
       this.isScheduled = false;

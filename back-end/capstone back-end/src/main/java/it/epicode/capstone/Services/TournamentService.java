@@ -73,6 +73,7 @@ public class TournamentService {
         t.setCoverUrl(dto.coverUrl());
         t.setPlace(placeSv.create(dto.place()));
         t.setRound(Round.OCTAVEFINAL);
+        t.setState(TournamentState.SCHEDULED);
         return tournamentRp.save(t);
     }
     private List<Referee> createReferee(List<String> refereeNames) throws BadRequestException {
@@ -112,6 +113,7 @@ public class TournamentService {
 
     public List<Game> startTournament(String nameTournament)throws BadRequestException {
         Tournament t = getByName(nameTournament);
+        t.setState(TournamentState.STARTED);
         if (t.getTeams().size() != 16) {
             throw new BadRequestException("Il numero di squadre presente ad un torneo deve essere 16, Il torneo inizierà dagli ottavi di finale");
         }
@@ -270,6 +272,9 @@ public class TournamentService {
 
         tournament.setGames(Collections.singletonList(finale));
         tournament.setRound(Round.FINAL);
+        if (tournament.getRound() == Round.FINAL && finale.getStatus() == GameStatus.FINISHED) {
+            tournament.setState(TournamentState.FINISHED);
+        }
         Tournament t = tournamentRp.save(tournament);
         return  finale;
     }

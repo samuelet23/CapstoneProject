@@ -23,7 +23,7 @@ ngOnInit(): void {
   this.isLoading = true
   if (this.provinceName) {
 
-    this.tournamentSv.getAllTournamentFromProvinceName(this.provinceName.trim().toLowerCase()).subscribe((tournaments)=>{
+    this.tournamentSv.getAllTournamentFromProvinceName(this.provinceName.toLowerCase()).subscribe((tournaments)=>{
       this.isLoading = false
       console.log(tournaments);
 
@@ -45,7 +45,7 @@ ngOnInit(): void {
 }
 
 isStarted(tournament: Tournament): boolean {
-  return tournament.round !== null && tournament.round !== "OCTAVEFINAL";
+  return tournament.state === "STARTED"
 }
 
 

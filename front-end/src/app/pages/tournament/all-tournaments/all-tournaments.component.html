@@ -15,7 +15,6 @@
     <div *ngFor="let team of tournament.teams">
       <p>{{team.logo}}</p>
       <p>{{team.name}}</p>
-      <p>{{team.captain.name}}</p>
     </div>
     <div *ngFor="let referee of tournament.referees">
       <h4 class="tournament-referees" >Arbitro/i:</h4>
@@ -30,6 +29,7 @@
   <button routerLink="/tournament/{{tournament.name}}/referee" class="btn btn-outline-success" *ngIf="!isStarted(tournament) && checkTheRefereeForTournament(tournament) === 'Aggiungi arbitro'">Aggiungi Arbitro/i</button>
   <button routerLink="/tournament/{{tournament.name}}" class="btn btn-outline-success" *ngIf="!isStarted(tournament) && checkTheRefereeForTournament(tournament) === 'Inizia torneo'">INIZIA TORNEO</button>
   <button routerLink="/tournament/{{tournament.name}}" class="btn btn-outline-success" *ngIf="isStarted(tournament)">Guarda l'andamento del torneo</button>
+  <button routerLink="/tournament/{{tournament.name}}" class="btn btn-outline-success" [disabled]="!isStarted" *ngIf="isStarted(tournament)">L'organizzatore non ha ancora avviato il torneo</button>
 
 </div>
 

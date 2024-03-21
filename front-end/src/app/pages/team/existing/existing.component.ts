@@ -24,14 +24,13 @@ ngOnInit(): void {
   if (this.nameTournament) {
     this.teamSv.getAllTeamWithoutTournament()
       .subscribe((teams: any) => {
-        console.log(teams);
 
         this.isLoading = false;
         this.teams = teams;
       },(error) =>{
         Swal.fire (error.error.message)
         this.isLoading = false
-        this.router.navigate(['/tournament'])
+        this.router.navigate(['/tournament/'+this.nameTournament])
       })
   } else{
     this.isLoading = false;
@@ -48,7 +47,7 @@ addExistingTeam(teamName:string){
         if (index !== -1) {
           this.teams.splice(index, 1);
         }
-        this.router.navigate(['/tournament'])
+        this.router.navigate(['/tournament/'+this.nameTournament])
       })
     })
   }

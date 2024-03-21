@@ -127,7 +127,6 @@ export class CreateComponent {
 
   getAllProvince() {
     this.placeSv.getAllProvince().subscribe((provinces: Province[]) => {
-      console.log(provinces);
 
       this.provinces = provinces;
     },
