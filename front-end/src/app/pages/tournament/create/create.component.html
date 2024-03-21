@@ -49,12 +49,13 @@
         </div>
       </div>
 
-
-
       <!-- Campo Città -->
       <div class="form-group" [class.error]="tournamentForm.get('place.address.townName')?.invalid && tournamentForm.get('place.address.townName')?.touched">
         <label for="townName">Città:</label>
-        <input type="text" id="townName" formControlName="townName" class="form-control" placeholder="inserisci la città">
+        <select id="townName" formControlName="townName" class="form-control" placeholder="Seleziona la città">
+          <option value="" disabled selected>Scegli la città</option>
+          <option *ngFor="let province of provinces" [value]="province.name">{{ province.name }}</option>
+        </select>
         <div *ngIf="tournamentForm.get('place.address.townName')?.invalid && tournamentForm.get('place.address.townName')?.touched" class="error-message error-text">
           La città è richiesta.
         </div>
