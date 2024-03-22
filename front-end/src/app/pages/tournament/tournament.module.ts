@@ -6,21 +6,22 @@ import { TournamentComponent } from './tournament.component';
 import { SharedModule } from '../../shared/shared.module';
 import { ClassificaComponent } from './classifica/classifica.component';
 import { CreateComponent } from './create/create.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { FilterComponent } from './filter/filter.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AllTournamentsComponent } from './all-tournaments/all-tournaments.component';
 
 
 @NgModule({
   declarations: [
     TournamentComponent,
     ClassificaComponent,
+    AllTournamentsComponent,
     CreateComponent,
-    FilterComponent
   ],
   imports: [
     CommonModule,
     TournamentRoutingModule,
     ReactiveFormsModule,
+    FormsModule,
     SharedModule
   ]
 })

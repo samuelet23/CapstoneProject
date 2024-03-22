@@ -4,6 +4,46 @@
   </div>
 </div>
 
+<div class="navbar navbar-expand-lg navbar-light bg-light ">
+  <div class="container-fluid">
+    <form class="d-flex" #tournamentForm="ngForm">
+      <input class="form-control me-2" type="search" id="tournamentNameInput" placeholder="Nome Torneo"
+        aria-label="Filter by Tournament Name" [(ngModel)]="tournamentName" name="tournamentName">
+
+      <input class="form-control me-2" type="date" id="startDateInput" placeholder="Data Inizio"
+        aria-label="Filter by Starter Date" [(ngModel)]="startDate" name="startDate">
+
+        <select id="cityName"  class="form-control" [(ngModel)]="cityName" name="cityName">
+          <option value="" disabled selected hidden>Città</option>
+          <option *ngFor="let province of provinces" [value]="province.name">{{ province.name }}</option>
+        </select>
+
+
+
+        <select class="form-select me-2" id="tournamentStateInput" aria-label="Filter by Tournament State"
+        [(ngModel)]="tournamentState" name="tournamentState">
+        <option value="" disabled selected hidden>Stato</option>
+        <option value="SCHEDULED">Programmato</option>
+        <option value="STARTED">Iniziato</option>
+        <option value="FINISHED">Finito</option>
+        </select>
+
+      <select class="form-select me-2" id="tournamentLevelInput" aria-label="Filter by Tournament Level"
+        [(ngModel)]="tournamentLevel" name="tournamentLevel">
+        <option value="" disabled selected hidden>Livello</option>
+        <option value="Junior">Junior</option>
+        <option value="Rising Stars">Rising Stars</option>
+        <option value="Elite">Elite</option>
+      </select>
+
+
+
+
+      <button class="btn btn-outline-success" type="button" (click)="filterTournaments()">FILTRA</button>
+    </form>
+  </div>
+</div>
+
 <div *ngFor="let tournament of tournaments" class="tournament-card p-3 m-3">
   <div class="tournament-details">
     <p class="tournament-name">Nome Torneo: <span>{{ tournament.name }}</span></p>
@@ -37,3 +77,8 @@
 
 </div>
 
+<div class="height" *ngIf="tournaments.length == 0">
+  <div class="message-container">
+    <p class="message">Non ci sono tornei disponibili</p>
+  </div>
+</div>

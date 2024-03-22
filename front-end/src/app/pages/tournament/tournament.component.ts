@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { TeamService } from '../../services/team.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GameService } from '../../services/game.service';
+import { FilterService } from '../../services/filter.service';
 
 @Component({
   selector: 'app-tournament',
@@ -18,6 +19,7 @@ export class TournamentComponent implements OnInit {
   private gameSv = inject(GameService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+
 
   tournamentName: string | null = this.route.snapshot.paramMap.get('name');
   isLoading: boolean = false;

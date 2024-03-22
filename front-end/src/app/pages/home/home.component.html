@@ -1,15 +1,18 @@
 <nav class="navbar p-3">
   <div class="container ">
     <h2>Trova la tua città e scopri i tornei di basket in corso o in arrivo!</h2>
-    <form class="search-bar" role="search" >
-      <input class="form-control me-2" type="search" placeholder="Cerca città..."
-             aria-label="Search" [(ngModel)]="searchTerm" name="searchTerm" (input)="onSearch()">
-      <button class="btn btn-outline-success" type="submit">Cerca</button>
-    </form>
+    <button class="btn btn-success" routerLink="/tournament/get/all">Scopri tutti i tornei</button>
   </div>
 </nav>
 
-
+<div class="container my-3">
+  <h2>Cerca una città e crea il tuo torneo!</h2>
+  <form class="search-bar" role="search" >
+    <input class="form-control me-2" type="search" placeholder="Cerca città..."
+    aria-label="Search" [(ngModel)]="searchTerm" name="searchTerm" (input)="onSearch()">
+    <button class="btn btn-outline-success search-btn" type="submit">Cerca</button>
+  </form>
+</div>
 <div *ngIf="provinces.length > 0">
   <div *ngFor="let province of provinces" class="province-card">
   <div class="province-details">
@@ -17,8 +20,6 @@
     <p class="province-sigla">Sigla Provincia: <span>{{province.sigla | uppercase}}</span></p>
   </div>
   <div class="province-action">
-    <h6>Scopri quali tornei ci sono in questa città</h6>
-    <button class="btn btn-outline-warning" routerLink="/tournament/province/{{province.name}}">SCOPRI</button>
     <button  class="btn btn-outline-warning"  (click)="createTournament()">CREA TORNEO</button>
   </div>
 </div>

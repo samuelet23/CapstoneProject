@@ -14,9 +14,9 @@ export class TournamentService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-getAllTournamentFromProvinceName(provinceName:string):Observable<Competition[]>{
-  return this.http.get<Competition[]>(`${this.url}/open/tournament/get/all/auto-complete/province/${provinceName}`)
-}
+  getAllTournamentFromProvinceName(provinceName:string):Observable<Competition[]>{
+    return this.http.get<Competition[]>(`${this.url}/open/tournament/get/all/auto-complete/province/${provinceName}`)
+  }
   getAllTeamFromTournament(tournamentName: string ):Observable<Team[]>{
      return  this.http.get<Team[]>(`${this.url}/open/team/get/all/tournament-name?tournament-name=${tournamentName}`)
   }
@@ -27,6 +27,9 @@ getAllTournamentFromProvinceName(provinceName:string):Observable<Competition[]>{
 
   getTournamentByName(tournamentName:string):Observable<Tournament>{
     return this.http.get<Tournament>(`${this.url}/open/tournament/get/byName/${tournamentName}`)
+  }
+  getAllTournaments():Observable<Tournament[]>{
+    return this.http.get<Tournament[]>(`${this.url}/open/tournament/get/all`)
   }
 
   createTournament(tournament: TournamentDto):Observable<Tournament>{
