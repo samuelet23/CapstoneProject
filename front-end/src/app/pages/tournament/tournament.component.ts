@@ -158,7 +158,7 @@ export class TournamentComponent implements OnInit {
   getRouterLink(matches: number) {
     switch (matches) {
       case 8:
-         return this.generaQuarti();
+        return this.generaQuarti();
       case 4:
         return this.generaSemiFinale();
       case 2:
@@ -179,69 +179,64 @@ export class TournamentComponent implements OnInit {
         (err: any) => {
           Swal.fire(err.error.message);
           this.isLoading = false;
-          this.router.navigate(['/tournament/'+this.tournamentName]);
+          this.router.navigate(['/tournament/' + this.tournamentName]);
         }
       );
     }
-}
-
-
-generaQuarti(){
-  if (this.tournamentName) {
-    this.isLoading = true;
-    this.tournamentSv
-    .generateQuarti(this.tournamentName)
-    .subscribe((res: Game[]) => {
-      this.games = res;
-      console.log(this.games, 'generati quarti');
-      this.isLoading = false;
-    },
-    (error) =>{
-      this.isLoading = false;
-      Swal.fire(error.error.message)
-      this.router.navigate(['/tournament/'+this.tournamentName])
-    });
-  }
-  this.isLoading = false;
-}
-
-generaSemiFinale(){
-  if (this.tournamentName) {
-    this.tournamentSv.generateSemiFinale(this.tournamentName)
-                .subscribe((data) =>{
-                 this.games = data
-                 this.isLoading = false
-                },
-                (err)=> {
-                  Swal.fire("Errore interno, potrebbero essersi generati comunque, altrimenti contattare l'assistenza")
-                 this.isLoading = false
-                 this.router.navigate(['/tournament/'+this.tournamentName])
-                },
-                )
-              }
   }
 
-
-
-generaFinale() {
-  if (this.tournamentName) {
-    this.isLoading = true;
-    this.tournamentSv
-    .generateFinale(this.tournamentName)
-    .subscribe((games) => {
-      this.isLoading = false;
-      this.games = games;
-    },
-    (error) =>{
-      Swal.fire(error.error.message)
-      this.isLoading = false;
-      this.router.navigate(['/tournament/'+this.tournamentName])
-    });
+  generaQuarti() {
+    if (this.tournamentName) {
+      this.isLoading = true;
+      this.tournamentSv.generateQuarti(this.tournamentName).subscribe(
+        (res: Game[]) => {
+          this.games = res;
+          console.log(this.games, 'generati quarti');
+          this.isLoading = false;
+        },
+        (error) => {
+          this.isLoading = false;
+          Swal.fire(error.error.message);
+          this.router.navigate(['/tournament/' + this.tournamentName]);
+        }
+      );
+    }
+    this.isLoading = false;
   }
-  this.isLoading = false;
+
+  generaSemiFinale() {
+    if (this.tournamentName) {
+      this.tournamentSv.generateSemiFinale(this.tournamentName).subscribe(
+        (data) => {
+          this.games = data;
+          this.isLoading = false;
+        },
+        (err) => {
+          Swal.fire(
+            "Errore interno, potrebbero essersi generati comunque, altrimenti contattare l'assistenza"
+          );
+          this.isLoading = false;
+          this.router.navigate(['/tournament/' + this.tournamentName]);
+        }
+      );
+    }
+  }
+
+  generaFinale() {
+    if (this.tournamentName) {
+      this.isLoading = true;
+      this.tournamentSv.generateFinale(this.tournamentName).subscribe(
+        (games) => {
+          this.isLoading = false;
+          this.games = games;
+        },
+        (error) => {
+          Swal.fire(error.error.message);
+          this.isLoading = false;
+          this.router.navigate(['/tournament/' + this.tournamentName]);
+        }
+      );
+    }
+    this.isLoading = false;
+  }
 }
-
-
-
-}
-

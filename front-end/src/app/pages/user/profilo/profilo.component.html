@@ -1,0 +1,34 @@
+<div *ngIf="isLoading" class="overlay">
+  <div class="spinner" role="status">
+    <span class="app-spinner"></span>
+  </div>
+</div>
+
+<div class="container m-3 p-3">
+  <div class="row justify-content-center">
+    <div class="col-lg-10 col-md-10">
+      <div class="card mx-auto">
+        <div class="card-header">
+          <h2>Bentornato {{ user.username }}</h2>
+        </div>
+        <div class="card-body">
+          <h4>Ecco le tue credenziali:</h4>
+          <p>Potrai cliccare il pulsante modifica in basso per modificare le tue credenziali, anche la password!</p>
+
+          <div class="row">
+            <div class="col-md-6">
+              <p><strong>Nome:</strong> {{ user.name }}</p>
+              <p><strong>Data di Nascita:</strong> {{ user.dateOfBirth }}</p>
+              <p><strong>Username:</strong> {{ user.username }}</p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Cognome:</strong> {{ user.surname }}</p>
+              <p><strong>Email:</strong> {{ user.email }}</p>
+            </div>
+          </div>
+          <button class="btn btn-success" routerLink="/user/modifica/{{user.username}}">MODIFICA LE TUE CREDENZIALI</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

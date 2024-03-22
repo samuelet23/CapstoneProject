@@ -1,0 +1,32 @@
+<div *ngIf="isLoading" class="overlay">
+  <div class="spinner" role="status">
+    <span class="app-spinner"></span>
+  </div>
+</div>
+<div >
+  <div class="container">
+    <div class="row" *ngFor="let user of users">
+      <div class="col-md-6">
+        <div class="user-details" >
+          <h4>Dettagli Utente</h4>
+          <p><strong>Nome:</strong> {{ user.name }}</p>
+          <p><strong>Cognome:</strong> {{ user.surname }}</p>
+          <p><strong>Email:</strong> {{ user.email }}</p>
+          <p><strong>Username:</strong> {{ user.username }}</p>
+          <p><strong>Età:</strong> {{ user.age }}</p>
+          <p><strong>Ruolo</strong> {{ user.role }}</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="actions my-3 p-3">
+          <button class="btn btn-primary my-2" (click)="editUser(user)">Modifica {{user.name}}</button>
+          <button class="btn btn-danger my-2" (click)="deleteUser(user)">Elimina {{user.name}}</button>
+          <button class="btn btn-success my-2" (click)="makeUserManager(user)" *ngIf="user.role !== 'MANAGER'">{{user.name}} diventa Manager</button>
+          <button class="btn btn-warning my-2" (click)="makeUserCaptain(user)" *ngIf="user.role !== 'CAPTAIN'">{{user.name}} diventa Capitano</button>
+          <button class="btn btn-warning my-2" (click)="makeUserUser(user)" *ngIf="user.role !== 'USER'">{{user.name}} ritorna user</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

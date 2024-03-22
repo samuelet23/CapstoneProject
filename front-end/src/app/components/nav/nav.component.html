@@ -1,24 +1,56 @@
-
+<!--
 <nav class="navbar navbar-expand-lg bg-primary" [ngClass]="{'sticky': isSticky}">
+  <div class="container-fluid">
+
+    <button class="navbar-toggler"  type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"> </span>
+    </button>
+    <div class="collapse navbar-collapse"  id="navbarNav">
+      <ul class="navbar-nav">
+        <ul ngbNav [activeId]="route.fragment | async" class="nav-tabs">
+        <div class="links">
+
+      </ul>
+      </ul>
+    </div>
+  </div>
+</nav> -->
+
+
+<nav class="navbar  bg-primary" [ngClass]="{'sticky': isSticky}">
   <div class="container-fluid">
     <div class=" logo-container" routerLink="/">
       <img src="../../../assets/logo .png" routerLink="" alt="logo" class="logo">
     </div>
-    <button class="navbar-toggler" (click)="toggleNav()" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"> </span>
+    <button class="navbar-toggler" type="button" (click)="toggleNav()" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" [ngClass]="{show: active}" id="navbarNav">
-      <ul class="navbar-nav">
-        <ul ngbNav [activeId]="route.fragment | async" class="nav-tabs">
-        <div class="links">
-          @for (link of links; track link) {
-            <li [ngbNavItem]="link.fragment">
-              <a ngbNavLink [routerLink]="[link.fragment]">{{ link.title }}</a>
-            </li>
-          }
-        </div>
-      </ul>
-      </ul>
+    <div class="offcanvas offcanvas-end transizione"  [ngClass]="{show: active}" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">3vs3 Easy Tournament</h5>
+        <button type="button" class="btn-close" (click)="toggleNav()" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" routerLink="/">Cerca torneo in città diversa.</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="auth/login">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="auth/register">Registrazione</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="user/profilo/{{username}}">Il mio account</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="user/get/all">Tutti gli Utenti</a>
+          </li>
+        </ul>
+
+        <button class="btn btn-danger" (click)="logout()">LOGOUT</button>
+      </div>
     </div>
   </div>
 </nav>
