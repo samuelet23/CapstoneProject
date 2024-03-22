@@ -47,8 +47,8 @@ public class TournamentService {
     @Autowired
     private PlayerService playerSv;
 
-    public Page<Tournament> getAll(Pageable pageable) {
-        return tournamentRp.findAll(pageable);
+    public List<Tournament> getAll() {
+        return tournamentRp.findAll();
     }
 
     public Tournament getById(UUID id) throws BadRequestException {
@@ -378,11 +378,6 @@ public class TournamentService {
 
     }
 
-
-
-
-
-
     public List<Tournament> getByLevel(String level) throws BadRequestException {
         TournamentLevel tournamentLevel = null;
         try {
@@ -396,6 +391,15 @@ public class TournamentService {
         return tournamentRp.findByLevel(tournamentLevel);
     }
 
+    public List<Tournament> getAllFinishedTournament()  {
+        return tournamentRp.findAllByState(TournamentState.FINISHED);
+    }
+    public List<Tournament> getAllStartedTournament(){
+        return tournamentRp.findAllByState(TournamentState.STARTED);
+    }
+    public List<Tournament> getAllScheduledTournament(){
+        return tournamentRp.findAllByState(TournamentState.SCHEDULED);
+    }
 
     public List<Tournament> getByStartDateAfter(String startDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");

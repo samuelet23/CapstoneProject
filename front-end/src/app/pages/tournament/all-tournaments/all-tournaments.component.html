@@ -26,10 +26,14 @@
   <div class="tournament-cover">
     <img [src]="tournament.coverUrl || '../../../../assets/logo tournament.png'" alt="Cover del torneo">
   </div>
-  <button routerLink="/tournament/{{tournament.name}}/referee" class="btn btn-outline-success" *ngIf="!isStarted(tournament) && checkTheRefereeForTournament(tournament) === 'Aggiungi arbitro'">Aggiungi Arbitro/i</button>
-  <button routerLink="/tournament/{{tournament.name}}" class="btn btn-outline-success" *ngIf="!isStarted(tournament) && checkTheRefereeForTournament(tournament) === 'Inizia torneo'">INIZIA TORNEO</button>
-  <button routerLink="/tournament/{{tournament.name}}" class="btn btn-outline-success" *ngIf="isStarted(tournament)">Guarda l'andamento del torneo</button>
-  <button routerLink="/tournament/{{tournament.name}}" class="btn btn-outline-success" [disabled]="!isStarted" *ngIf="isStarted(tournament)">L'organizzatore non ha ancora avviato il torneo</button>
+  <!-- Manager Button -->
+  <button routerLink="/tournament/{{tournament.name}}/referee" class="btn btn-outline-success" *ngIf="!isStarted(tournament) && checkTheRefereeForTournament(tournament) === 'Aggiungi arbitro' && !isFinished">Aggiungi Arbitro/i</button>
+  <button routerLink="/tournament/{{tournament.name}}" class="btn btn-outline-success" *ngIf="!isStarted(tournament) && checkTheRefereeForTournament(tournament) === 'Inizia torneo' && !isFinished(tournament)"  >INIZIA TORNEO</button>
+
+  <!-- User Button -->
+  <button routerLink="/tournament/{{tournament.name}}" class="btn btn-outline-success" *ngIf="isStarted(tournament) && !isFinished(tournament)">Guarda l'andamento del torneo</button>
+  <button routerLink="/tournament/{{tournament.name}}" class="btn btn-outline-success" [disabled]="!isStarted(tournament)" *ngIf="!isStarted(tournament) && !isFinished(tournament)">L'organizzatore non ha ancora avviato il torneo</button>
+  <button routerLink="/tournament/{{tournament.name}}" class="btn btn-outline-success" *ngIf="isFinished(tournament)">Il torneo è finito, scopri chi ha vinto e chi è l'MVP</button>
 
 </div>
 

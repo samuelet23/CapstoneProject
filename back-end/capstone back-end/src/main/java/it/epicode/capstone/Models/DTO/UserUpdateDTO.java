@@ -6,16 +6,20 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record UserUpdateDTO(
-        @NotBlank(message = "The username field cannot be empty/null")
-        @Size(min = 5, message = "Username must be of 5 characters")
+        @NotBlank(message = "Il campo dell'username non può essere vuoto")
+        @Size(min = 5, message = "L'username deve essere di 5 caratteri")
         String username,
-        @Email(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Not Valid Email")
+        @Email(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Email non valida")
         String email,
-        @NotBlank(message = "The name field cannot be empty/null")
-        @Size(min = 3, message = "Name must be of 3 characters")
+        @NotBlank(message = "Il campo del nome non può essere vuoto")
+        @Size(min = 3, message = "Il nome deve essere di almeno 3 caratteri")
         String name,
-        @NotBlank(message = "The surname field cannot be empty/null")
-        @Size(min = 3,message = "Surname must be of 3 characters")
-        String surname
+        @NotBlank(message = "Il campo del cognome non può essere vuoto")
+        @Size(min = 3,message = "Il cognome deve essere di almeno 3 caratteri")
+        String surname,
+
+        @NotBlank(message = "Il campo della data di nascita non può essere vuoto")
+        @Size(min = 3,message = "La data di nascita deve essere di almeno 3 caratteri")
+        String dateOfBirth
 ) {
 }

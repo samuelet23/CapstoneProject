@@ -5,25 +5,31 @@
   align-items: center;
   background-color: #242222;
 
+  .navbar-toggler {
+    background-color: $primary;
+    border-color: $primary
+  }
 
+  .navbar-toggler:focus {
+    box-shadow: none;
+  }
+  .offcanvas-header .btn-close {
+    background-color: $primary;
+  }
 
-  .links {
-    display: flex;
-    margin: 0;
-    padding: 0;
+  .offcanvas-header .btn-close:focus {
+   box-shadow: none;
+  }
 
-    li {
-      margin-right: 10px;
-    }
-
-    a {
-      text-decoration: none;
-      color: white;
-      padding: 8px 12px;
-      background-color:  $primary;
-      border-radius: 5px;
-    }
-
+  .transizione{
+    transition: all 0.5s ;
+  }
+  .nav-link{
+    font-size: 15px;
+  }
+  .nav-link:hover{
+    text-decoration: underline;
+    color: $primary;
   }
 }
 

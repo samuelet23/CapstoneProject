@@ -88,7 +88,7 @@
             Partita</button>
         </div>
       </div>
-    <button class=" btn btn-primary mb-3" *ngIf="areFinishedAllGames(games)" [routerLink]="getRouterLink(games.length)">{{getRoundPhase(games.length)}}</button>
+    <button class=" btn btn-primary mb-3" *ngIf="areFinishedAllGames(games)" (click)="getRouterLink(games.length)">{{getRoundPhase(games.length)}}</button>
 
     </div>
   </div>
@@ -96,7 +96,7 @@
   <div *ngIf="isFinalFinished" class="winner-card my-3">
     <div *ngFor="let match of games">
 
-    <i class="bi bi-arrow-left-circle-fill pointer" routerLink="/tournament/{{tournamentName}}"></i>
+    <i class="bi bi-arrow-left-circle-fill pointer" routerLink="/"></i>
     <h2 class="text-center mb-4">Il vincitore del torneo è: {{ match.winner?.name }}</h2>
 
     <div class="text-center mb-4">
@@ -117,7 +117,7 @@
       <div *ngFor="let player of match.winner?.players" class="player-details mb-4">
         <h5>{{ player.name }}</h5>
         <p>All'età di {{ player.age }} anni, {{ player.name }} ha vinto il torneo {{ tournamentName }}. CONGRATULAZIONI!!</p>
-        <p>Caro {{ player.name }}, hai giocato un totale di {{ player.gamesPlayed }} partite segnando {{ player.point }} punti.</p>
+        <p>{{ player.name }}, hai giocato un totale di {{ player.gamesPlayed }} partite segnando {{ player.point }} punti.</p>
       </div>
     </div>
   </div>

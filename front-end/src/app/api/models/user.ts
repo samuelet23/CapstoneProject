@@ -2,14 +2,14 @@
 /* eslint-disable */
 import { GrantedAuthority } from '../models/granted-authority';
 export interface User {
-  age?: number;
+  age: number;
   authorities?: Array<GrantedAuthority>;
   createdAt?: string;
-  dateOfBirth?: string;
-  email?: string;
+  dateOfBirth: string;
+  email: string;
   id?: string;
-  name?: string;
+  name: string;
   role?: 'USER' | 'CAPTAIN' | 'MANAGER';
-  surname?: string;
-  username?: string;
+  surname: string;
+  username: string;
 }

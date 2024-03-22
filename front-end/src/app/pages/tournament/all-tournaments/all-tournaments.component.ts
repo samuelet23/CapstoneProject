@@ -25,7 +25,6 @@ ngOnInit(): void {
 
     this.tournamentSv.getAllTournamentFromProvinceName(this.provinceName.toLowerCase()).subscribe((tournaments)=>{
       this.isLoading = false
-      console.log(tournaments);
 
       if (tournaments.length > 0) {
         this.tournaments = tournaments
@@ -46,6 +45,9 @@ ngOnInit(): void {
 
 isStarted(tournament: Tournament): boolean {
   return tournament.state === "STARTED"
+}
+isFinished(tournament: Tournament): boolean {
+  return tournament.state === "FINISHED"
 }
 
 

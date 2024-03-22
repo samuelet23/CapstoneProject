@@ -36,8 +36,8 @@ public class UserService {
     @Autowired
     private MailService mailService;
 
-    public Page<User> getAll(Pageable pageable){
-        return userRp.findAll(pageable);
+    public List<User> getAll(){
+        return userRp.findAll();
     }
 
     public User getById(UUID id)throws BadRequestException{
@@ -52,7 +52,7 @@ public class UserService {
     }
 
     public User create (UserDTO user) throws BadRequestException, InternalServerErrorException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         User u = new User();
         u.setName(user.name());
         u.setSurname(user.surname());
@@ -86,9 +86,10 @@ public class UserService {
         User u = getById(id);
         updateUserInformation(u, user);
     }
-    public void updateByUsername(UserUpdateDTO user, String username) throws BadRequestException, InternalServerErrorException {
+    public User updateByUsername(UserUpdateDTO user, String username) throws BadRequestException, InternalServerErrorException {
         User u = getByUsername(username);
         updateUserInformation(u, user);
+        return u;
     }
 
     public void updatePasswordByUsername(UpdatePasswordDTO updatePasswordDTO, String username) throws UnauthorizedException, BadRequestException, InternalServerErrorException {
@@ -158,11 +159,13 @@ public class UserService {
 
 
     private void updateUserInformation(User u, UserUpdateDTO user) throws BadRequestException, InternalServerErrorException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         u.setName(user.name());
         u.setSurname(user.surname());
         u.setEmail(user.email());
         u.setUsername(user.username());
+        u.setDateOfBirth(LocalDate.parse(user.dateOfBirth(), formatter));
         userRp.save(u);
         emailManagement(u);
     }

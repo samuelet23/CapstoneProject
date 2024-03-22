@@ -7,13 +7,15 @@ import { SharedModule } from '../../shared/shared.module';
 import { ClassificaComponent } from './classifica/classifica.component';
 import { CreateComponent } from './create/create.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FilterComponent } from './filter/filter.component';
 
 
 @NgModule({
   declarations: [
     TournamentComponent,
     ClassificaComponent,
-    CreateComponent
+    CreateComponent,
+    FilterComponent
   ],
   imports: [
     CommonModule,
