@@ -22,7 +22,7 @@ const routes: Routes = [
 
   { path: 'team', loadChildren: () => import('./pages/team/team.module').then(m => m.TeamModule) },
 
-  { path: 'user', loadChildren: () => import('./pages/user/user.module').then(m => m.UserModule) },
+  { path: 'user/:id', loadChildren: () => import('./pages/user/user.module').then(m => m.UserModule) },
 
     { path: '**', loadChildren: () => import('./pages/not-found/not-found.module').then(m => m.NotFoundModule) }];
 

@@ -47,6 +47,9 @@ ngOnInit(): void {
 isStarted(tournament: Tournament): boolean {
   return tournament.state === "STARTED"
 }
+isFinished(tournament: Tournament): boolean {
+  return tournament.state === "FINISHED"
+}
 
 
 checkTheRefereeForTournament(tournament: Tournament): string {
