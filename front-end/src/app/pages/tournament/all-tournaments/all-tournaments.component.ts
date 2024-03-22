@@ -108,7 +108,6 @@ filterTournaments() {
   this.isLoading = true;
 
   if (this.tournamentName) {
-    console.log("Filtering by tournament name:", this.tournamentName);
     this.filterSv.filterByName(this.tournamentName)
       .pipe(
         map((tournament: Tournament) => [tournament])
@@ -116,36 +115,64 @@ filterTournaments() {
       .subscribe((res) => {
         this.isLoading = false;
         this.tournaments = res;
+      },
+      (error) =>{
+        Swal.fire(error.error.message)
+        this.isLoading = false;
       });
   } else if (this.startDate) {
     this.filterSv.filterByStarterDate(this.startDate).subscribe((tournaments) => {
       this.tournaments = tournaments;
       this.isLoading = false;
+    },
+    (error) =>{
+      this.isLoading = false;
+      Swal.fire(error.error.message)
     });
   } else if (this.tournamentState === 'FINISHED') {
     this.filterSv.filterByFinishedTournament().subscribe((res) => {
       this.tournaments = res;
       this.isLoading = false;
+    },
+    (error) =>{
+      this.isLoading = false;
+      Swal.fire(error.error.message)
     });
   } else if (this.tournamentState === 'STARTED') {
     this.filterSv.filterByStartedTournament().subscribe((res) => {
       this.tournaments = res;
       this.isLoading = false;
+    },
+    (error) =>{
+      this.isLoading = false;
+      Swal.fire(error.error.message)
     });
   } else if (this.tournamentState === 'SCHEDULED') {
     this.filterSv.filterByScheduledTournament().subscribe((res) => {
       this.tournaments = res;
       this.isLoading = false;
+    },
+    (error) =>{
+      this.isLoading = false;
+      Swal.fire(error.error.message)
     });
   } else if (this.tournamentLevel) {
     this.filterSv.filterByTournamentLevel(this.tournamentLevel).subscribe((res) => {
       this.tournaments = res;
       this.isLoading = false;
+    },
+    (error) =>{
+      this.isLoading = false;
+      Swal.fire(error.error.message)
     });
   } else if (this.cityName) {
     this.tournamentSv.getAllTournamentFromProvinceName(this.cityName.toLowerCase()).subscribe((res) => {
       this.tournaments = res;
       this.isLoading = false;
+    },
+    (error) =>{
+      this.isLoading = false;
+      Swal.fire(error.error.message)
     });
   }
 }

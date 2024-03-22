@@ -12,17 +12,20 @@ export class NavComponent {
 
   active: boolean = false;
   isSticky: boolean = false;
-  isLoggedIn: boolean = false;
+  isLoggedIn!: boolean ;
   username: string = '';
 
   constructor() {}
 
   ngOnInit() {
-    const userData = localStorage.getItem('utente');
 
+    this.authSv.isLoggedIn$.subscribe(loggedIn =>{
+      this.isLoggedIn = loggedIn;
+    })
+
+    const userData = localStorage.getItem('utente');
     if (userData) {
       const user = JSON.parse(userData);
-
       this.username = user.username;
     }
   }

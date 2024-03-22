@@ -41,8 +41,8 @@ export class LoginComponent implements OnInit{
           const token = res.accessToken;
           if (token) {
             localStorage.setItem('token', token);
-            this.router.navigate(['/']);
-
+            this.isLoading = false
+            this.router.navigate(['/'])
           }else{
             Swal.fire('Errore interno, ripova')
             this.isLoading = false

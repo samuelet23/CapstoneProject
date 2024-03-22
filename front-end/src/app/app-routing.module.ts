@@ -5,24 +5,38 @@ import { AuthGuard } from './pages/auth/auth.guard';
 const routes: Routes = [
 
   { path: 'auth', loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthModule) },
-  { path: '', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule),},
 
   {
-    path: 'tournament', // da aggiungere :id ,  potrebbe essere cambiato con il name
+    path: '',
+    loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule),
+    canActivate:[AuthGuard]
+  },
+
+  {
+    path: 'tournament',
     loadChildren: () => import('./pages/tournament/tournament.module').then(m => m.TournamentModule),
-    // canActivate:[AuthGuard]
+    canActivate:[AuthGuard]
   },
 
   {
     path: 'game/:id',
     loadChildren: () => import('./pages/game/game.module').then(m => m.GameModule),
-    // canActivate:[AuthGuard]
+    canActivate:[AuthGuard]
   },
 
 
-  { path: 'team', loadChildren: () => import('./pages/team/team.module').then(m => m.TeamModule) },
+  {
+  path: 'team',
+  loadChildren: () => import('./pages/team/team.module').then(m => m.TeamModule),
+  canActivate:[AuthGuard]
+},
 
-  { path: 'user', loadChildren: () => import('./pages/user/user.module').then(m => m.UserModule) },
+  {
+    path: 'user',
+    loadChildren: () => import('./pages/user/user.module').then(m => m.UserModule),
+    canActivate:[AuthGuard]
+
+  },
 
     { path: '**', loadChildren: () => import('./pages/not-found/not-found.module').then(m => m.NotFoundModule) }];
 

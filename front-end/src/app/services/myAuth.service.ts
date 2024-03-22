@@ -48,7 +48,7 @@ export class myAuthService {
   }
 
   isLoggedIn(): boolean {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('string token');
     return !this.jwtHelper.isTokenExpired(token);
   }
 
@@ -57,40 +57,28 @@ export class myAuthService {
   }
 
 
-  getUserDetails(): Observable<User> {
-    const token = localStorage.getItem('token');
-
-    if (token) {
-      const username = this.jwtHelper.decodeToken(token)?.sub;
-      if (username) {
-        console.log("sta mandando il metodo");
-
-        this.http.get<User>(`${this.url}/open/user/get/byUsername/${username}`)
-      }
-    } else {
-      throw new Error('Token non trovato');
-    }
-    return throwError("Impossibile ottenere i dettagli dell'utente.");
-  }
 
   restore() {
-    const userLs = localStorage.getItem('user');
+    const userLs = localStorage.getItem('utente');
 
     if (userLs) {
       const userData: AccessTokenRes = JSON.parse(userLs);
       const tokenExpired = this.jwtHelper.isTokenExpired(userData.accessToken);
 
       if (tokenExpired) {
-        this.isLoggedInSubject.next(true);
+        this.isLoggedInSubject.next(false);
         this.authSubject.next(userData);
         this.autologout(userData);
+      } else{
+        this.isLoggedInSubject.next(true);
       }
     }
   }
 
   logout() {
-    localStorage.removeItem('user');
+    localStorage.removeItem('utente');
     localStorage.removeItem('token');
+    localStorage.removeItem('string token');
     this.router.navigate(['/']);
     this.authSubject.next(null);
     this.isLoggedInSubject.next(false);

@@ -25,7 +25,8 @@ export class UserComponent {
     email: '',
     name: '',
     surname: '',
-    username: ''
+    username: '',
+    role: 'USER'
   }
 
   ngOnInit(): void {
