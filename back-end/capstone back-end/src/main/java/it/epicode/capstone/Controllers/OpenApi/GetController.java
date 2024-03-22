@@ -322,8 +322,8 @@ public class GetController {
             description = "Retrieve all tournaments with pagination support.",
             summary = "Get all tournaments"
     )
-    public Page<Tournament> getAllTournament(Pageable pageable){
-        return tournamentSv.getAll(pageable);
+    public List<Tournament> getAllTournament(){
+        return tournamentSv.getAll();
     }
 
     @GetMapping("/tournament/get/all/place-id")
@@ -362,12 +362,39 @@ public class GetController {
         return placeSv.findTournamentsByKeywordInRegion(region, pageable);
     }
 
-    @GetMapping("/tournament/get/all/tournament-level")
+    @GetMapping("/tournament/get/all/finished")
+    @Operation(
+            description = "Retrieve all finished tournaments.",
+            summary = "Get all finished tournaments"
+    )
+    public List<Tournament> getAllFinishedTournament() {
+        return tournamentSv.getAllFinishedTournament();
+    }
+
+    @GetMapping("/tournament/get/all/started")
+    @Operation(
+            description = "Retrieve all started tournaments.",
+            summary = "Get all started tournaments"
+    )
+    public List<Tournament> getAllStartedTournament() {
+        return tournamentSv.getAllStartedTournament();
+    }
+
+    @GetMapping("/tournament/get/all/scheduled")
+    @Operation(
+            description = "Retrieve all scheduled tournaments.",
+            summary = "Get all scheduled tournaments"
+    )
+    public List<Tournament> getAllScheduledTournament() {
+        return tournamentSv.getAllScheduledTournament();
+    }
+
+    @GetMapping("/tournament/get/all/{tournament-level}")
     @Operation(
             description = "Retrieve tournaments by their level.",
             summary = "Get tournaments by level"
     )
-    public List<Tournament> getAllTournamentByLevel(@RequestParam("tournament-level") String level) throws BadRequestException {
+    public List<Tournament> getAllTournamentByLevel(@PathVariable("tournament-level") String level) throws BadRequestException {
         return tournamentSv.getByLevel(level);
     }
 
@@ -380,12 +407,12 @@ public class GetController {
         return tournamentSv.getByStartDateAfter(startDate);
     }
 
-    @GetMapping("/tournament/get/all/after-starter-date/town-name")
+    @GetMapping("/tournament/get/all/{town-name}/after-starter-date")
     @Operation(
             description = "Retrieve tournaments starting after a specific date in a given town.",
             summary = "Get tournaments starting after a given date in a specific town"
     )
-    public List<Tournament> getAllTournamentAfterStarDateAndTown(@RequestParam("town-name") String townName, @RequestParam("after-starter-date")String startDate) throws BadRequestException {
+    public List<Tournament> getAllTournamentAfterStarDateAndTown(@PathVariable("town-name") String townName, @RequestParam("after-starter-date")String startDate) throws BadRequestException {
         return tournamentSv.findByPlaceAndStartDateAfter(townName,startDate);
     }
     @GetMapping("/tournament/get/byId/{id}")
@@ -412,8 +439,8 @@ public class GetController {
             description = "Retrieve all users with pagination support.",
             summary = "Get all users"
     )
-    public Page<User> getAll(Pageable pageable){
-        return userSv.getAll(pageable);
+    public List<User> getAll(){
+        return userSv.getAll();
     }
 
     @GetMapping("/user/get/byId/{id}")

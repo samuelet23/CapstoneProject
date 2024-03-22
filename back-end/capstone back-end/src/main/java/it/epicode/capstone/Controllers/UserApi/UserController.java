@@ -34,7 +34,6 @@ import java.util.UUID;
 @RequestMapping("/api/user")
 @Tag(name = "USER")
 @SecurityRequirement(name = "Easy3vs3Auth")
-@PreAuthorize("hasAuthority('MANAGER')")
 public class UserController {
 
     @Autowired
@@ -47,6 +46,7 @@ public class UserController {
             description = "Create a new user.",
             summary = "Create user"
     )
+    @PreAuthorize("hasAuthority('MANAGER')")
     public User createUser(@RequestBody @Validated UserDTO userDTO, BindingResult bindingResult) throws BadRequestException, InternalServerErrorException {
         HandlerException.internalServerErrorException(bindingResult);
         HandlerException.badRequestException(bindingResult);
@@ -58,12 +58,13 @@ public class UserController {
             description = "Update a user by their unique identifier.",
             summary = "Update user by ID"
     )
+    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updateUserById(@PathVariable UUID id,@RequestBody @Validated UserUpdateDTO userDTO, BindingResult bindingResult) throws BadRequestException, InternalServerErrorException, UnauthorizedException {
         HandlerException.internalServerErrorException(bindingResult);
         HandlerException.badRequestException(bindingResult);
         userSv.updateById(userDTO, id);
         return new ConfirmRes(
-                "User with id: "+id+ " has been updated successfully.",
+                "User: "+id+ " è stato modificato con successo.",
                 HttpStatus.CREATED
         );
     }
@@ -73,14 +74,12 @@ public class UserController {
             description = "Update a user by their username.",
             summary = "Update user by username"
     )
-    public ConfirmRes updateUserByUsername(@PathVariable String username,@RequestBody @Validated UserUpdateDTO userDTO, BindingResult bindingResult) throws BadRequestException, InternalServerErrorException, UnauthorizedException {
+    @PreAuthorize("hasAuthority('MANAGER')")
+    public User updateUserByUsername(@PathVariable String username,@RequestBody @Validated UserUpdateDTO userDTO, BindingResult bindingResult) throws BadRequestException, InternalServerErrorException, UnauthorizedException {
         HandlerException.internalServerErrorException(bindingResult);
         HandlerException.badRequestException(bindingResult);
-        userSv.updateByUsername(userDTO, username);
-        return new ConfirmRes(
-                "User with username: "+username+ " has been updated successfully.",
-                HttpStatus.CREATED
-        );
+       return userSv.updateByUsername(userDTO, username);
+
     }
 
     @PatchMapping("/update/password/{username}")
@@ -88,13 +87,14 @@ public class UserController {
             description = "Update a user's password by their username.",
             summary = "Update user's password by username"
     )
+    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updatePasswordByUsername(@RequestBody @Validated UpdatePasswordDTO updatePasswordDTO,@PathVariable String username, BindingResult bindingResult) throws BadRequestException, InternalServerErrorException, UnauthorizedException {
         HandlerException.internalServerErrorException(bindingResult);
         HandlerException.unathorizedException(bindingResult);
         HandlerException.badRequestException(bindingResult);
         userSv.updatePasswordByUsername(updatePasswordDTO, username);
         return new ConfirmRes(
-                "Password for user with username: "+username+ " has been updated successfully.",
+                "Password per utente: "+username+ " è stata modificata con successo",
                 HttpStatus.CREATED
         );
     }
@@ -104,6 +104,7 @@ public class UserController {
             description = "Update a user's username by their unique identifier.",
             summary = "Update user's username by ID"
     )
+    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updateUsername(@PathVariable UUID id,@RequestBody String username, BindingResult bindingResult) throws BadRequestException, UnauthorizedException {
         HandlerException.badRequestException(bindingResult);
         if (username.isEmpty()) {
@@ -113,7 +114,7 @@ public class UserController {
         }
         userSv.updateUsername(id, username);
         return new ConfirmRes(
-                "Username "+username+" has been updated successfully",
+                "Username "+username+" è stato modificato con successo ",
                 HttpStatus.CREATED
         );
     }
@@ -123,13 +124,13 @@ public class UserController {
             description = "Update a user's role to manager by their username.",
             summary = "Update user's role to manager by username"
     )
-    @PreAuthorize("hasAnyAuthority('USER','MANAGER','CAPTAIN')")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public UpdateRoleRes updateRoleToManager(@PathVariable String username)throws BadRequestException{
        Role role =  userSv.updateRoleManagerByUsername(username);
         return new UpdateRoleRes(
-                "Username Role"+username+" has been updated successfully to Captain",
+                "Il ruolo di "+username+" è stato modificato con successo a Organizzatore",
                 HttpStatus.CREATED,
-                "The role now is "+ role
+                "Il ruolo ora è "+ role
         );
     }
 
@@ -138,13 +139,13 @@ public class UserController {
             description = "Update a user's role to captain by their username.",
             summary = "Update user's role to captain by username"
     )
-    @PreAuthorize("hasAnyAuthority('USER','CAPTAIN')")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public UpdateRoleRes updateRoleToCaptain(@PathVariable String username)throws BadRequestException{
         Role role = userSv.updateRoleCaptainByUsername(username);
         return new UpdateRoleRes(
-                "Username Role"+username+" has been updated successfully to Captain",
+                "Il ruolo di "+username+" è stato modificato con successo a Capitano",
                 HttpStatus.CREATED,
-                "The role now is "+ role
+                "Il ruolo ora è "+ role
         );
     }
     @PatchMapping("/update/{username}/user")
@@ -152,12 +153,13 @@ public class UserController {
             description = "Update a user's role to user by their username.",
             summary = "Update user's role to user by username"
     )
+    @PreAuthorize("hasAuthority('MANAGER')")
     public UpdateRoleRes updateRoleToUser(@PathVariable String username)throws BadRequestException{
         Role role = userSv.updateRoleUserByUsername(username);
         return new UpdateRoleRes(
-                "Username Role"+username+" has been updated successfully to User",
+                "Il ruolo di"+username+" è stato modificato con successo a User",
                 HttpStatus.CREATED,
-                "The role now is "+ role
+                "Il ruolo adesso è "+ role
         );
     }
 
@@ -166,10 +168,11 @@ public class UserController {
             description = "Delete a user by their unique identifier.",
             summary = "Delete user by ID"
     )
+    @PreAuthorize("hasAuthority('MANAGER')")
     public DeleteRes deleteById(@PathVariable UUID id)throws BadRequestException{
         userSv.deleteById(id);
         return new DeleteRes(
-                "User with id: "+id+" has been deleted successfully"
+                "User: "+id+" è stato eliminato correttamente"
         );
     }
 
@@ -178,10 +181,11 @@ public class UserController {
             description = "Delete a user by their username.",
             summary = "Delete user by username"
     )
+    @PreAuthorize("hasAuthority('MANAGER')")
     public DeleteRes deleteByUsername(@PathVariable String username)throws BadRequestException{
         userSv.deleteByUsername(username);
         return new DeleteRes(
-                "User with username: "+username+" has been deleted successfully"
+                "User: "+username+" è stato eliminato correttamente"
         );
     }
 
@@ -191,7 +195,7 @@ public class UserController {
         String authenticatedUsername = authentication.getName();
 
         if (!authenticatedUsername.equals(targetUsername) && !authentication.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ADMIN"))) {
-            throw new UnauthorizedException("You are not authorized to perform this action");
+            throw new UnauthorizedException("Non sei autorizzato!");
         }
     }
 }
