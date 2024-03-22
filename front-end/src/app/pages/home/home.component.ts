@@ -10,27 +10,23 @@ import { RefereesService } from '../../services/referees.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
-  private placeSv = inject(PlaceService)
-  private router = inject(Router)
-  private auth = inject(myAuthService)
-  private refereeSv = inject(RefereesService)
+  private placeSv = inject(PlaceService);
+  private router = inject(Router);
   searchTerm: string = '';
-provinces: Province[] = []
-  isLoading: boolean = false
+  provinces: Province[] = [];
+  isLoading: boolean = false;
 
-    constructor(){}
-  ngOnInit(): void {
-  }
-
+  constructor() {}
+  ngOnInit(): void {}
 
   onSearch() {
     if (this.searchTerm.trim() !== '') {
       this.placeSv.getProvinceByName(this.searchTerm).subscribe(
         (towns: Province[]) => {
-          this.provinces = towns
+          this.provinces = towns;
         },
         (error) => {
           console.error(error);
@@ -40,32 +36,7 @@ provinces: Province[] = []
     }
   }
 
-
-  createTournament(){
-
-          this.router.navigate(["/tournament/create"])
-
-    // this.auth.isLoggedIn$.subscribe((isLoggedIn) => {
-    //   console.log(isLoggedIn);
-
-    // })
+  createTournament() {
+    this.router.navigate(['/tournament/create']);
   }
-
-  // private isCaptainOrManagaer(): boolean {
-  //   const userString = localStorage.getItem('utente');
-  //   if (userString !== null) {
-  //     const user = JSON.parse(userString);
-  //     if (user.role === 'MANAGER' || user.role === 'CAPTAIN') {
-  //       return this.isCaptainOrManager = true;
-  //     } else {
-  //       return this.isCaptainOrManager = false;
-  //     }
-  //   } else {
-  //     Swal.fire('Utente non loggato');
-  //     return false;
-  //   }
-  // }
-
-
-  }
-
+}

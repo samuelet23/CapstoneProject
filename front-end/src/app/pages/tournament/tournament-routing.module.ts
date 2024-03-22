@@ -24,7 +24,7 @@ const routes: Routes = [
     component: ClassificaComponent
    },
   {
-    path:'province/:provinceName',
+    path:'get/all',
     component: AllTournamentsComponent
   }
   ];
