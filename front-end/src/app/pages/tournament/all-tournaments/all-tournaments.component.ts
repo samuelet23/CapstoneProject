@@ -3,6 +3,8 @@ import { TournamentService } from '../../../services/tournament.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Tournament } from '../../../api/models';
 import Swal from 'sweetalert2';
+import { FilterService } from '../../../services/filter.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-all-tournaments',
@@ -10,9 +12,11 @@ import Swal from 'sweetalert2';
   styleUrl: './all-tournaments.component.scss'
 })
 export class AllTournamentsComponent implements OnInit {
-private tournamentSv = inject(TournamentService)
+  private tournamentSv = inject(TournamentService)
 private route  = inject(ActivatedRoute)
 private router  = inject(Router)
+private filterSv = inject(FilterService);
+
 isLoading: boolean = false
 isWithReferee:boolean = true
 provinceName: string | null = this.route.snapshot.paramMap.get('provinceName');
@@ -77,6 +81,43 @@ checkTheRefereeForTournament(tournament: Tournament): string {
 }
 
 
+tournamentName: string = '';
+startDate: string = '';
+tournamentState: string = '';
+tournamentLevel: string = '';
 
+
+
+filterTournaments() {
+
+  if (this.tournamentName) {
+    this.filterSv.filterByName(this.tournamentName)
+      .pipe(
+        map((tournament: Tournament) => [tournament])
+      ).subscribe((res)=>{
+        this.tournaments = res;
+      });
+  } else if (this.startDate) {
+    this.filterSv.filterByStarterDate(this.startDate).subscribe((tournaments) =>{
+        this.tournaments = tournaments
+    })
+  } else if (this.tournamentState === 'FINISHED') {
+    this.filterSv.filterByFinishedTournament().subscribe((res=>{
+      this.tournaments = res
+    }))
+  } else if (this.tournamentState === 'STARTED') {
+    this.filterSv.filterByStartedTournament().subscribe((res=>{
+      this.tournaments = res
+    }))
+  } else if (this.tournamentState === 'SCHEDULED') {
+    this.filterSv.filterByScheduledTournament().subscribe((res=>{
+      this.tournaments = res
+    }))
+  } else if (this.tournamentLevel) {
+    this.filterSv.filterByTournamentLevel(this.tournamentLevel).subscribe((res=>{
+      this.tournaments = res
+    }))
+  }
+}
 
 }

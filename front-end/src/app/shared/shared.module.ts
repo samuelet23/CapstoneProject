@@ -19,7 +19,6 @@ import { RefereesComponent } from '../components/referees/referees.component';
     RegisterPageComponent,
     FooterComponent,
     SpinnerComponent,
-    AllTournamentsComponent,
     RefereesComponent,
   ],
   imports: [
@@ -36,7 +35,6 @@ import { RefereesComponent } from '../components/referees/referees.component';
     RegisterPageComponent,
     FooterComponent,
     SpinnerComponent,
-    AllTournamentsComponent,
     RefereesComponent,
   ]
 })
