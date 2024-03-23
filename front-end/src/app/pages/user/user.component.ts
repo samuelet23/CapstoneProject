@@ -19,6 +19,7 @@ export class UserComponent {
   username: string | null = this.route.snapshot.paramMap.get('username');
   isLoading:boolean = false
   userForm!: FormGroup;
+  urlImg:string  = ''
   user:User = {
     age: 0,
     dateOfBirth: '',
@@ -93,5 +94,29 @@ checkDateAndFormat(dateOfBirth: string): string {
   }
   return formatDate(dateOfBirthDate, 'dd-MM-yyyy', 'en-US');
 }
+
+onFileSelected(event: any) {
+  const file: File = event.target.files[0];
+
+  this.isLoading = true;
+
+  if (this.username) {
+
+    this.userSv.uploadLogoProfile(this.username, file).subscribe(
+      response => {
+        console.log(response);
+
+        this.urlImg = response.url;
+        this.isLoading = false;
+      },
+      (error) => {
+        Swal.fire("Errore nel caricamento dell'immagine. Prova con un immagine con dimensioni inferiori");
+        this.isLoading = false;
+      }
+      );
+    }
+
+}
+
 
 }

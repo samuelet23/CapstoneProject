@@ -23,6 +23,9 @@ public record UserDTO (
         @Email(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Email non valida")
         String email,
         String role,
+
+        String url,
+
         @NotBlank(message = "Il campo password non può essere vuoto/null")
         @Size(min = 7, message = "La password deve essere di almeno 7 caratteri")
         String password,

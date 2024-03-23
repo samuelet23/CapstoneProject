@@ -19,6 +19,9 @@ export class myAuthService {
   userProfile!: UserToken;
   userLogged!: AccessTokenRes;
 
+  private roleSubject = new BehaviorSubject<string>('');
+  role$ = this.roleSubject.asObservable();
+
   private authSubject = new BehaviorSubject<null | AccessTokenRes>(null);
   user$ = this.authSubject.asObservable();
 
@@ -40,12 +43,29 @@ export class myAuthService {
           this.userLogged = data
           localStorage.setItem('string token', JSON.stringify(data.accessToken));
           localStorage.setItem('utente', JSON.stringify(data));
+          // localStorage.setItem('role',(data.user.role));
           this.autologout(data);
           this.userProfile = data.user;
+          console.log(data);
+
       })
 
     );
   }
+
+  getUserDetails(): Observable<User> {
+    const token = localStorage.getItem('string token');
+
+    if (token) {
+      const username = this.jwtHelper.decodeToken(token)?.sub;
+      if (username) {
+        return this.getUserByUsername(username);
+      }
+    }
+
+    return throwError("Impossibile ottenere i dettagli dell'utente.");
+  }
+
 
   isLoggedIn(): boolean {
     const token = localStorage.getItem('string token');
@@ -79,7 +99,7 @@ export class myAuthService {
     localStorage.removeItem('utente');
     localStorage.removeItem('token');
     localStorage.removeItem('string token');
-    this.router.navigate(['/']);
+    this.router.navigate(['/auth/login']);
     this.authSubject.next(null);
     this.isLoggedInSubject.next(false);
 
@@ -104,8 +124,10 @@ export class myAuthService {
   }
 
 
-  private getUserByUsername(username: string) {
-    return this.http.get(`${this.url}/user/get/byUsername/${username}`);
+
+
+  protected getUserByUsername(username: string):Observable<User> {
+    return this.http.get<User>(`${this.url}/user/get/byUsername/${username}`);
   }
 
 }

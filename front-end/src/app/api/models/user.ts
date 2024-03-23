@@ -8,6 +8,7 @@ export interface User {
   dateOfBirth: string;
   email: string;
   id?: string;
+  logoProfile?:string;
   name: string;
   role: 'USER' | 'CAPTAIN' | 'MANAGER';
   surname: string;

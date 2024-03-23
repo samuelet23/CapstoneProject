@@ -1,5 +1,6 @@
 package it.epicode.capstone.Controllers.OpenApi;
 
+import com.cloudinary.Cloudinary;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Exceptions.BadRequestException;
@@ -9,13 +10,17 @@ import it.epicode.capstone.Models.Entities.SuperClass.Competition;
 import it.epicode.capstone.Models.Entities.Game;
 import it.epicode.capstone.Models.ResponsesDTO.ConfirmPlayerPoints;
 import it.epicode.capstone.Models.ResponsesDTO.PlayerPointRes;
+import it.epicode.capstone.Models.ResponsesDTO.UploadConfirm;
 import it.epicode.capstone.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,6 +42,22 @@ public class GetController {
     private PlayerService playerSv;
     @Autowired
     private TournamentService tournamentSv;
+    @Autowired
+    private Cloudinary cloudinary;
+
+    @PatchMapping("/upload/logo-profile/{username}")
+    @Operation(
+            description = "Upload a user profile image.",
+            summary = "Upload user's profile img"
+    )
+    public UploadConfirm UploadProfileImg(@RequestParam("file") MultipartFile file, @PathVariable("username") String username) throws IOException, BadRequestException {
+        String url = (String) cloudinary.uploader().upload(file.getBytes(), new HashMap<>()).get("url");
+        userSv.uploadProfileImg(url, username);
+        return new UploadConfirm(
+                "Logo for " + username + " uploaded successfully.",
+                url
+        );
+    }
 
 //   ***************** GAME CONTROLLER *************************
     @GetMapping("/game/get/all")

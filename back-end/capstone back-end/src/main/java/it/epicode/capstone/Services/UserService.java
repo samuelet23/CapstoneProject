@@ -60,6 +60,7 @@ public class UserService {
         u.setUsername(user.username());
         u.setAge(calculateAge(u.getDateOfBirth()));
         u.setEmail(user.email());
+        u.setLogoProfile(user.url());
         u.setRole(Role.USER);
         u.setPassword(encoder.encode(user.password()));
         u.setConfirmPassword(encoder.encode(user.confirmPassword()));
@@ -145,6 +146,13 @@ public class UserService {
          userRp.save(u);
         return u.getRole();
     }
+
+    public void uploadProfileImg(String url, String username)throws BadRequestException{
+        User u = getByUsername(username);
+        u.setLogoProfile(url);
+        userRp.save(u);
+    }
+
     public void deleteById(UUID id) throws BadRequestException {
         User u = getById(id);
         userRp.delete(u);

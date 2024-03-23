@@ -1,8 +1,9 @@
 
 <nav class="navbar  bg-primary" [ngClass]="{'sticky': isSticky}">
   <div class="container-fluid">
-    <div class=" logo-container pointer" routerLink="/">
-      <img src="../../../assets/logo .png" routerLink="" alt="logo" class="logo">
+    <div class=" logo-container pointer" routerLink="/" >
+      <img src="../../../assets/logo .png" routerLink="/" alt="logo" class="logo" *ngIf="!isLoggedIn">
+      <img [src]="user.logoProfile || '../../../assets/logo profile.png'" routerLink="/" alt="" class="logo" *ngIf="isLoggedIn">
     </div>
     <button class="navbar-toggler" type="button" (click)="toggleNav()" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -15,23 +16,23 @@
       <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" routerLink="/">Cerca torneo in città diversa.</a>
+            <a class="nav-link active" aria-current="page" routerLink="/"  (click)="toggleNav()">Cerca torneo in città diversa.</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="auth/login" *ngIf="!isLoggedIn">Login</a>
+            <a class="nav-link" routerLink="auth/login" *ngIf="!isLoggedIn" (click)="toggleNav()">Login</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="auth/register" *ngIf="!isLoggedIn">Registrazione</a>
+            <a class="nav-link" routerLink="auth/register" *ngIf="!isLoggedIn" (click)="toggleNav()">Registrazione</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="user/profilo/{{username}}" *ngIf="isLoggedIn">Il mio account</a>
+            <a class="nav-link" routerLink="user/profilo/{{username}}" *ngIf="isLoggedIn" (click)="toggleNav()">Il mio account</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="user/get/all" *ngIf="isLoggedIn">Tutti gli Utenti</a>
+            <a class="nav-link" routerLink="user/get/all" *ngIf="isLoggedIn" (click)="toggleNav()">Tutti gli Utenti</a>
           </li>
         </ul>
 
-        <button class="btn btn-danger" (click)="logout()" *ngIf="isLoggedIn">LOGOUT</button>
+        <button class="btn btn-danger" (click)="logout()" *ngIf="isLoggedIn" >LOGOUT</button>
       </div>
     </div>
   </div>

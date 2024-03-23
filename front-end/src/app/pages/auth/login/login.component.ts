@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Login$Params } from '../../../api/fn/auth/login';
 import { AccessTokenRes, LoginDto, User } from '../../../api/models';
 import { AuthService } from '../../../api/services';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { myAuthService } from '../../../services/myAuth.service';
 import { Router } from '@angular/router';
+import { RoleService } from '../../../services/role.service';
 
 @Component({
   selector: 'app-login',
@@ -15,11 +16,16 @@ import { Router } from '@angular/router';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit{
+  private fb = inject(FormBuilder)
+  private auth = inject(myAuthService)
+  private router = inject(Router)
+  private roleSv = inject(RoleService)
   isLoading:boolean =false;
   form!:FormGroup;
+  userRole$ = new BehaviorSubject<string>('');
 
 
-  constructor(private fb: FormBuilder, private  auth: myAuthService, private router: Router){}
+  constructor(){}
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -42,7 +48,16 @@ export class LoginComponent implements OnInit{
           if (token) {
             localStorage.setItem('token', token);
             this.isLoading = false
-            this.router.navigate(['/'])
+
+            Swal.fire({
+              title: 'Confermato',
+              text: "Login avvenuto con successo",
+              icon: 'success',
+            }).then(() =>{
+              this.router.navigate(['/'])
+              this.isLoading = false;
+            })
+            this.isLoading = false;
           }else{
             Swal.fire('Errore interno, ripova')
             this.isLoading = false
@@ -50,7 +65,7 @@ export class LoginComponent implements OnInit{
         },
         (error) => {
 
-          Swal.fire(error.error.message)
+          Swal.fire("Errore nel carimento del server")
           this.isLoading = false;
         })
 

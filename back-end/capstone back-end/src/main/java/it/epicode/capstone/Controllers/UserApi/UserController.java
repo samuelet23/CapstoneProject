@@ -1,5 +1,6 @@
 package it.epicode.capstone.Controllers.UserApi;
 
+import com.cloudinary.Cloudinary;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,11 +11,13 @@ import it.epicode.capstone.Exceptions.UnauthorizedException;
 import it.epicode.capstone.Models.DTO.UpdatePasswordDTO;
 import it.epicode.capstone.Models.DTO.UserDTO;
 import it.epicode.capstone.Models.DTO.UserUpdateDTO;
+import it.epicode.capstone.Models.Entities.Team;
 import it.epicode.capstone.Models.Entities.User;
 import it.epicode.capstone.Models.Enums.Role;
 import it.epicode.capstone.Models.ResponsesDTO.ConfirmRes;
 import it.epicode.capstone.Models.ResponsesDTO.DeleteRes;
 import it.epicode.capstone.Models.ResponsesDTO.UpdateRoleRes;
+import it.epicode.capstone.Models.ResponsesDTO.UploadConfirm;
 import it.epicode.capstone.Services.UserService;
 import org.hibernate.sql.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +30,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.UUID;
 
 @RestController
@@ -38,7 +44,8 @@ public class UserController {
 
     @Autowired
     private UserService userSv;
-
+    @Autowired
+    private Cloudinary cloudinary;
 
 
     @PostMapping("/create")
@@ -118,6 +125,7 @@ public class UserController {
                 HttpStatus.CREATED
         );
     }
+
 
     @PatchMapping("/update/{username}/manager")
     @Operation(
