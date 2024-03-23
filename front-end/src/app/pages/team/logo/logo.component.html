@@ -1,0 +1,15 @@
+
+      <div class="container-form">
+        <div class="centered-element">
+
+          <div class="container-logo-personalized">
+            <img src="{{urlImg}}" alt="" class="logo-personalized">
+          </div>
+          <div class="form-group">
+            <label for="coverImage">Immagine Giocatore (PNG o JPG)</label>
+            <input type="file" id="coverImage" class="form-control" #fileInput (change)="onFileSelected($event)">
+            <button class="btn btn-warning my-2"  (click)="salvaLogo()">Salva Logo</button>
+          </div>
+
+        </div>
+      </div>

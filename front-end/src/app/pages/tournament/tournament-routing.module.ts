@@ -5,11 +5,13 @@ import { ClassificaComponent } from './classifica/classifica.component';
 import { AllTournamentsComponent } from './all-tournaments/all-tournaments.component';
 import { CreateComponent } from './create/create.component';
 import { RefereesComponent } from '../../components/referees/referees.component';
+import { AuthGuard } from '../auth/auth.guard';
 
 const routes: Routes = [
   {
    path: 'create',
    component: CreateComponent,
+   canActivate:[AuthGuard],
   },
   {
    path: ':name',
@@ -18,6 +20,7 @@ const routes: Routes = [
   {
    path: ':name/referee',
    component: RefereesComponent,
+   canActivate:[AuthGuard],
   },
    {
     path: ':name/classifica',

@@ -50,9 +50,7 @@ public class TeamService {
     }
 
     public Team getByPlayerName(String name) throws BadRequestException {
-        return teamRp.findByPlayersContains(name).orElseThrow(
-                () -> new BadRequestException("The player with name " + name + " does not exist or is not associated with any team")
-        );
+        return teamRp.findByPlayerName(name);
     }
     public List<Team> getAllTeamWithoutCaptain(){
         return teamRp.findByCaptainIsNull();

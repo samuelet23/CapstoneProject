@@ -19,6 +19,8 @@ export class PlayersComponent {
   isLoading: boolean = false;
   isUpdating: boolean = false;
   isCaptainOrManager: boolean = false;
+
+
   players: Player[] = [];
   teamToUpdate: Team  ={
     name: '',
@@ -174,6 +176,7 @@ export class PlayersComponent {
           teamName: this.teamName
         };
 
+
         if (!this.isNicknameInTeam(player, playersOfTeam)) {
           this.createPlayer(player);
           playersOfTeam.push(player);
@@ -222,6 +225,8 @@ export class PlayersComponent {
     }
     return formatDate(dateOfBirthDate, 'dd-MM-yyyy', 'en-US');
   }
+
+
 
 
   passaModifica(){

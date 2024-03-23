@@ -68,7 +68,7 @@
   </div>
   <!-- Manager Button -->
   <button routerLink="/tournament/{{tournament.name}}/referee" class="btn btn-outline-success" *ngIf="!isStarted(tournament) && checkTheRefereeForTournament(tournament) === 'Aggiungi arbitro' && !isFinished">Aggiungi Arbitro/i</button>
-  <button routerLink="/tournament/{{tournament.name}}" class="btn btn-outline-success" *ngIf="!isStarted(tournament) && checkTheRefereeForTournament(tournament) === 'Inizia torneo' && !isFinished(tournament)"  >INIZIA TORNEO</button>
+  <button routerLink="/tournament/{{tournament.name}}" class="btn btn-outline-success" *ngIf="!isStarted(tournament) && checkTheRefereeForTournament(tournament) === 'Inizia torneo' && !isFinished(tournament)"  >Aggiungi Squadre</button>
 
   <!-- User Button -->
   <button routerLink="/tournament/{{tournament.name}}" class="btn btn-outline-success" *ngIf="isStarted(tournament) && !isFinished(tournament)">Guarda l'andamento del torneo</button>

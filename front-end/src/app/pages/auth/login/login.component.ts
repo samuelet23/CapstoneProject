@@ -8,7 +8,6 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { myAuthService } from '../../../services/myAuth.service';
 import { Router } from '@angular/router';
-import { RoleService } from '../../../services/role.service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +18,6 @@ export class LoginComponent implements OnInit{
   private fb = inject(FormBuilder)
   private auth = inject(myAuthService)
   private router = inject(Router)
-  private roleSv = inject(RoleService)
   isLoading:boolean =false;
   form!:FormGroup;
   userRole$ = new BehaviorSubject<string>('');

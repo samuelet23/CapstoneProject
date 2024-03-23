@@ -30,6 +30,8 @@ public class Player extends Person {
     private String nickname;
 
     private String sigla;
+    private String url;
+
 
     private int gamesPlayed;
     @Enumerated(EnumType.STRING)

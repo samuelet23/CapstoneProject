@@ -1,0 +1,32 @@
+@import "../../../shared/variables";
+
+
+.container-form{
+  height: 58vh;
+  position: relative;
+}
+.container-logo-personalized{
+  position: absolute;
+  top: 10%;
+  left: 38%;
+  width: 200px;
+}
+
+.logo-personalized{
+  width: 100%;
+  background-color: black;
+  color: white;
+  border-radius: 100%;
+  box-shadow: 2px 2px 10px $primary;
+}
+.form-group {
+  position: absolute;
+  top: 43%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  background-color: black;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 10px $primary;
+}

@@ -22,6 +22,8 @@ export class myAuthService {
   private roleSubject = new BehaviorSubject<string>('');
   role$ = this.roleSubject.asObservable();
 
+
+
   private authSubject = new BehaviorSubject<null | AccessTokenRes>(null);
   user$ = this.authSubject.asObservable();
 
@@ -43,7 +45,7 @@ export class myAuthService {
           this.userLogged = data
           localStorage.setItem('string token', JSON.stringify(data.accessToken));
           localStorage.setItem('utente', JSON.stringify(data));
-          // localStorage.setItem('role',(data.user.role));
+          // this.setUserRole(data.user.role)
           this.autologout(data);
           this.userProfile = data.user;
           console.log(data);
@@ -53,18 +55,31 @@ export class myAuthService {
     );
   }
 
-  getUserDetails(): Observable<User> {
-    const token = localStorage.getItem('string token');
 
-    if (token) {
-      const username = this.jwtHelper.decodeToken(token)?.sub;
-      if (username) {
-        return this.getUserByUsername(username);
+  setUserRole(role: string | undefined) {
+
+      if (role == "USER") {
+        this.roleSubject.next("USER");
       }
-    }
+      else if  (role == "CAPTAIN") {
+        this.roleSubject.next("CAPTAIN");
+      }
+      else if (role == "USER") {
+        this.roleSubject.next("USER");
+      }
 
-    return throwError("Impossibile ottenere i dettagli dell'utente.");
   }
+
+getUserRole$(): Observable<string> {
+  const utente = localStorage.getItem('utente');
+  if (utente) {
+    const utenteParsed = JSON.parse(utente)
+    const role = utenteParsed.role
+    this.roleSubject.next(role);
+  }
+  return this.roleSubject.asObservable();
+}
+
 
 
   isLoggedIn(): boolean {

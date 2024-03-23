@@ -14,32 +14,29 @@ const routes: Routes = [
   {
     path: 'tournament',
     loadChildren: () => import('./pages/tournament/tournament.module').then(m => m.TournamentModule),
-    canActivate:[AuthGuard]
   },
 
   {
     path: 'game/:id',
     loadChildren: () => import('./pages/game/game.module').then(m => m.GameModule),
-    canActivate:[AuthGuard]
+    canActivate:[AuthGuard],
   },
 
 
   {
-  path: 'team',
+  path: 'captain/team', //modificare tutte le rotte che iniziano con /team aggiungendo /captain
   loadChildren: () => import('./pages/team/team.module').then(m => m.TeamModule),
-  canActivate:[AuthGuard]
+  canActivate:[AuthGuard],
 },
 
   {
     path: 'user',
     loadChildren: () => import('./pages/user/user.module').then(m => m.UserModule),
-    canActivate:[AuthGuard]
-
+    canActivate:[AuthGuard],
   },
 
     { path: '**', loadChildren: () => import('./pages/not-found/not-found.module').then(m => m.NotFoundModule) }];
 
-  // canActivate: [AuthGuard] aggiungere questo a tutte le rotte che hanno bisogno dell'autenticazione
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
