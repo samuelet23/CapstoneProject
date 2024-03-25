@@ -2,6 +2,7 @@
 <nav class="navbar  bg-primary" [ngClass]="{'sticky': isSticky}">
   <div class="container-fluid">
     <div class=" logo-container pointer" routerLink="/" >
+      <img src='../../../assets/logo .png' routerLink="/{{username}}" alt="" class="logo" *ngIf="!isLoggedIn">
       <img [src]="user.logoProfile || '../../../assets/logo .png'" routerLink="/{{username}}" alt="" class="logo" *ngIf="isLoggedIn && user">
     </div>
     <button class="navbar-toggler" type="button" (click)="toggleNav()" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">

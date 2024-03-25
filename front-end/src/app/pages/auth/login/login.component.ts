@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit{
     google.accounts.id.initialize({
       client_id: '558661000376-fkg5c4718pmq6djm3dt7qqtucml2ju0i.apps.googleusercontent.com',
       callback: (resp:any) =>{
-        this.handleLogin(resp)
+        this.auth.handleGoogleLogin(resp)
       }
     });
 
@@ -47,17 +47,7 @@ export class LoginComponent implements OnInit{
       password:['', [Validators.required, Validators.minLength(7)]]
     })
   }
-decodeToken(token:string){
-  return JSON.parse(atob(token.split('.')[1]));
-}
 
-  handleLogin(res:any){
-      if (res) {
-        const payload = this.decodeToken(res.credential);
-        sessionStorage.setItem("googleUser",JSON.stringify(payload));
-        this.router.navigate(['/'])
-      }
-  }
 
 
   access(): void {

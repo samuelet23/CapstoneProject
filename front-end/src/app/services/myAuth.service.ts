@@ -107,12 +107,19 @@ getUserRole$(): Observable<string> {
         this.isLoggedInSubject.next(true);
       }
     }
+    const googleUser = sessionStorage.getItem('googleUser');
+    const isLoggedInGoogle = !!googleUser;
+    if (isLoggedInGoogle) {
+      this.isLoggedInSubject.next(true);
+    }
   }
+
 
   logout() {
     localStorage.removeItem('utente');
     localStorage.removeItem('token');
     localStorage.removeItem('string token');
+    this.logoutGoogle();
     this.router.navigate(['/auth/login']);
     this.authSubject.next(null);
     this.isLoggedInSubject.next(false);
@@ -137,8 +144,29 @@ getUserRole$(): Observable<string> {
     return this.userProfile;
   }
 
+  decodeToken(token:string){
+    return JSON.parse(atob(token.split('.')[1]));
+  }
 
+  handleGoogleLogin(response: any) {
+    if (response) {
+      const payload = this.decodeToken(response.credential);
+      sessionStorage.setItem('googleUser', JSON.stringify(payload));
+      this.router.navigate(['/'])
+      this.checkGoogleLoginStatus();
+    }
+  }
 
+  logoutGoogle() {
+    sessionStorage.removeItem('googleUser');
+    this.checkGoogleLoginStatus();
+  }
+
+  private checkGoogleLoginStatus() {
+    const googleUser = sessionStorage.getItem('googleUser');
+    const isLoggedIn = !!googleUser;
+    this.isLoggedInSubject.next(isLoggedIn);
+  }
 
   protected getUserByUsername(username: string):Observable<User> {
     return this.http.get<User>(`${this.url}/user/get/byUsername/${username}`);
