@@ -41,8 +41,8 @@ export class UserService {
   updateUserToUser(username:string):Observable<UpdateRoleRes>{
     return this.http.patch<UpdateRoleRes>(`${this.url}/user/update/${username}/user`,{})
   }
-  updateUserToCaptain(username:string):Observable<UpdateRoleRes>{
-    return this.http.patch<UpdateRoleRes>(`${this.url}/user/update/${username}/captain`,{})
+  updateUserToCoordinator(username:string):Observable<UpdateRoleRes>{
+    return this.http.patch<UpdateRoleRes>(`${this.url}/user/update/${username}/coordinator`,{})
   }
   updateUserToManager(username:string):Observable<UpdateRoleRes>{
     return this.http.patch<UpdateRoleRes>(`${this.url}/user/update/${username}/manager`,{})

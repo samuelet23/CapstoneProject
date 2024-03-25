@@ -10,6 +10,8 @@ import { FooterComponent } from '../components/footer/footer.component';
 import { SpinnerComponent } from '../components/spinner/spinner.component';
 import { AllTournamentsComponent } from '../pages/tournament/all-tournaments/all-tournaments.component';
 import { RefereesComponent } from '../components/referees/referees.component';
+import { HomeSearchComponent } from '../components/home-search/home-search.component';
+import { ClassificaComponent } from '../pages/tournament/classifica/classifica.component';
 
 
 
@@ -20,6 +22,7 @@ import { RefereesComponent } from '../components/referees/referees.component';
     FooterComponent,
     SpinnerComponent,
     RefereesComponent,
+    HomeSearchComponent,
   ],
   imports: [
     CommonModule,
@@ -36,6 +39,7 @@ import { RefereesComponent } from '../components/referees/referees.component';
     FooterComponent,
     SpinnerComponent,
     RefereesComponent,
+    HomeSearchComponent,
   ]
 })
 export class SharedModule { }

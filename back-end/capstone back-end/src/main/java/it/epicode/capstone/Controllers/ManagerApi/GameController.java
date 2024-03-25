@@ -26,7 +26,7 @@ import java.util.UUID;
 @RequestMapping("/api/game")
 @Tag(name = "GAME")
 @SecurityRequirement(name = "Easy3vs3Auth")
-@PreAuthorize("hasAuthority('MANAGER')")
+@PreAuthorize("hasAnyAuthority('COORDINATOR','MANAGER')")
 public class GameController {
 
     @Autowired

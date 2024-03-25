@@ -37,7 +37,6 @@ public class TournamentController {
     @Autowired
     private TournamentService tournamentSv;
 
-
     @PostMapping("/create")
     @Operation(
             description = "Create a new tournament.",
@@ -78,7 +77,7 @@ public class TournamentController {
                 HttpStatus.CREATED
         );
     }
-
+    @PreAuthorize("hasAnyAuthority('COORDINATOR','MANAGER')")
     @PostMapping("/start/{tournament-name}")
     public List<Game> startTournament(@PathVariable("tournament-name") String nameTournament)throws BadRequestException{
         return tournamentSv.startTournament(nameTournament);

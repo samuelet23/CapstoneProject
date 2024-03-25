@@ -16,13 +16,14 @@
     <p><strong>Nickname:</strong> {{player.nickname}}</p>
     <p><strong>Data di nascita:</strong> {{player.dateOfBirth}}</p>
     <p><strong>Sigla:</strong> {{player.sigla}}</p>
-    <button class="btn btn-success" routerLink="/team/player/{{player.nickname}}/uploadLogo">Aggiungi Logo</button>
+    <button class="btn btn-success" routerLink="/team/player/{{player.nickname}}/uploadLogo" *ngIf="isCoordinator || isManager">Aggiungi Logo</button>
   </div>
-  <button class="btn btn-warning" (click)="passaModifica()" *ngIf="isCaptainOrManager">Modifica Team</button>
+  <button class="btn btn-warning" (click)="passaModifica()" *ngIf="isCoordinator || isManager">Modifica Team</button>
 </div>
 
 
 <div class="bg-dark p-3 rounded-3 text-white m-3" *ngIf="isUpdating && !isLoading">
+  <i class="bi bi-arrow-left-circle-fill pointer" (click)="goBack()"></i>
 
   <app-updated></app-updated>
 

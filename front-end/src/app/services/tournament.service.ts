@@ -64,6 +64,9 @@ export class TournamentService {
     return this.http.get<any>(`${this.url}/open/player/get/point-player/tournament-name?tournament-name=${nameTournament}`)
   }
 
+  finishTournament(nameTournament:string):Observable<Tournament>{
+    return this.http.patch<Tournament>(`${this.url}/generate/tournament/finish/${nameTournament}`,{})
+  }
 
   getPlayersFromTeam(teamName:string):Observable<Player[]>{
     //selezioan tutti i giocatori da un team

@@ -59,7 +59,7 @@ public class TournamentService {
 
     public Tournament getByName(String name) throws BadRequestException {
         return tournamentRp.findByName(name).orElseThrow(
-                () -> new BadRequestException("Tournament with name: " + name + " Not Found")
+                () -> new BadRequestException("Torneo con il nome: " + name + " non trovato")
         );
     }
 
@@ -99,7 +99,11 @@ public class TournamentService {
         return team;
     }
 
-
+    public Tournament finishTournament(String nameTournament) throws BadRequestException {
+        Tournament t= getByName(nameTournament);
+        t.setState(TournamentState.FINISHED);
+        return tournamentRp.save(t);
+    }
     public Team createAndSubscribeTeamToTournament(TeamDTO teamDTO, String nameTournament) throws BadRequestException {
         Tournament t = getByName(nameTournament);
         if (t.getTeams().size() >= 16) {
@@ -255,7 +259,7 @@ public class TournamentService {
             }
         }
 
-        if (finalTeams.size() < 2) {
+        if (finalTeams.size() <= 2) {
             throw new IllegalStateException("Non ci sono abbastanza team vincenti per generare la finale.");
         }
 

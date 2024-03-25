@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UpdatePasswordDto } from '../../../api/models';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-password',
@@ -13,6 +14,7 @@ import Swal from 'sweetalert2';
 export class PasswordComponent implements OnInit {
   passwordForm!: FormGroup;
   private userSv = inject(UserService);
+  private location = inject(Location);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private fb = inject(FormBuilder);
@@ -82,5 +84,7 @@ export class PasswordComponent implements OnInit {
   }
 
 
-
+  goBack(){
+    this.location.back()
+  }
 }

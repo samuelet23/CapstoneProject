@@ -225,7 +225,7 @@ public class GetController {
     }
 
     // ****************** REFEREE CONTROLLER ********************
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/referee/get/all")
     @Operation(
             description = "Retrieve all referees.",
@@ -234,7 +234,7 @@ public class GetController {
     public List<Referee> getAllReferee(){
         return refereeSv.getAll();
     }
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/referee/get/byId/{id}")
     @Operation(
             description = "Retrieve a referee by their unique identifier.",
@@ -243,7 +243,7 @@ public class GetController {
     public Referee getRefereeById(@PathVariable UUID id)throws BadRequestException {
         return refereeSv.getById(id);
     }
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/referee/get/byNickname/{nickname}")
     @Operation(
             description = "Retrieve a referee by their nickname.",
@@ -252,7 +252,7 @@ public class GetController {
     public Referee getRefereeByNickname(@PathVariable String nickname)throws BadRequestException {
         return refereeSv.getByNickname(nickname);
     }
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/referee/get/all/tournament-name")
     @Operation(
             description = "Retrieve all referees for a specific tournament.",

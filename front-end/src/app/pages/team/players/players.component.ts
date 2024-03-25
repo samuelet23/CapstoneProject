@@ -4,7 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TeamService } from '../../../services/team.service';
 import { PlayerService } from '../../../services/player.service';
 import Swal from 'sweetalert2';
-import { formatDate } from '@angular/common';
+import { Location, formatDate } from '@angular/common';
+import { myAuthService } from '../../../services/myAuth.service';
 
 @Component({
   selector: 'app-player',
@@ -12,13 +13,15 @@ import { formatDate } from '@angular/common';
   styleUrl: './players.component.scss'
 })
 export class PlayersComponent {
-  private router = inject (Router);
+  private auth = inject (myAuthService);
+  private location = inject(Location)
   private route = inject (ActivatedRoute);
   private teamSv = inject (TeamService);
   private playerSv = inject (PlayerService);
   isLoading: boolean = false;
   isUpdating: boolean = false;
-  isCaptainOrManager: boolean = false;
+  isCoordinator: boolean = false;
+  isManager: boolean = false;
 
 
   players: Player[] = [];
@@ -40,7 +43,15 @@ export class PlayersComponent {
 
 
   ngOnInit(): void {
-    this.isCaptainOrManagaer()
+    this.auth.getUserRole$().subscribe(role =>{
+      if (role === "MANAGER") {
+        return this.isManager = true;
+      }
+      if (role === "COORDINATOR") {
+        this.isCoordinator = true;
+      }
+      return false
+    })
     this.getTeamFromName();
     this.checkIfPlayerExists()
 
@@ -56,7 +67,7 @@ export class PlayersComponent {
         },
         error => {
           Swal.fire('Errore', error.error.message, 'error').then(() => {
-
+            this.location.back()
           });
           this.isLoading = false;
         }
@@ -87,6 +98,9 @@ export class PlayersComponent {
     return this.hasNickname(player) && this.isPlayerInDatabase(player);
   }
 
+  goBack(){
+    this.location.back();
+  }
 
   updatePlayer(player: PlayerDto , id: string){
 
@@ -99,7 +113,6 @@ export class PlayersComponent {
 
     this.isLoading = true
     this.playerSv.updateCredentialPlayer(player, id).subscribe(result => {
-      console.log(player, "update 2");
 
       const index = this.teamToUpdate.players.findIndex(p => p.id === id);
       if (index !== -1) {
@@ -132,10 +145,8 @@ export class PlayersComponent {
     const formattedDateOfBirth = this.checkDateAndFormat(player.dateOfBirth);
 
     player.dateOfBirth = formattedDateOfBirth;
-    console.log(player, "create");
 
     this.playerSv.createPlayer(player).subscribe(player =>{
-    console.log(player, "create2");
       this.players.push(player)
 
 
@@ -187,7 +198,6 @@ export class PlayersComponent {
       this.teamSv.updateTeam(this.teamToUpdate.name, teamDto).subscribe(
         (team) => {
           Swal.fire("Il team è stato salvato correttamente");
-          console.log(team);
 
         },
         (error) => {
@@ -233,18 +243,5 @@ export class PlayersComponent {
     this.isUpdating = !this.isUpdating;
   }
 
-  private isCaptainOrManagaer(): boolean {
-    const userString = localStorage.getItem('utente');
-    if (userString !== null) {
-      const user = JSON.parse(userString);
-      if (user.role === 'MANAGER' || user.role === 'CAPTAIN') {
-        return this.isCaptainOrManager = true;
-      } else {
-        return this.isCaptainOrManager = false;
-      }
-    } else {
-      Swal.fire('Utente non loggato');
-      return false;
-    }
-  }
+
 }

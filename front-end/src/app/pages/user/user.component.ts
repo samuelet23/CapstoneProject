@@ -4,7 +4,7 @@ import { UserService } from '../../services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User, UserUpdateDto } from '../../api/models';
 import Swal from 'sweetalert2';
-import { formatDate } from '@angular/common';
+import { Location, formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-user',
@@ -13,6 +13,7 @@ import { formatDate } from '@angular/common';
 })
 export class UserComponent {
   private fb = inject(FormBuilder);
+  private location = inject(Location);
   private userSv = inject(UserService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -33,6 +34,7 @@ export class UserComponent {
   ngOnInit(): void {
     if (this.username) {
       this.getUserByUsername(this.username);
+
     }
   }
 
@@ -75,7 +77,7 @@ onSubmit(){
     this.userSv.updateCredentialUser(this.username, user).subscribe(res =>{
       Swal.fire("Utente modificato correttamente")
       this.isLoading = false;
-      this.router.navigate(['/'])
+      this.goBack();
     },
     (error)=>{
       Swal.fire(error.error.message)
@@ -118,5 +120,7 @@ onFileSelected(event: any) {
 
 }
 
-
+goBack(){
+  this.location.back()
+}
 }

@@ -28,7 +28,7 @@ export class TokenInterceptor implements HttpInterceptor{
       });
       return next.handle(newRequest).pipe(
         catchError((error: HttpErrorResponse) => {
-          if (error.error.message.includes() === 'JWT expired') {
+          if (error.error.message && error.error.message.includes('JWT expired')) {
             Swal.fire("La tua sessione è scaduta, stai per essere reindirizzato alla pagina di login").then(() =>{
               this.router.navigate(['/auth/login'])
             })

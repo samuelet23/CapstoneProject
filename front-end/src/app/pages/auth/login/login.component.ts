@@ -1,3 +1,4 @@
+declare var google:any
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
@@ -26,10 +27,36 @@ export class LoginComponent implements OnInit{
   constructor(){}
 
   ngOnInit(): void {
+    google.accounts.id.initialize({
+      client_id: '558661000376-fkg5c4718pmq6djm3dt7qqtucml2ju0i.apps.googleusercontent.com',
+      callback: (resp:any) =>{
+        this.handleLogin(resp)
+      }
+    });
+
+    google.accounts.id.renderButton(document.getElementById("google-btn"),{
+      theme: 'filled_blue',
+      size:'medium',
+      shape:'rectangle',
+      width: 250
+    })
+
+
     this.form = this.fb.group({
       username:['', [Validators.required, Validators.minLength(5)]],
       password:['', [Validators.required, Validators.minLength(7)]]
     })
+  }
+decodeToken(token:string){
+  return JSON.parse(atob(token.split('.')[1]));
+}
+
+  handleLogin(res:any){
+      if (res) {
+        const payload = this.decodeToken(res.credential);
+        sessionStorage.setItem("googleUser",JSON.stringify(payload));
+        this.router.navigate(['/'])
+      }
   }
 
 
@@ -52,7 +79,7 @@ export class LoginComponent implements OnInit{
               text: "Login avvenuto con successo",
               icon: 'success',
             }).then(() =>{
-              this.router.navigate(['/'])
+              this.router.navigate(['/'+this.form.value.username])
               this.isLoading = false;
             })
             this.isLoading = false;
@@ -62,8 +89,11 @@ export class LoginComponent implements OnInit{
           }
         },
         (error) => {
-
-          Swal.fire("Errore nel carimento del server")
+          if (error.error.message === "passowrd o username errati") {
+            Swal.fire("Errore", "Nome utente o password errati", "error");
+          } else {
+            Swal.fire("Errore", error.error.message, "error");
+          }
           this.isLoading = false;
         })
 

@@ -10,7 +10,7 @@ export interface User {
   id?: string;
   logoProfile?:string;
   name: string;
-  role: 'USER' | 'CAPTAIN' | 'MANAGER';
+  role: 'USER' | 'COORDINATOR' | 'MANAGER';
   surname: string;
   username: string;
 }

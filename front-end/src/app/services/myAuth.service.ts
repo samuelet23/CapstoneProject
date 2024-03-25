@@ -45,7 +45,6 @@ export class myAuthService {
           this.userLogged = data
           localStorage.setItem('string token', JSON.stringify(data.accessToken));
           localStorage.setItem('utente', JSON.stringify(data));
-          // this.setUserRole(data.user.role)
           this.autologout(data);
           this.userProfile = data.user;
           console.log(data);
@@ -61,8 +60,8 @@ export class myAuthService {
       if (role == "USER") {
         this.roleSubject.next("USER");
       }
-      else if  (role == "CAPTAIN") {
-        this.roleSubject.next("CAPTAIN");
+      else if  (role == "COORDINATOR") {
+        this.roleSubject.next("COORDINATOR");
       }
       else if (role == "USER") {
         this.roleSubject.next("USER");
@@ -117,7 +116,7 @@ getUserRole$(): Observable<string> {
     this.router.navigate(['/auth/login']);
     this.authSubject.next(null);
     this.isLoggedInSubject.next(false);
-
+    this.roleSubject.next('');
     if (this.timelogout) {
       clearTimeout(this.timelogout);
     }

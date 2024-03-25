@@ -34,6 +34,7 @@ public class Player extends Person {
 
 
     private int gamesPlayed;
+
     @Enumerated(EnumType.STRING)
     private RoleInTheGame roleInTheGame = RoleInTheGame.PLAYER;
 

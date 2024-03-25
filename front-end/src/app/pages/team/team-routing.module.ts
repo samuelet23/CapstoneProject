@@ -7,12 +7,16 @@ import { UpdatedComponent } from './updated/updated.component';
 import { PlayersComponent } from './players/players.component';
 import { LogoComponent } from './logo/logo.component';
 import { NotFoundComponent } from '../not-found/not-found.component';
-import { AuthGuard } from '../auth/auth.guard';
+import { AuthGuard } from '../../guards/auth.guard';
 
 const routes: Routes = [
   { path: '', component: NotFoundComponent },
   {
     path: 'create/tournament/:name',
+    component: CreatedComponent,
+   },
+  {
+    path: 'create',
     component: CreatedComponent,
    },
   {
