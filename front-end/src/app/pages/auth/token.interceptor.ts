@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
@@ -13,9 +13,9 @@ import Swal from 'sweetalert2';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor{
-  token!: string | null;
-  constructor(private authSrv: myAuthService, private router: Router) {}
-
+  private authSv = inject(myAuthService)
+  private router = inject(Router)
+  token!: string | null
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = localStorage.getItem('token');
@@ -28,7 +28,7 @@ export class TokenInterceptor implements HttpInterceptor{
       });
       return next.handle(newRequest).pipe(
         catchError((error: HttpErrorResponse) => {
-          if (error && error.status === 401 && error.error.message === 'JWT expired') {
+          if (error.error.message && error.error.message.includes('JWT expired')) {
             Swal.fire("La tua sessione è scaduta, stai per essere reindirizzato alla pagina di login").then(() =>{
               this.router.navigate(['/auth/login'])
             })
@@ -36,9 +36,8 @@ export class TokenInterceptor implements HttpInterceptor{
           return throwError(error);
         })
       );
-    } else {
-      this.router.navigate(['/auth/login']);
+    }
       return next.handle(request);
     }
   }
-}
+

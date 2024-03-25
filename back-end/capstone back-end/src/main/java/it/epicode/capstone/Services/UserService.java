@@ -11,8 +11,6 @@ import it.epicode.capstone.Models.Enums.Role;
 import it.epicode.capstone.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -60,6 +58,7 @@ public class UserService {
         u.setUsername(user.username());
         u.setAge(calculateAge(u.getDateOfBirth()));
         u.setEmail(user.email());
+        u.setLogoProfile(user.url());
         u.setRole(Role.USER);
         u.setPassword(encoder.encode(user.password()));
         u.setConfirmPassword(encoder.encode(user.confirmPassword()));
@@ -127,12 +126,12 @@ public class UserService {
         userRp.save(u);
         return u.getRole();
     }
-    public Role updateRoleCaptainByUsername(String username) throws BadRequestException {
+    public Role updateRoleCoordinatorByUsername(String username) throws BadRequestException {
         User u = getByUsername(username);
-        if (u.getRole() == Role.CAPTAIN) {
-            throw new BadRequestException("The role is already CAPTAIN");
+        if (u.getRole() == Role.COORDINATOR) {
+            throw new BadRequestException("The role is already COORDINATOR");
         }
-        u.setRole(Role.CAPTAIN);
+        u.setRole(Role.COORDINATOR);
          userRp.save(u);
         return u.getRole();
     }
@@ -145,6 +144,13 @@ public class UserService {
          userRp.save(u);
         return u.getRole();
     }
+
+    public void uploadProfileImg(String url, String username)throws BadRequestException{
+        User u = getByUsername(username);
+        u.setLogoProfile(url);
+        userRp.save(u);
+    }
+
     public void deleteById(UUID id) throws BadRequestException {
         User u = getById(id);
         userRp.delete(u);

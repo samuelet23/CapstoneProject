@@ -19,6 +19,11 @@ export class myAuthService {
   userProfile!: UserToken;
   userLogged!: AccessTokenRes;
 
+  private roleSubject = new BehaviorSubject<string>('');
+  role$ = this.roleSubject.asObservable();
+
+
+
   private authSubject = new BehaviorSubject<null | AccessTokenRes>(null);
   user$ = this.authSubject.asObservable();
 
@@ -42,13 +47,42 @@ export class myAuthService {
           localStorage.setItem('utente', JSON.stringify(data));
           this.autologout(data);
           this.userProfile = data.user;
+          console.log(data);
+
       })
 
     );
   }
 
+
+  setUserRole(role: string | undefined) {
+
+      if (role == "USER") {
+        this.roleSubject.next("USER");
+      }
+      else if  (role == "COORDINATOR") {
+        this.roleSubject.next("COORDINATOR");
+      }
+      else if (role == "USER") {
+        this.roleSubject.next("USER");
+      }
+
+  }
+
+getUserRole$(): Observable<string> {
+  const utente = localStorage.getItem('utente');
+  if (utente) {
+    const utenteParsed = JSON.parse(utente)
+    const role = utenteParsed.role
+    this.roleSubject.next(role);
+  }
+  return this.roleSubject.asObservable();
+}
+
+
+
   isLoggedIn(): boolean {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('string token');
     return !this.jwtHelper.isTokenExpired(token);
   }
 
@@ -57,44 +91,39 @@ export class myAuthService {
   }
 
 
-  getUserDetails(): Observable<User> {
-    const token = localStorage.getItem('token');
-
-    if (token) {
-      const username = this.jwtHelper.decodeToken(token)?.sub;
-      if (username) {
-        console.log("sta mandando il metodo");
-
-        this.http.get<User>(`${this.url}/open/user/get/byUsername/${username}`)
-      }
-    } else {
-      throw new Error('Token non trovato');
-    }
-    return throwError("Impossibile ottenere i dettagli dell'utente.");
-  }
 
   restore() {
-    const userLs = localStorage.getItem('user');
+    const userLs = localStorage.getItem('utente');
 
     if (userLs) {
       const userData: AccessTokenRes = JSON.parse(userLs);
       const tokenExpired = this.jwtHelper.isTokenExpired(userData.accessToken);
 
       if (tokenExpired) {
-        this.isLoggedInSubject.next(true);
+        this.isLoggedInSubject.next(false);
         this.authSubject.next(userData);
         this.autologout(userData);
+      } else{
+        this.isLoggedInSubject.next(true);
       }
+    }
+    const googleUser = sessionStorage.getItem('googleUser');
+    const isLoggedInGoogle = !!googleUser;
+    if (isLoggedInGoogle) {
+      this.isLoggedInSubject.next(true);
     }
   }
 
+
   logout() {
-    localStorage.removeItem('user');
+    localStorage.removeItem('utente');
     localStorage.removeItem('token');
-    this.router.navigate(['/']);
+    localStorage.removeItem('string token');
+    this.logoutGoogle();
+    this.router.navigate(['/auth/login']);
     this.authSubject.next(null);
     this.isLoggedInSubject.next(false);
-
+    this.roleSubject.next('');
     if (this.timelogout) {
       clearTimeout(this.timelogout);
     }
@@ -115,9 +144,32 @@ export class myAuthService {
     return this.userProfile;
   }
 
+  decodeToken(token:string){
+    return JSON.parse(atob(token.split('.')[1]));
+  }
 
-  private getUserByUsername(username: string) {
-    return this.http.get(`${this.url}/user/get/byUsername/${username}`);
+  handleGoogleLogin(response: any) {
+    if (response) {
+      const payload = this.decodeToken(response.credential);
+      sessionStorage.setItem('googleUser', JSON.stringify(payload));
+      this.router.navigate(['/'])
+      this.checkGoogleLoginStatus();
+    }
+  }
+
+  logoutGoogle() {
+    sessionStorage.removeItem('googleUser');
+    this.checkGoogleLoginStatus();
+  }
+
+  private checkGoogleLoginStatus() {
+    const googleUser = sessionStorage.getItem('googleUser');
+    const isLoggedIn = !!googleUser;
+    this.isLoggedInSubject.next(isLoggedIn);
+  }
+
+  protected getUserByUsername(username: string):Observable<User> {
+    return this.http.get<User>(`${this.url}/user/get/byUsername/${username}`);
   }
 
 }

@@ -39,6 +39,8 @@ public class User extends Person implements UserDetails {
     @JsonIgnore
     private  String confirmPassword;
 
+    private String logoProfile;
+
     private Timestamp createdAt;
 
     @Enumerated(EnumType.STRING)

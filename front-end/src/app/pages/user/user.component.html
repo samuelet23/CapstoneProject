@@ -4,10 +4,15 @@
   </div>
 </div>
 
-<div class="bg-dark text-white p-3 m-4 rounded-3" *ngIf="!isLoading">
+<div class="bg-dark text-white p-3 m-4 rounded-3" >
 
+  <div class="flex">
     <h2>Modifca Utente</h2>
-  <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="mt-4">
+    <div class="container-logo">
+      <img src="{{urlImg}}" alt="" class="logo">
+    </div>
+  </div>
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="mt-4">
 
     <div class="form-group">
       <label for="name">Nome</label>
@@ -27,6 +32,12 @@
       </div>
     </div>
 
+
+    <div class="form-group">
+      <label for="coverImage">Aggiungi il tuo logo personale</label>
+      <input type="file" id="coverImage" class="form-control" #fileInput (change)="onFileSelected($event)">
+    </div>
+
     <div class="form-group">
       <label for="dateOfBirth">Data di Nascita</label>
       <input type="date" id="dateOfBirth" formControlName="dateOfBirth" class="form-control">
@@ -35,6 +46,8 @@
         <div *ngIf="formControls['dateOfBirth']!.errors && formControls['dateOfBirth']!.errors['minlength']" class="error-text">La data di nascita deve essere composta da almeno 3 caratteri</div>
       </div>
     </div>
+
+
 
     <div class="form-group">
       <label for="email">Email</label>
@@ -53,6 +66,8 @@
         <div *ngIf="formControls['username']!.errors && formControls['username']!.errors['minlength']" class="error-text">L'username deve essere composto da almeno 5 caratteri</div>
       </div>
     </div>
+
+
 
     <div class="flex">
       <button type="submit" [disabled]="userForm.invalid" class="btn btn-primary my-3">Modifica Utente</button>

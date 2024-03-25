@@ -5,6 +5,7 @@ import { TournamentService } from '../../../services/tournament.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PlayerPointRes } from '../../../api/models';
 import Swal from 'sweetalert2';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-classifica',
@@ -12,8 +13,10 @@ import Swal from 'sweetalert2';
   styleUrl: './classifica.component.scss'
 })
 export class ClassificaComponent implements OnInit  {
+  private route = inject(ActivatedRoute)
+  private location = inject(Location)
+
 isLoading : boolean = false;
-private route = inject(ActivatedRoute)
 tournamentName:string | null = this.route.snapshot.paramMap.get('name')
 
 leadBoard!: PlayerPointRes
@@ -25,20 +28,24 @@ ngOnInit(): void {
   this.getClassificaMvp()
 }
 
+goBack(){
+  this.location.back()
+}
 
 getClassificaMvp() {
   if (this.tournamentName) {
   this.tournamentSv.getClassificaMvp(this.tournamentName).subscribe(
     (data: PlayerPointRes) => {
-      console.log(data);
 
       if (!data.playerPointsList) {
-        this.router.navigate(['/tournament/'+this.tournamentName])
+        this.goBack()
         Swal.fire("La classifica sarà disponibile una volta iniziato il torneo")
         this.isLoading = false
       }
       this.leadBoard = data;
+
       this.player = this.leadBoard?.playerPointsList || [];
+
       this.isLoading = false;
       this.checkIfTournamentisFinished();
     },
@@ -69,11 +76,10 @@ checkIfTournamentisFinished() {
   (error) =>{
     Swal.fire(error.error.message)
     this.isLoading = false
-    this.router.navigate(['/tournament'+this.tournamentName])
-  });
+    this.goBack()
+});
   }else{
     this.isLoading = false
-    this.router.navigate(['/'])
   }
 }
 

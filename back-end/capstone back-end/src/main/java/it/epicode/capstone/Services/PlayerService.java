@@ -62,6 +62,7 @@ public class PlayerService {
             Player p = new Player();
             p.setName(playerDTO.name());
             p.setSurname(playerDTO.surname());
+            p.setUrl(playerDTO.url());
             p.setNickname(playerDTO.nickname());
             p.setDateOfBirth(LocalDate.parse(playerDTO.dateOfBirth(), formatter));
             if (!isOverFourteen(LocalDate.parse(playerDTO.dateOfBirth(), formatter))) {
@@ -113,6 +114,11 @@ public class PlayerService {
         }
     }
 
+    public void uploadLogo(String url, String nickname)throws BadRequestException{
+        Player p = getByNickname(nickname);
+        p.setUrl(url);
+        playerRp.save(p);
+    }
 
     public Player updateNicknameById(UUID id,String nickname) throws BadRequestException {
         Player p = getById(id);

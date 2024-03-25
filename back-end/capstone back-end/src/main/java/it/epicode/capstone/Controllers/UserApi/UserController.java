@@ -1,5 +1,6 @@
 package it.epicode.capstone.Controllers.UserApi;
 
+import com.cloudinary.Cloudinary;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,11 +11,13 @@ import it.epicode.capstone.Exceptions.UnauthorizedException;
 import it.epicode.capstone.Models.DTO.UpdatePasswordDTO;
 import it.epicode.capstone.Models.DTO.UserDTO;
 import it.epicode.capstone.Models.DTO.UserUpdateDTO;
+import it.epicode.capstone.Models.Entities.Team;
 import it.epicode.capstone.Models.Entities.User;
 import it.epicode.capstone.Models.Enums.Role;
 import it.epicode.capstone.Models.ResponsesDTO.ConfirmRes;
 import it.epicode.capstone.Models.ResponsesDTO.DeleteRes;
 import it.epicode.capstone.Models.ResponsesDTO.UpdateRoleRes;
+import it.epicode.capstone.Models.ResponsesDTO.UploadConfirm;
 import it.epicode.capstone.Services.UserService;
 import org.hibernate.sql.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +30,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.UUID;
 
 @RestController
@@ -38,7 +44,8 @@ public class UserController {
 
     @Autowired
     private UserService userSv;
-
+    @Autowired
+    private Cloudinary cloudinary;
 
 
     @PostMapping("/create")
@@ -58,7 +65,6 @@ public class UserController {
             description = "Update a user by their unique identifier.",
             summary = "Update user by ID"
     )
-    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updateUserById(@PathVariable UUID id,@RequestBody @Validated UserUpdateDTO userDTO, BindingResult bindingResult) throws BadRequestException, InternalServerErrorException, UnauthorizedException {
         HandlerException.internalServerErrorException(bindingResult);
         HandlerException.badRequestException(bindingResult);
@@ -74,7 +80,6 @@ public class UserController {
             description = "Update a user by their username.",
             summary = "Update user by username"
     )
-    @PreAuthorize("hasAuthority('MANAGER')")
     public User updateUserByUsername(@PathVariable String username,@RequestBody @Validated UserUpdateDTO userDTO, BindingResult bindingResult) throws BadRequestException, InternalServerErrorException, UnauthorizedException {
         HandlerException.internalServerErrorException(bindingResult);
         HandlerException.badRequestException(bindingResult);
@@ -87,7 +92,6 @@ public class UserController {
             description = "Update a user's password by their username.",
             summary = "Update user's password by username"
     )
-    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updatePasswordByUsername(@RequestBody @Validated UpdatePasswordDTO updatePasswordDTO,@PathVariable String username, BindingResult bindingResult) throws BadRequestException, InternalServerErrorException, UnauthorizedException {
         HandlerException.internalServerErrorException(bindingResult);
         HandlerException.unathorizedException(bindingResult);
@@ -104,7 +108,6 @@ public class UserController {
             description = "Update a user's username by their unique identifier.",
             summary = "Update user's username by ID"
     )
-    @PreAuthorize("hasAuthority('MANAGER')")
     public ConfirmRes updateUsername(@PathVariable UUID id,@RequestBody String username, BindingResult bindingResult) throws BadRequestException, UnauthorizedException {
         HandlerException.badRequestException(bindingResult);
         if (username.isEmpty()) {
@@ -118,6 +121,7 @@ public class UserController {
                 HttpStatus.CREATED
         );
     }
+
 
     @PatchMapping("/update/{username}/manager")
     @Operation(
@@ -134,16 +138,16 @@ public class UserController {
         );
     }
 
-    @PatchMapping("/update/{username}/captain")
+    @PatchMapping("/update/{username}/coordinator")
     @Operation(
-            description = "Update a user's role to captain by their username.",
-            summary = "Update user's role to captain by username"
+            description = "Update a user's role to coordinator by their username.",
+            summary = "Update user's role to coordinator by username"
     )
     @PreAuthorize("hasAuthority('MANAGER')")
-    public UpdateRoleRes updateRoleToCaptain(@PathVariable String username)throws BadRequestException{
-        Role role = userSv.updateRoleCaptainByUsername(username);
+    public UpdateRoleRes updateRoleToCoordinator(@PathVariable String username)throws BadRequestException{
+        Role role = userSv.updateRoleCoordinatorByUsername(username);
         return new UpdateRoleRes(
-                "Il ruolo di "+username+" è stato modificato con successo a Capitano",
+                "Il ruolo di "+username+" è stato modificato con successo a Organizzatore",
                 HttpStatus.CREATED,
                 "Il ruolo ora è "+ role
         );

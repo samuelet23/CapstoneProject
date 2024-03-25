@@ -16,19 +16,22 @@
     <p><strong>Nickname:</strong> {{player.nickname}}</p>
     <p><strong>Data di nascita:</strong> {{player.dateOfBirth}}</p>
     <p><strong>Sigla:</strong> {{player.sigla}}</p>
+    <button class="btn btn-success" routerLink="/team/player/{{player.nickname}}/uploadLogo" *ngIf="isCoordinator || isManager">Aggiungi Logo</button>
   </div>
-  <button class="btn btn-warning" (click)="passaModifica()" *ngIf="isCaptainOrManager">Modifica Team</button>
+  <button class="btn btn-warning" (click)="passaModifica()" *ngIf="isCoordinator || isManager">Modifica Team</button>
 </div>
 
 
 <div class="bg-dark p-3 rounded-3 text-white m-3" *ngIf="isUpdating && !isLoading">
+  <i class="bi bi-arrow-left-circle-fill pointer" (click)="goBack()"></i>
 
   <app-updated></app-updated>
 
   <h2>Modifica i giocatori</h2>
   <div *ngFor="let player of teamToUpdate.players; let i = index" class="player-container m-3">
     <p>I {{teamToUpdate.players.length}} giocatori della squadra sono:</p>
-    <h6 class="pt-2">Giocatore N. {{i+1}} </h6>
+      <h6 class="pt-2">Giocatore N. {{i+1}} </h6>
+
     <!-- Campo Name -->
     <div class="form-group">
       <label for="name{{i}}">Nome</label>
@@ -44,6 +47,8 @@
         #surnameInput="ngModel">
 
     </div>
+
+
 
     <div class="form-group">
       <label for="nickname{{i}}">Nickname</label>

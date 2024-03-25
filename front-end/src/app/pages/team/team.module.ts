@@ -9,6 +9,7 @@ import { PlayersComponent } from './players/players.component';
 import { SharedModule } from '../../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UpdatedComponent } from './updated/updated.component';
+import { LogoComponent } from './logo/logo.component';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { UpdatedComponent } from './updated/updated.component';
     ExistingComponent,
     PlayersComponent,
     UpdatedComponent,
+    LogoComponent,
   ],
   imports: [
     CommonModule,

@@ -16,14 +16,16 @@ import { Tournament } from '../../api/models';
 export class RefereesComponent implements OnInit  {
   private refereeSv = inject(RefereesService)
   private tournamentSv = inject(TournamentService)
+  private fb = inject(FormBuilder)
   isLoading: boolean = false
   refereeForm: FormGroup;
   refereCreated!: number | undefined
+  numRefereesExpected:string = ''
   private route = inject(ActivatedRoute);
   tournament!:Tournament
   nameTournament:string | null = this.route.snapshot.paramMap.get('name')
 
-  constructor(private fb: FormBuilder) {
+  constructor() {
     this.refereeForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       surname: ['', [Validators.required, Validators.minLength(3)]],
@@ -87,10 +89,13 @@ export class RefereesComponent implements OnInit  {
           console.log(data);
           this.tournament = data
           if (data.level === "JUNIOR") {
+            this.numRefereesExpected = "1"
             this.refereCreated = data.referees?.length;
           } else if (data.level === "RISINGSTARS") {
+            this.numRefereesExpected = "2"
             this.refereCreated = data.referees?.length;
           } else if (data.level === "ELITE") {
+            this.numRefereesExpected = "3"
             this.refereCreated = data.referees?.length;
           }
 

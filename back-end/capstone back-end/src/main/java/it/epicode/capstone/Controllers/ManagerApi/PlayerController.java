@@ -1,5 +1,6 @@
 package it.epicode.capstone.Controllers.ManagerApi;
 
+import com.cloudinary.Cloudinary;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -9,10 +10,7 @@ import it.epicode.capstone.Models.DTO.PlayerDTO;
 import it.epicode.capstone.Models.DTO.UpdateStatsPlayerDTO;
 import it.epicode.capstone.Models.Entities.Player;
 import it.epicode.capstone.Models.Entities.Tournament;
-import it.epicode.capstone.Models.ResponsesDTO.ConfirmPlayerPoints;
-import it.epicode.capstone.Models.ResponsesDTO.ConfirmRes;
-import it.epicode.capstone.Models.ResponsesDTO.DeleteRes;
-import it.epicode.capstone.Models.ResponsesDTO.PlayerPointRes;
+import it.epicode.capstone.Models.ResponsesDTO.*;
 import it.epicode.capstone.Services.GameService;
 import it.epicode.capstone.Services.PlayerService;
 import it.epicode.capstone.Services.TournamentService;
@@ -24,7 +22,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.UUID;
 
 @RestController
@@ -36,6 +37,8 @@ public class PlayerController {
 
     @Autowired
     private PlayerService playerSv;
+    @Autowired
+    private Cloudinary cloudinary;
 
     @PatchMapping("/update/credential/{id}")
     @Operation(
@@ -67,6 +70,20 @@ public class PlayerController {
         HandlerException.badRequestException(bindingResult);
         playerSv.updateStatsByName(nickname, playerDTO);
         return new ConfirmRes("Player's stats have been updated successfully", HttpStatus.CREATED);
+    }
+
+    @PatchMapping("upload/logo-player/{nickname}")
+    @Operation(
+            description = "Upload a logo for player.",
+            summary = "Upload logo player"
+    )
+    public UploadConfirm uploadLogoPlayer(@RequestParam("file") MultipartFile file, @PathVariable("nickname") String nickname) throws IOException, BadRequestException {
+        String url = (String) cloudinary.uploader().upload(file.getBytes(), new HashMap<>()).get("url");
+        playerSv.uploadLogo(url,nickname);
+        return new UploadConfirm(
+                "Cover was uploaded successfully",
+                url
+        );
     }
 
     @DeleteMapping("/delete/byId/{id}")

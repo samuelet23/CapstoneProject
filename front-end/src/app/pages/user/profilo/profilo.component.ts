@@ -3,6 +3,7 @@ import { UserService } from '../../../services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../../api/models';
 import Swal from 'sweetalert2';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-profilo',
@@ -12,6 +13,7 @@ import Swal from 'sweetalert2';
 export class ProfiloComponent implements OnInit  {
   private userSv = inject(UserService);
   private route = inject(ActivatedRoute);
+  private location = inject(Location);
   private router = inject(Router);
   isLoading:boolean = false;
   username: string | null = this.route.snapshot.paramMap.get('username');
@@ -31,4 +33,7 @@ export class ProfiloComponent implements OnInit  {
     }
   }
 
+  goBack(){
+    this.location.back()
+  }
 }

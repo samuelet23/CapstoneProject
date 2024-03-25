@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, NgModel, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PlayerDto, Team, TeamDto, UpdateCaptainDto, UpdateTeamNameDto } from '../../../api/models';
 import Swal from 'sweetalert2';
-import { formatDate } from '@angular/common';
+import { Location, formatDate } from '@angular/common';
 import { TeamService } from '../../../services/team.service';
 import { PlayerService } from '../../../services/player.service';
 
@@ -17,6 +17,7 @@ export class UpdatedComponent implements OnInit{
   private router = inject (Router);
   private route = inject (ActivatedRoute);
   private teamSv = inject (TeamService);
+  private location = inject(Location)
   private playerSv = inject (PlayerService);
   isLoading: boolean = false;
 urlImg:string ='';
@@ -60,7 +61,7 @@ urlImg:string ='';
         },
         error => {
           Swal.fire('Errore', error.error.message, 'error').then(() => {
-            this.router.navigate(['/'])
+            this.location.back()
           });
           this.isLoading = false;
         }
@@ -74,7 +75,7 @@ urlImg:string ='';
     if (this.teamToUpdate.id && this.newName.teamName.length > 2) {
       this.teamSv.updateName(this.teamToUpdate.id, this.newName).subscribe(() =>{
         Swal.fire("Nome del team aggiornato correttamente")
-        this.router.navigate(['/team/player/', this.newName.teamName]);
+        this.location.back()
         this.isLoading = false
       },
       (error)=>{
@@ -92,13 +93,11 @@ urlImg:string ='';
 
     this.isLoading = true;
     this.teamSv.updateCaptainName(this.teamToUpdate.name, this.newCaptain ).subscribe((data) =>{
-        console.log(data);
         Swal.fire("Nome del capitano aggiornato correttamente")
         this.isLoading = false;
       },
       (error) => {
         Swal.fire(error.error.message)
-        console.log(this.newCaptain);
         this.isLoading = false;
       });
 
@@ -123,6 +122,7 @@ urlImg:string ='';
         response => {
           this.urlImg = response.url;
           Swal.fire("Il logo è stato modificato con successo");
+          this.location.back()
           this.isLoading = false;
         },
         (error) => {

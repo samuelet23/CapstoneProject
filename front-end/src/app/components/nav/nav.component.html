@@ -1,26 +1,9 @@
-<!--
-<nav class="navbar navbar-expand-lg bg-primary" [ngClass]="{'sticky': isSticky}">
-  <div class="container-fluid">
-
-    <button class="navbar-toggler"  type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"> </span>
-    </button>
-    <div class="collapse navbar-collapse"  id="navbarNav">
-      <ul class="navbar-nav">
-        <ul ngbNav [activeId]="route.fragment | async" class="nav-tabs">
-        <div class="links">
-
-      </ul>
-      </ul>
-    </div>
-  </div>
-</nav> -->
-
 
 <nav class="navbar  bg-primary" [ngClass]="{'sticky': isSticky}">
   <div class="container-fluid">
-    <div class=" logo-container" routerLink="/">
-      <img src="../../../assets/logo .png" routerLink="" alt="logo" class="logo">
+    <div class=" logo-container pointer" routerLink="/" >
+      <img src='../../../assets/logo .png' routerLink="/{{username}}" alt="" class="logo" *ngIf="!isLoggedIn">
+      <img [src]="user.logoProfile || '../../../assets/logo .png'" routerLink="/{{username}}" alt="" class="logo" *ngIf="isLoggedIn && user">
     </div>
     <button class="navbar-toggler" type="button" (click)="toggleNav()" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -33,23 +16,30 @@
       <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" routerLink="/">Cerca torneo in città diversa.</a>
+            <a class="nav-link active" aria-current="page" routerLink="/"  (click)="toggleNav()" *ngIf="!isLoggedIn">Cerca torneo in città diversa.</a>
+            <a class="nav-link active" aria-current="page" routerLink="/{{username}}"  (click)="toggleNav()" *ngIf="isLoggedIn">Cerca torneo in città diversa.</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="auth/login">Login</a>
+            <a class="nav-link" routerLink="auth/login" *ngIf="!isLoggedIn" (click)="toggleNav()">Login</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="auth/register">Registrazione</a>
+            <a class="nav-link" routerLink="auth/register" *ngIf="!isLoggedIn" (click)="toggleNav()">Registrazione</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="user/profilo/{{username}}">Il mio account</a>
+            <a class="nav-link" routerLink="user/profilo/{{username}}" *ngIf="isLoggedIn" (click)="toggleNav()">Il mio account</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="user/get/all">Tutti gli Utenti</a>
+            <a class="nav-link" routerLink="user/get/all" *ngIf="isManager" (click)="toggleNav()">Tutti gli Utenti</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="team/create" *ngIf="isManager || isCoordinator" (click)="toggleNav()">Crea una Sqaudra</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="tournament/create" *ngIf="isManager" (click)="toggleNav()">Crea un torneo</a>
           </li>
         </ul>
 
-        <button class="btn btn-danger" (click)="logout()">LOGOUT</button>
+        <button class="btn btn-danger" (click)="logout()" *ngIf="isLoggedIn" >LOGOUT</button>
       </div>
     </div>
   </div>

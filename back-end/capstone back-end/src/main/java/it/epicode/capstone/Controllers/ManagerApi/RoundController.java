@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Exceptions.TournamentDataException;
 import it.epicode.capstone.Models.Entities.Game;
+import it.epicode.capstone.Models.Entities.Tournament;
 import it.epicode.capstone.Models.ResponsesDTO.ConfirmRes;
 import it.epicode.capstone.Services.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/generate")
 @Tag(name = "ROUND ")
-@PreAuthorize("hasAuthority('MANAGER')")
+@PreAuthorize("hasAnyAuthority('COORDINATOR','MANAGER')")
 @SecurityRequirement(name = "Easy3vs3Auth")
 //@Hidden
 public class RoundController {
@@ -52,6 +53,15 @@ public class RoundController {
     )
     public Game generateFinal(@PathVariable("tournament-name")String nameTournament) throws BadRequestException, TournamentDataException {
        return tournamentSv.generateFinale(nameTournament);
+    }
+
+    @PatchMapping("/tournament/finish/{tournamentName}")
+    @Operation(
+            description = "finish a tournament.",
+            summary = "Finish tournament"
+    )
+    public Tournament finishTournament(@PathVariable("tournamentName") String nameTournament)throws Exception{
+        return tournamentSv.finishTournament(nameTournament);
     }
 
 

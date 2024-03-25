@@ -5,12 +5,29 @@ import { CreatedComponent } from './created/created.component';
 import { ExistingComponent } from './existing/existing.component';
 import { UpdatedComponent } from './updated/updated.component';
 import { PlayersComponent } from './players/players.component';
+import { LogoComponent } from './logo/logo.component';
+import { NotFoundComponent } from '../not-found/not-found.component';
+import { AuthGuard } from '../../guards/auth.guard';
 
 const routes: Routes = [
-  { path: '', component: TeamComponent },
-  { path: 'create/tournament/:name', component: CreatedComponent },
-  { path: 'existing/tournament/:name', component: ExistingComponent },
-  { path: 'player/:name', component: PlayersComponent }
+  { path: '', component: NotFoundComponent },
+  {
+    path: 'create/tournament/:name',
+    component: CreatedComponent,
+   },
+  {
+    path: 'create',
+    component: CreatedComponent,
+   },
+  {
+    path: 'existing/tournament/:name',
+    component: ExistingComponent,
+  },
+  { path: 'player/:name', component: PlayersComponent },
+  {
+  path: 'player/:name/uploadLogo',
+  component: LogoComponent
+ }
 
 ];
 

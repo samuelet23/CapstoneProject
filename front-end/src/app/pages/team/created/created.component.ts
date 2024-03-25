@@ -1,8 +1,20 @@
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit, inject } from '@angular/core';
 import { TeamService } from '../../../services/team.service';
-import { ActivatedRoute, NavigationEnd, Event as NavigationEvent, Router } from '@angular/router';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Event as NavigationEvent,
+  Router,
+} from '@angular/router';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Player, PlayerDto, Team, TeamDto } from '../../../api/models';
 import Swal from 'sweetalert2';
 import { formatDate } from '@angular/common';
@@ -11,48 +23,43 @@ import { filter } from 'rxjs';
 @Component({
   selector: 'app-created',
   templateUrl: './created.component.html',
-  styleUrl: './created.component.scss'
+  styleUrl: './created.component.scss',
 })
 export class CreatedComponent implements OnInit {
-isLoading:boolean = false;
-players!:FormArray
-teamForm!: FormGroup;
-isUpdating:boolean = false;
-private route = inject(ActivatedRoute);
-private fb = inject(FormBuilder);
-private teamSv = inject(TeamService)
-private router = inject(Router)
-urlImg:string = ''
-teamName = this.route.snapshot.paramMap.get('name')
-teamToUpdate:Team ={
-  name: '',
-  players: [],
-  captain: {
-    dateOfBirth: '',
+  isLoading: boolean = false;
+  players!: FormArray;
+  teamForm!: FormGroup;
+  isUpdating: boolean = false;
+  private route = inject(ActivatedRoute);
+  private fb = inject(FormBuilder);
+  private teamSv = inject(TeamService);
+  private router = inject(Router);
+  teamName = this.route.snapshot.paramMap.get('name');
+  teamToUpdate: Team = {
     name: '',
-    nickname: '',
-    sigla: '',
-    surname: '',
-    teamName: '',
-    id: ''
-  }
-}
+    players: [],
+    captain: {
+      dateOfBirth: '',
+      name: '',
+      nickname: '',
+      sigla: '',
+      surname: '',
+      teamName: '',
+      id: '',
+    },
+  };
+  nameTournament!: string | null;
 
-constructor() {
-}
-
-
-
+  constructor() {}
 
   ngOnInit(): void {
     this.teamForm = this.fb.group({
       nameTeam: ['', Validators.required],
       captainName: ['', Validators.required],
-      players: this.fb.array([], Validators.required)
+      players: this.fb.array([], Validators.required),
     });
-      this.addPlayer();
-    }
-
+    this.addPlayer();
+  }
 
   submitForm() {
     if (this.teamForm.valid) {
@@ -65,72 +72,91 @@ constructor() {
             name: player.name,
             nickname: player.nickname,
             sigla: player.sigla,
-            surname: player.surname
+            surname: player.surname,
           };
           return playerDto;
-        })
+        }),
       };
 
-      const nameTournament = this.route.snapshot.paramMap.get('name');
-      if (nameTournament) {
-        this.subscribeCreatedTeam(team, nameTournament)
-      } else{
-        throw new Error ('Il nome del torneo è inesistente')
+      this.nameTournament = this.route.snapshot.paramMap.get('name');
+      if (this.nameTournament) {
+        this.subscribeCreatedTeam(team, this.nameTournament);
+      } else {
+        this.createdTeam(team);
       }
     }
   }
 
+  createdTeam(team: TeamDto) {
+    this.teamSv.createTeam(team).subscribe(
+      (team) => {
+        Swal.fire('Team creato correttamente, aggiungilo ad un torneo').then(
+          () => {
+            this.router.navigate(['/tournament/get/all']);
+          }
+        );
+      },
+      (error) => {
+        let errorMessage =
+          "Si è verificato un errore durante l'esecuzione dell'operazione. Si prega di riprovare più tardi.";
+        if (
+          error.status === 500 &&
+          error.error.message &&
+          error.error.message.includes(
+            'un valore chiave duplicato viola il vincolo univoco'
+          )
+        ) {
+          errorMessage =
+            'Il nome utente o il nome del team inseriti sono  già in uso. Si prega di scegliere un altro nome utente.';
+        }
+        Swal.fire({
+          icon: 'error',
+          title: 'Errore!',
+          text: errorMessage,
+        });
+      }
+    );
+  }
 
-  onFileSelected(event: any, teamName: string | null) {
-    const file: File = event.target.files[0];
-    console.log("File selezionato:", file);
-
-    this.isLoading = true;
-    if (teamName) {
-      this.teamSv.uploadLogoTeam(teamName, file).subscribe(
-        response => {
-          this.urlImg = response.url;
-          this.isLoading = false;
+  subscribeCreatedTeam(team: TeamDto, tournamentName: string) {
+    this.teamSv
+      .subscribeCreatedTeamToTournament(team, tournamentName)
+      .subscribe(
+        (team) => {
+          Swal.fire('Il team è stato creato con successo nel torneo').then(
+            () => {
+              this.router.navigate(['/tournament/' + tournamentName]);
+            }
+          );
         },
         (error) => {
-          Swal.fire("Errore nel caricamento dell'immagine. Prova con un immagine con dimensioni inferiori");
-          this.isLoading = false;
+          let errorMessage =
+            "Si è verificato un errore durante l'esecuzione dell'operazione. Si prega di riprovare più tardi.";
+          if (
+            error.status === 500 &&
+            error.error.message &&
+            error.error.message.includes(
+              'un valore chiave duplicato viola il vincolo univoco'
+            )
+          ) {
+            errorMessage =
+              'Il nome utente o il nome del team inseriti sono  già in uso. Si prega di scegliere un altro nome utente.';
+          }
+          Swal.fire({
+            icon: 'error',
+            title: 'Errore!',
+            text: errorMessage,
+          });
         }
       );
-    } else {
-      this.isLoading = false;
-    }
   }
 
-
-
-  subscribeCreatedTeam(team:TeamDto, tournamentName:string){
-    this.teamSv.subscribeCreatedTeamToTournament(team, tournamentName).subscribe(team =>{
-        Swal.fire("Il team è stato creato con successo nel torneo").then(() =>{
-          this.router.navigate(['/tournament/'+tournamentName])
-        });
-
-    },
-    (error) => {
-      let errorMessage = 'Si è verificato un errore durante l\'esecuzione dell\'operazione. Si prega di riprovare più tardi.';
-      if (error.status === 500 && error.error.message && error.error.message.includes('un valore chiave duplicato viola il vincolo univoco')) {
-        errorMessage = 'Il nome utente o il nome del team inseriti sono  già in uso. Si prega di scegliere un altro nome utente.';
-      }
-      Swal.fire({
-        icon: 'error',
-        title: 'Errore!',
-        text: errorMessage
-      });
-    });
+  isValid(fieldName: string) {
+    return this.teamForm.get(fieldName)?.valid;
   }
 
-
-  isValid(fieldName:string){
-    return this.teamForm.get(fieldName)?.valid
-  }
-
-  isTouched(fieldName:string){
-    return this.teamForm.get(fieldName)?.touched
+  isTouched(fieldName: string) {
+    return this.teamForm.get(fieldName)?.touched;
   }
 
   getPlayerControl(index: number, fieldName: string) {
@@ -147,89 +173,78 @@ constructor() {
     return null;
   }
 
-isCaptainNameValid(): boolean {
-  const captainName = this.teamForm.value.captainName;
-  const players = this.teamForm.value.players;
+  isCaptainNameValid(): boolean {
+    const captainName = this.teamForm.value.captainName;
+    const players = this.teamForm.value.players;
 
-  return players.some((player: { nickname: any; }) => player.nickname === captainName);
-}
-
-
-
-addPlayer() {
- this.players = this.teamForm.get('players') as FormArray;
-  if (this.players.length < 5) {
-    this.players.push(this.createPlayer());
-    this.createPlayer()
-  }
-  else{
-    Swal.fire("Non puoi creare più di 5 giocatori per ogni team")
-  }
-}
-
-
-removePlayer(index: number) {
-  this.players = this.teamForm.get('players') as FormArray;
-  if (this.players.length >1) {
-    this.players.removeAt(index);
-  } else{
-    Swal.fire('Erorre: inserisci minimo 3 giocatori')
-  }
+    return players.some(
+      (player: { nickname: any }) => player.nickname === captainName
+    );
   }
 
-  removePlayerById(id:string){
-
-  }
-
-createPlayer(): FormGroup {
-  return this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(3)]],
-    surname: ['', [Validators.required, Validators.minLength(3)]],
-    nickname: ['', [Validators.required, Validators.minLength(3)]],
-    dateOfBirth: ['', [Validators.required, this.dateOfBirthValidator]],
-    sigla: ['', [Validators.required, Validators.pattern(/[A-E]/)]]
-  });
-}
-
-
-
-private checkDateAndFormat(dateOfBirth: string): string {
-  const dateOfBirthDate: Date = new Date(dateOfBirth);
-  const today: Date = new Date();
-  if (isNaN(dateOfBirthDate.getTime()) || dateOfBirthDate > today) {
-    Swal.fire({
-      title: 'Errore',
-      text: 'La data di nascita non è valida o è successiva a oggi.',
-      icon: 'error',
-      confirmButtonText: 'OK'
-    });
-    throw new Error('La data di nascita non è valida o è successiva a oggi.');
-  }
-
-  return formatDate(
-    dateOfBirthDate,
-    'dd-MM-yyyy',
-    'en-US'
-  );
-}
-private dateOfBirthValidator(control: FormControl) {
-  const inputDate = new Date(control.value);
-  const currentDate = new Date();
-  return inputDate <= currentDate ? null : { invalidDateOfBirth: true };
-}
-protected arePlayersValid() {
-  if (this.players.length < 3 || this.players.length > 5) {
-    return false;
-  }
-
-  for (let i = 0; i < this.players.length; i++) {
-    const playerFormGroup = this.players.at(i) as FormGroup;
-    if (playerFormGroup.invalid) {
-      return false;
+  addPlayer() {
+    this.players = this.teamForm.get('players') as FormArray;
+    if (this.players.length < 5) {
+      this.players.push(this.createPlayer());
+      this.createPlayer();
+    } else {
+      Swal.fire('Non puoi creare più di 5 giocatori per ogni team');
     }
   }
 
-  return true;
-}
+  removePlayer(index: number) {
+    this.players = this.teamForm.get('players') as FormArray;
+    if (this.players.length > 1) {
+      this.players.removeAt(index);
+    } else {
+      Swal.fire('Erorre: inserisci minimo 3 giocatori');
+    }
+  }
 
+  removePlayerById(id: string) {}
+
+  createPlayer(): FormGroup {
+    return this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      surname: ['', [Validators.required, Validators.minLength(3)]],
+      nickname: ['', [Validators.required, Validators.minLength(3)]],
+      dateOfBirth: ['', [Validators.required, this.dateOfBirthValidator]],
+      sigla: ['', [Validators.required, Validators.pattern(/[A-E]/)]],
+    });
+  }
+
+  private checkDateAndFormat(dateOfBirth: string): string {
+    const dateOfBirthDate: Date = new Date(dateOfBirth);
+    const today: Date = new Date();
+    if (isNaN(dateOfBirthDate.getTime()) || dateOfBirthDate > today) {
+      Swal.fire({
+        title: 'Errore',
+        text: 'La data di nascita non è valida o è successiva a oggi.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+      throw new Error('La data di nascita non è valida o è successiva a oggi.');
+    }
+
+    return formatDate(dateOfBirthDate, 'dd-MM-yyyy', 'en-US');
+  }
+  private dateOfBirthValidator(control: FormControl) {
+    const inputDate = new Date(control.value);
+    const currentDate = new Date();
+    return inputDate <= currentDate ? null : { invalidDateOfBirth: true };
+  }
+  protected arePlayersValid() {
+    if (this.players.length < 3 || this.players.length > 5) {
+      return false;
+    }
+
+    for (let i = 0; i < this.players.length; i++) {
+      const playerFormGroup = this.players.at(i) as FormGroup;
+      if (playerFormGroup.invalid) {
+        return false;
+      }
+    }
+
+    return true;
+  }
 }

@@ -37,45 +37,7 @@ public class TokenConfig implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        UserDTO managerDTO = new UserDTO(
-                "manager",
-                "manager",
-                "manager1",
-                "23-11-2000",
-                "manager@gmail.com",
-                "MANAGER",
-                "manager",
-                "manager"
-        );
 
-        generateManagerToken(managerDTO);
-
-
-        UserDTO captainDTO = new UserDTO(
-                "captain",
-                "captain",
-                "captain1",
-                "23-11-2000",
-                "captain@gmail.com",
-                "CAPTAIN",
-                "captain",
-                "captain"
-        );
-
-        generateCaptainToken(captainDTO);
-
-        UserDTO userDTO = new UserDTO(
-                "user",
-                "user1",
-                "user1",
-                "23-11-2000",
-                "user@gmail.com",
-                "USER",
-                "user",
-                "user"
-        );
-
-        generateUserToken(userDTO);
 
 
 
@@ -107,7 +69,7 @@ public class TokenConfig implements CommandLineRunner {
         AccessTokenRes accessTokenRes = authService.login(captainDTO.username(), captainDTO.password());
         System.out.println("Captain Token: " + accessTokenRes.getAccessToken());
     } catch (BadRequestException | UnauthorizedException e) {
-        authService.registerCaptain(captainDTO);
+        authService.registerCoordinator(captainDTO);
         AccessTokenRes accessTokenRes = authService.login(captainDTO.username(), captainDTO.password());
         System.out.println("Captain Token: " + accessTokenRes.getAccessToken());
     }

@@ -8,8 +8,9 @@ export interface User {
   dateOfBirth: string;
   email: string;
   id?: string;
+  logoProfile?:string;
   name: string;
-  role?: 'USER' | 'CAPTAIN' | 'MANAGER';
+  role: 'USER' | 'COORDINATOR' | 'MANAGER';
   surname: string;
   username: string;
 }

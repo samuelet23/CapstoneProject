@@ -21,9 +21,9 @@
         <div class="actions my-3 p-3">
           <button class="btn btn-primary my-2" (click)="editUser(user)">Modifica {{user.name}}</button>
           <button class="btn btn-danger my-2" (click)="deleteUser(user)">Elimina {{user.name}}</button>
-          <button class="btn btn-success my-2" (click)="makeUserManager(user)" *ngIf="user.role !== 'MANAGER'">{{user.name}} diventa Manager</button>
-          <button class="btn btn-warning my-2" (click)="makeUserCaptain(user)" *ngIf="user.role !== 'CAPTAIN'">{{user.name}} diventa Capitano</button>
-          <button class="btn btn-warning my-2" (click)="makeUserUser(user)" *ngIf="user.role !== 'USER'">{{user.name}} ritorna user</button>
+          <button class="btn btn-success my-2" (click)="makeUserManager(user)" *ngIf="user.role !== 'MANAGER'">{{user.name}} promuovi a Manager</button>
+          <button class="btn btn-warning my-2" (click)="makeUserCoordinator(user)" *ngIf="user.role !== 'COORDINATOR'">{{user.name}} Promuovi a Organizzatore</button>
+          <button class="btn btn-warning my-2" (click)="makeUserUser(user)" *ngIf="user.role !== 'USER'">{{user.name}} Declassa a User</button>
         </div>
       </div>
     </div>

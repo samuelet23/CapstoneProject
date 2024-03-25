@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Player, PlayerDto, Team, TeamDto } from '../api/models';
+import { Player, PlayerDto, Team, TeamDto, UploadConfirm } from '../api/models';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -15,6 +15,12 @@ export class PlayerService {
 
   createPlayer(player: PlayerDto):Observable<Player>{
     return this.http.post<Player>(`${this.url}/player/create`, player)
+  }
+
+  uploadLogoPlayer(nickname:string, file: File):Observable<UploadConfirm>{
+    const img: FormData = new FormData();
+    img.append('file', file)
+    return this.http.patch<UploadConfirm>(`${this.url}/player/upload/logo-player/${nickname}`,img)
   }
 
   updateCredentialPlayer(player: PlayerDto, id:string):Observable<Player>{

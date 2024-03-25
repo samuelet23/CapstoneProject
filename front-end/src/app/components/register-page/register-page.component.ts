@@ -1,5 +1,5 @@
 import { User } from './../../api/models/user';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { formatDate } from '@angular/common';
 import Swal from 'sweetalert2';
 import { myAuthService } from '../../services/myAuth.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-register-page',
@@ -21,12 +22,12 @@ import { myAuthService } from '../../services/myAuth.service';
   styleUrl: './register-page.component.scss',
 })
 export class RegisterPageComponent implements OnInit {
+  private userSv = inject(UserService)
   @Input() defaultRole!: string;
   isLoading: boolean = false;
   registrationForm!: FormGroup;
   hoveredDate: NgbDate | null = null;
   userRegister!: UserDto;
-
   constructor(
     private fb: FormBuilder,
     private auth: myAuthService,
@@ -86,12 +87,20 @@ export class RegisterPageComponent implements OnInit {
     try {
       if (this.registrationForm && this.registrationForm.valid) {
         this.auth.signup(params).subscribe(
-          (response: any) => {
+          (response) => {
+            Swal.fire({
+              title: 'Confermato',
+              text: "La tua registrazione è andata a buon fine",
+              icon: 'success',
+            }).then(() =>{
 
-            this.router.navigate(['auth/login']);
+              this.router.navigate(['auth/login']);
+              this.isLoading = false;
+            })
             this.isLoading = false;
           },
           (error) => {
+
             Swal.fire({
               title: 'Errore',
               text: error.error.message,
@@ -108,6 +117,7 @@ export class RegisterPageComponent implements OnInit {
 
     }
 }
+
 
 private checkDateAndFormat():string{
   const dateOfBirth: Date = new Date(this.registrationForm.value.dateOfBirth);

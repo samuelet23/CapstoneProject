@@ -15,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.UUID;
@@ -69,9 +68,9 @@ public class AuthService {
         User u =register(userDTO);
         u.setRole(Role.USER);
     }
-    public void registerCaptain(UserDTO userDTO) throws BadRequestException, InternalServerErrorException {
+    public void registerCoordinator(UserDTO userDTO) throws BadRequestException, InternalServerErrorException {
         User u =register(userDTO);
-        u.setRole(Role.CAPTAIN);
+        u.setRole(Role.COORDINATOR);
     }
     public void registerManager(UserDTO userDTO) throws BadRequestException, InternalServerErrorException {
         User u =register(userDTO);

@@ -4,7 +4,7 @@ import { environment } from '../../environments/environment';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ConfirmRes, DeleteRes, UpdatePasswordDto, UpdateRoleRes, UserUpdateDto } from '../api/models';
+import { ConfirmRes, DeleteRes, UpdatePasswordDto, UpdateRoleRes, UploadConfirm, UserUpdateDto } from '../api/models';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +24,11 @@ export class UserService {
   getUserByUsername(username:string):Observable<User>{
     return this.http.get<User>(`${this.url}/open/user/get/byUsername/${username}`)
   }
-
+  uploadLogoProfile(username:string, file: File):Observable<UploadConfirm>{
+    const img: FormData = new FormData();
+    img.append('file', file)
+    return this.http.patch<UploadConfirm>(`${this.url}/open/upload/logo-profile/${username}`,img)
+  }
   updateCredentialUser(username:string, userUpdate: UserUpdateDto):Observable<User>{
     return this.http.put<User>(`${this.url}/user/update/byUsername/${username}` , userUpdate)
   }
@@ -37,8 +41,8 @@ export class UserService {
   updateUserToUser(username:string):Observable<UpdateRoleRes>{
     return this.http.patch<UpdateRoleRes>(`${this.url}/user/update/${username}/user`,{})
   }
-  updateUserToCaptain(username:string):Observable<UpdateRoleRes>{
-    return this.http.patch<UpdateRoleRes>(`${this.url}/user/update/${username}/captain`,{})
+  updateUserToCoordinator(username:string):Observable<UpdateRoleRes>{
+    return this.http.patch<UpdateRoleRes>(`${this.url}/user/update/${username}/coordinator`,{})
   }
   updateUserToManager(username:string):Observable<UpdateRoleRes>{
     return this.http.patch<UpdateRoleRes>(`${this.url}/user/update/${username}/manager`,{})

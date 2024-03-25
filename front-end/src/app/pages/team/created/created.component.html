@@ -72,9 +72,9 @@
 
         <div class="container-btn">
           <button type="button" (click)="addPlayer()" class="btn btn-primary">
-            <span class="bi bi-plus"></span> Add Player
+            <span class="bi bi-plus"></span> Aggiungi Giocatore
           </button>
-          <button type="button" (click)="removePlayer(i)" class="btn btn-danger">Remove Player</button>
+          <button type="button" (click)="removePlayer(i)" class="btn btn-danger" *ngIf="players.length>1">Rimuovi Giocatore</button>
         </div>
 
       </div>
@@ -106,17 +106,13 @@
             Il nome del capitano deve essere il nickname di uno dei giocatori.
           </span>
         </div>
-        <div class="form-group">
-          <label for="coverImage">Aggiungi il tuo logo  (PNG o JPG) <span>(facoltativo, puoi inserirlo successivamente)</span></label>
-          <input type="file" id="coverImage" class="form-control" #fileInput (change)="onFileSelected($event, teamName)">
-        </div>
       </div>
 
 
 
       <button type="submit" class="btn btn-primary"
-        [disabled]="teamForm.invalid || players.length < 3 || players.length > 5 || !arePlayersValid() || !isCaptainNameValid()">Crea
-        e Iscrivi il tuo Team!</button>
+        [disabled]="teamForm.invalid || players.length < 3 || players.length > 5 || !arePlayersValid() || !isCaptainNameValid() ">
+        Crea il tuo Team!</button>
     </div>
   </form>
 

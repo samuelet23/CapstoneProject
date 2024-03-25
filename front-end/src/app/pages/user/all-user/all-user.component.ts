@@ -3,6 +3,7 @@ import { User } from '../../../api/models';
 import { UserService } from './../../../services/user.service';
 import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-all-user',
@@ -12,6 +13,7 @@ import { Router } from '@angular/router';
 export class AllUserComponent implements OnInit {
   private userSv = inject(UserService);
   private router = inject(Router);
+  private location = inject(Location)
 
   isLoading: boolean = false;
 
@@ -40,7 +42,9 @@ export class AllUserComponent implements OnInit {
       }
     );
   }
-
+goBack(){
+  this.location.back();
+}
   makeUserUser(user: User) {
     this.isLoading = true;
     this.userSv.updateUserToUser(user.username).subscribe(
@@ -57,7 +61,7 @@ export class AllUserComponent implements OnInit {
           if (result.isConfirmed) {
             Swal.fire({
               title: `Modifica effettuata`,
-              text: `Adesso ${user.name} è uno user !`,
+              text: `Adesso ${user.name} è user!`,
               icon: 'success',
             });
             const updatedUserIndex = this.users.findIndex(
@@ -87,9 +91,9 @@ export class AllUserComponent implements OnInit {
     );
   }
 
-  makeUserCaptain(user: User) {
+  makeUserCoordinator(user: User) {
     this.isLoading = true;
-    this.userSv.updateUserToCaptain(user.username).subscribe(
+    this.userSv.updateUserToCoordinator(user.username).subscribe(
       (data) => {
         Swal.fire({
           title: 'Sei sicuro?',
@@ -110,7 +114,7 @@ export class AllUserComponent implements OnInit {
               (u) => u.username === user.username
               );
               if (updatedUserIndex !== -1) {
-                this.users[updatedUserIndex].role = 'CAPTAIN';
+                this.users[updatedUserIndex].role = 'COORDINATOR';
               }
               this.isLoading = false;
             }

@@ -5,10 +5,17 @@
 .logo-container {
   margin-right: auto;
   width: 80px;
-  .logo {
-    width: 100%;
-  }
 }
+.logo {
+  width: 100%;
+  border-radius: 100%;
+}
+.flex{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 
 .error-message {
   font-size: 9px;
@@ -83,4 +90,10 @@
 
 .btn {
   width: 100%;
+}
+.container-logo{
+  width: 100px;
+}
+.height{
+  height: 55vh;
 }

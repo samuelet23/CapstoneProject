@@ -6,7 +6,9 @@
 
 <div class="form-group p-3 m-3 " *ngIf="!isLoading && refereCreated !== checkTheRefereeForTournament(tournament)?.requiredReferees">
   <div class="flex">
-    <h4>Crea Arbitro</h4>  </div>
+    <h4>Crea Arbitro</h4>
+    <p>Il tuo torneo ha bisogno di {{numRefereesExpected}} arbitri</p>
+  </div>
   <div>
     <h5>Arbitri assegnati a questo torneo: {{ refereCreated }}</h5>
   </div>
@@ -22,7 +24,7 @@
       <div *ngIf="isNotValidAndTouched('surname')" class="error-message error-text">Il cognome deve essere almeno di 3 caratteri</div>
     </div>
     <div class="form-group">
-      <label for="nickname">Soprannome:</label>
+      <label for="nickname">Nickname:</label>
       <input type="text" id="nickname" formControlName="nickname" class="form-control" placeholder="Inserisci il soprannome dell'arbitro">
       <div *ngIf="isNotValidAndTouched('nickname')" class="error-message error-text">Il nickname deve essere almeno di 3 caratteri</div>
     </div>

@@ -1,0 +1,40 @@
+<div *ngFor="let tournament of tournaments" class="tournament-card p-3 m-3">
+  <div class="tournament-details">
+    <p class="tournament-name">Nome Torneo: <span>{{ tournament.name }}</span></p>
+    <p class="tournament-level">Livello: <span>{{ tournament.level }}</span></p>
+    <p class="tournament-start-date">Data di Inizio: <span>{{ tournament.startDate }}</span></p>
+    <p class="tournament-place">Luogo: <span>{{ tournament.place?.address?.via }}, {{ tournament.place?.address?.civico }} {{ tournament.place?.address?.cap }}</span></p>
+    <p class="tournament-court-name">Nome Campo: <span>{{ tournament.place?.courtName }}</span></p>
+    <h4 class="tournament-teams" >Squadre:</h4>
+    <div *ngFor="let team of tournament.teams">
+      <p>{{team.logo}}</p>
+      <p>{{team.name}}</p>
+    </div>
+    <div *ngFor="let referee of tournament.referees">
+      <h4 class="tournament-referees" >Arbitro/i:</h4>
+      <p>{{referee.name}}</p>
+      <p>{{referee.surname}}</p>
+      <p>{{referee.age}}</p>
+    </div>
+  </div>
+  <div class="tournament-cover">
+    <img [src]="tournament.coverUrl || '../../../../assets/logo tournament.png'" alt="Cover del torneo">
+  </div>
+  <!-- Manager Button -->
+  <button routerLink="/tournament/{{tournament.name}}/referee" class="btn btn-outline-success" *ngIf="!isStarted(tournament) && checkTheRefereeForTournament(tournament) === 'Aggiungi arbitro' && !isFinished && isManagerOrCoordinator" >Aggiungi Arbitro/i</button>
+  <button routerLink="/tournament/{{tournament.name}}/teams" class="btn btn-outline-success" *ngIf="!isStarted(tournament) && checkTheRefereeForTournament(tournament) === 'Inizia torneo' && !isFinished(tournament) && isManagerOrCoordinator && tournament.teams!.length<16"  >Aggiungi Squadre</button>
+  <button routerLink="/tournament/{{tournament.name}}/rounds" class="btn btn-outline-success" *ngIf="!isStarted(tournament) && checkTheRefereeForTournament(tournament) === 'Inizia torneo' && !isFinished(tournament) && isManagerOrCoordinator && tournament.teams!.length==16"  >Inizia Torneo</button>
+
+  <!-- User Button -->
+  <button routerLink="/tournament/{{tournament.name}}/rounds" class="btn btn-outline-success" *ngIf="isStarted(tournament) && !isFinished(tournament)">Guarda l'andamento del torneo</button>
+  <button  class="btn btn-outline-success" [disabled]="!isStarted(tournament)" *ngIf="!isStarted(tournament) && !isFinished(tournament)">L'organizzatore non ha ancora avviato il torneo</button>
+  <button routerLink="/tournament/{{tournament.name}}/rounds" class="btn btn-outline-success" *ngIf="isFinished(tournament)">Il torneo è finito, scopri chi ha vinto e chi è l'MVP</button>
+
+</div>
+
+<div class="height" *ngIf="tournaments.length == 0 && !isLoading" >
+  <div class="message-container">
+    <p class="message">Non ci sono tornei disponibili</p>
+    <button class="btn btn-danger" (click)="goBack()">TORNA INDIETRO</button>
+  </div>
+</div>

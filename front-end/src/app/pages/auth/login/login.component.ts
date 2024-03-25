@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+declare var google:any
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Login$Params } from '../../../api/fn/auth/login';
 import { AccessTokenRes, LoginDto, User } from '../../../api/models';
 import { AuthService } from '../../../api/services';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { myAuthService } from '../../../services/myAuth.service';
 import { Router } from '@angular/router';
 
@@ -15,18 +16,38 @@ import { Router } from '@angular/router';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit{
+  private fb = inject(FormBuilder)
+  private auth = inject(myAuthService)
+  private router = inject(Router)
   isLoading:boolean =false;
   form!:FormGroup;
+  userRole$ = new BehaviorSubject<string>('');
 
 
-  constructor(private fb: FormBuilder, private  auth: myAuthService, private router: Router){}
+  constructor(){}
 
   ngOnInit(): void {
+    google.accounts.id.initialize({
+      client_id: '558661000376-fkg5c4718pmq6djm3dt7qqtucml2ju0i.apps.googleusercontent.com',
+      callback: (resp:any) =>{
+        this.auth.handleGoogleLogin(resp)
+      }
+    });
+
+    google.accounts.id.renderButton(document.getElementById("google-btn"),{
+      theme: 'filled_blue',
+      size:'medium',
+      shape:'rectangle',
+      width: 250
+    })
+
+
     this.form = this.fb.group({
       username:['', [Validators.required, Validators.minLength(5)]],
       password:['', [Validators.required, Validators.minLength(7)]]
     })
   }
+
 
 
   access(): void {
@@ -41,16 +62,28 @@ export class LoginComponent implements OnInit{
           const token = res.accessToken;
           if (token) {
             localStorage.setItem('token', token);
-            this.router.navigate(['/']);
+            this.isLoading = false
 
+            Swal.fire({
+              title: 'Confermato',
+              text: "Login avvenuto con successo",
+              icon: 'success',
+            }).then(() =>{
+              this.router.navigate(['/'+this.form.value.username])
+              this.isLoading = false;
+            })
+            this.isLoading = false;
           }else{
             Swal.fire('Errore interno, ripova')
             this.isLoading = false
           }
         },
         (error) => {
-
-          Swal.fire(error.error.message)
+          if (error.error.message === "passowrd o username errati") {
+            Swal.fire("Errore", "Nome utente o password errati", "error");
+          } else {
+            Swal.fire("Errore", error.error.message, "error");
+          }
           this.isLoading = false;
         })
 

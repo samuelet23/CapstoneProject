@@ -6,6 +6,7 @@ import it.epicode.capstone.Models.DTO.TeamDTO;
 import it.epicode.capstone.Models.DTO.UpdatePlayerTeamDTO;
 import it.epicode.capstone.Models.Entities.Player;
 import it.epicode.capstone.Models.Entities.Team;
+import it.epicode.capstone.Models.Enums.RoleInTheGame;
 import it.epicode.capstone.Repositories.PlayerRepository;
 import it.epicode.capstone.Repositories.TeamRepository;
 import jakarta.transaction.Transactional;
@@ -50,9 +51,7 @@ public class TeamService {
     }
 
     public Team getByPlayerName(String name) throws BadRequestException {
-        return teamRp.findByPlayersContains(name).orElseThrow(
-                () -> new BadRequestException("The player with name " + name + " does not exist or is not associated with any team")
-        );
+        return teamRp.findByPlayerName(name);
     }
     public List<Team> getAllTeamWithoutCaptain(){
         return teamRp.findByCaptainIsNull();
@@ -92,6 +91,7 @@ public class TeamService {
         savedTeam.setPlayers(players);
         Player captain = playerRp.findByNickname(teamDTO.captainName())
                 .orElseThrow(() -> new IllegalArgumentException("Capitano non trovato"));
+        captain.setRoleInTheGame(RoleInTheGame.CAPTAIN);
         savedTeam.setCaptain(captain);
 
         return teamRp.save(savedTeam);

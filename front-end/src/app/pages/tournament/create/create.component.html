@@ -1,5 +1,11 @@
 <form [formGroup]="tournamentForm" (ngSubmit)="submitForm()" class="m-4 bg-dark p-3 rounded-3 text-white">
-<h2>Inizia a Creare il tuo torneo</h2>
+<i class="bi bi-arrow-left-circle-fill pointer" (click)="goBack()"></i>
+  <div class="flex ">
+    <h2>Crea il tuo torneo</h2>
+    <div class="container-logo">
+      <img src="{{urlImg}}" alt="" class="logo">
+    </div>
+  </div>
     <div class="form-group">
     <label for="name">Nome:</label>
     <input type="text" id="name" formControlName="name" class="form-control" placeholder="Inserisci il nome del torneo">

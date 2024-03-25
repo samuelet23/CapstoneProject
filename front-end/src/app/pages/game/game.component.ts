@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Game, Team } from '../../api/models';
 import Swal from 'sweetalert2';
 import { Unsubscribable } from 'rxjs';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-game',
@@ -14,6 +15,7 @@ import { Unsubscribable } from 'rxjs';
 })
 export class GameComponent implements OnInit  {
 private gameSv = inject(GameService);
+private location = inject(Location);
 private route = inject(ActivatedRoute);
 private router = inject(Router);
 partita: Game ={
@@ -48,7 +50,9 @@ ngOnInit(): void {
   }
   this.isLoading = false;
 }
-
+goBack(){
+  this.location.back()
+}
 startGame(): void {
   this.isLoading = true;
   if (this.idGame) {

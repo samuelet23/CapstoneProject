@@ -4,7 +4,7 @@ import { UserService } from '../../services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User, UserUpdateDto } from '../../api/models';
 import Swal from 'sweetalert2';
-import { formatDate } from '@angular/common';
+import { Location, formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-user',
@@ -13,24 +13,28 @@ import { formatDate } from '@angular/common';
 })
 export class UserComponent {
   private fb = inject(FormBuilder);
+  private location = inject(Location);
   private userSv = inject(UserService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   username: string | null = this.route.snapshot.paramMap.get('username');
   isLoading:boolean = false
   userForm!: FormGroup;
+  urlImg:string  = ''
   user:User = {
     age: 0,
     dateOfBirth: '',
     email: '',
     name: '',
     surname: '',
-    username: ''
+    username: '',
+    role: 'USER'
   }
 
   ngOnInit(): void {
     if (this.username) {
       this.getUserByUsername(this.username);
+
     }
   }
 
@@ -73,7 +77,7 @@ onSubmit(){
     this.userSv.updateCredentialUser(this.username, user).subscribe(res =>{
       Swal.fire("Utente modificato correttamente")
       this.isLoading = false;
-      this.router.navigate(['/'])
+      this.goBack();
     },
     (error)=>{
       Swal.fire(error.error.message)
@@ -93,4 +97,30 @@ checkDateAndFormat(dateOfBirth: string): string {
   return formatDate(dateOfBirthDate, 'dd-MM-yyyy', 'en-US');
 }
 
+onFileSelected(event: any) {
+  const file: File = event.target.files[0];
+
+  this.isLoading = true;
+
+  if (this.username) {
+
+    this.userSv.uploadLogoProfile(this.username, file).subscribe(
+      response => {
+        console.log(response);
+
+        this.urlImg = response.url;
+        this.isLoading = false;
+      },
+      (error) => {
+        Swal.fire("Errore nel caricamento dell'immagine. Prova con un immagine con dimensioni inferiori");
+        this.isLoading = false;
+      }
+      );
+    }
+
+}
+
+goBack(){
+  this.location.back()
+}
 }

@@ -1,4 +1,4 @@
-import { formatDate } from '@angular/common';
+import { Location, formatDate } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
@@ -16,6 +16,7 @@ export class CreateComponent {
   private fb = inject(FormBuilder)
   private router = inject(Router)
   private placeSv = inject(PlaceService)
+  private location  = inject(Location)
   private tournamentSv = inject(TournamentService)
   tournamentForm!: FormGroup;
   tournamentDto!:TournamentDto
@@ -49,6 +50,10 @@ export class CreateComponent {
       }
     });
 
+  }
+
+  goBack(){
+    this.location.back()
   }
 
   submitForm(){

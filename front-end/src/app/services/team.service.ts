@@ -22,6 +22,11 @@ export class TeamService {
   getTeamFromName(name:string):Observable<Team>{
     return this.http.get<Team>(`${this.url}/open/team/get/byName/${name}`)
   }
+
+  getTeamByPlayerName(playerName:string):Observable<Team>{
+    return this.http.get<Team>(`${this.url}/open/team/get/player-name?player-name=${playerName}`)
+  }
+
   createTeam(team: TeamDto):Observable<Team>{
     //crea un team
     return this.http.post<Team>(`${this.url}/team/create`,team);

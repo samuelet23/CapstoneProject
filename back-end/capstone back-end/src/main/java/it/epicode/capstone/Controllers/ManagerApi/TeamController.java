@@ -5,28 +5,19 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Exceptions.HandlerException;
-import it.epicode.capstone.Exceptions.NotFoundException;
-import it.epicode.capstone.Models.DTO.PlayerDTO;
 import it.epicode.capstone.Models.DTO.TeamDTO;
-import it.epicode.capstone.Models.DTO.UpdateCaptainDTO;
+import it.epicode.capstone.Models.DTO.UpdateCoordinatorDTO;
 import it.epicode.capstone.Models.DTO.UpdateTeamNameDTO;
 import it.epicode.capstone.Models.Entities.Player;
 import it.epicode.capstone.Models.Entities.Team;
-import it.epicode.capstone.Models.ResponsesDTO.ConfirmRes;
 import it.epicode.capstone.Models.ResponsesDTO.DeleteRes;
 import it.epicode.capstone.Services.TeamService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -65,7 +56,7 @@ public class TeamController {
             description = "Update the captain of a team.",
             summary = "Update team captain"
     )
-    public Player updateCaptainFromTeam(@RequestParam("team-name") String teamName, @RequestBody @Validated UpdateCaptainDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
+    public Player updateCaptainFromTeam(@RequestParam("team-name") String teamName, @RequestBody @Validated UpdateCoordinatorDTO playerDTO, BindingResult bindingResult)throws BadRequestException{
         HandlerException.badRequestException(bindingResult);
         return teamSv.updateCaptain(teamName, playerDTO.nickname());
 
