@@ -8,72 +8,72 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { myAuthService } from '../../../services/myAuth.service';
 import { Router } from '@angular/router';
+import { ResetPasswordService } from '../../../services/reset-password.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
 })
-export class LoginComponent implements OnInit{
-  private fb = inject(FormBuilder)
-  private auth = inject(myAuthService)
-  private router = inject(Router)
-  isLoading:boolean =false;
-  form!:FormGroup;
+export class LoginComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private passwordSv = inject(ResetPasswordService);
+  private auth = inject(myAuthService);
+  private router = inject(Router);
+  isLoading: boolean = false;
+  form!: FormGroup;
 
-
-  constructor(){}
+  constructor() {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      username:['', [Validators.required, Validators.minLength(5)]],
-      password:['', [Validators.required, Validators.minLength(7)]]
-    })
+      username: ['', [Validators.required, Validators.minLength(5)]],
+      password: ['', [Validators.required, Validators.minLength(7)]],
+    });
   }
-
-
 
   access(): void {
     this.isLoading = true;
     if (this.form && this.form.valid) {
       const loginParams: LoginDto = {
-          password: this.form.value.password,
-          username: this.form.value.username,
-        }
+        password: this.form.value.password,
+        username: this.form.value.username,
+      };
 
-        this.auth.login(loginParams).subscribe((res:AccessTokenRes)=>{
+      this.auth.login(loginParams).subscribe(
+        (res: AccessTokenRes) => {
           const token = res.accessToken;
           if (token) {
             localStorage.setItem('token', token);
-            this.isLoading = false
+            this.isLoading = false;
 
             Swal.fire({
               title: 'Confermato',
-              text: "Login avvenuto con successo",
+              text: 'Login avvenuto con successo',
               icon: 'success',
-            }).then(() =>{
-              this.router.navigate(['/'+this.form.value.username])
+            }).then(() => {
+              this.router.navigate(['/' + this.form.value.username]);
               this.isLoading = false;
-            })
+            });
             this.isLoading = false;
-          }else{
-            Swal.fire('Errore interno, ripova')
-            this.isLoading = false
+          } else {
+            Swal.fire('Errore interno, ripova');
+            this.isLoading = false;
           }
         },
         (error) => {
-
-          if (error.error.message === "passowrd o username errati") {
-            Swal.fire("Errore", "Nome utente o password errati", "error");
+          if (error.error.message === 'passowrd o username errati') {
+            Swal.fire('Errore', 'Nome utente o password errati', 'error');
             this.isLoading = false;
           } else {
-            Swal.fire("Errore", error.error.message, "error");
+            Swal.fire('Errore', error.error.message, 'error');
             this.isLoading = false;
           }
           this.isLoading = false;
-        })
+        }
+      );
+    }
+  }
 
-  }
-  }
 
 }

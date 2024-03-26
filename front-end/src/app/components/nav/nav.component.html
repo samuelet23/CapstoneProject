@@ -3,7 +3,7 @@
   <div class="container-fluid">
     <div class=" logo-container pointer"  >
       <img src='../../../assets/logo .png' routerLink="/" alt="" class="logo" *ngIf="!isLoggedIn">
-    <img src='../../../assets/logo .png' routerLink="/{{username}}" alt="" class="logo" *ngIf="isLoggedIn">
+    <img src='../../../assets/logo profile.png' routerLink="/{{username}}" alt="" class="logo" *ngIf="isLoggedIn">
       <!-- adding user img  -->
     </div>
     <button class="navbar-toggler" type="button" (click)="toggleNav()" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">

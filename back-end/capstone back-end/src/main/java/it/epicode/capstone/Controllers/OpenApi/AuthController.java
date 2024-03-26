@@ -9,11 +9,14 @@ import it.epicode.capstone.Exceptions.HandlerException;
 import it.epicode.capstone.Exceptions.InternalServerErrorException;
 import it.epicode.capstone.Exceptions.UnauthorizedException;
 import it.epicode.capstone.Models.DTO.LoginDTO;
+import it.epicode.capstone.Models.DTO.ResetPassword;
 import it.epicode.capstone.Models.DTO.UserDTO;
 import it.epicode.capstone.Models.Entities.User;
 import it.epicode.capstone.Models.ResponsesDTO.AccessTokenRes;
+import it.epicode.capstone.Models.ResponsesDTO.ConfirmRes;
 import it.epicode.capstone.Services.AuthService;
 import it.epicode.capstone.Services.UserService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -56,5 +59,13 @@ public class AuthController {
         return authService.login(loginDTO.username(), loginDTO.password() );
     }
 
-
+    @PutMapping("/forgot-password")
+    public ConfirmRes forgotPassword(@RequestParam String email) throws MessagingException, BadRequestException {
+        return authService.forgotPassword(email);
+    }
+    @PutMapping("/set-password")
+    public ConfirmRes setPassword(@RequestParam String email, @RequestBody @Validated ResetPassword resetPassword, BindingResult bindingResult) throws BadRequestException {
+        HandlerException.badRequestException(bindingResult);
+        return authService.setPassword(email,resetPassword);
+    }
 }

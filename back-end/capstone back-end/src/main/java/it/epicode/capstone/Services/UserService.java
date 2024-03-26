@@ -40,12 +40,16 @@ public class UserService {
 
     public User getById(UUID id)throws BadRequestException{
         return userRp.findById(id).orElseThrow(
-                () -> new BadRequestException("User with id: "+ id+" Not Found")
+                () -> new BadRequestException("id : "+ id+" non esiste")
         );
     }
     public User getByUsername(String username)throws BadRequestException{
         return userRp.findByUsername(username).orElseThrow(
-                () -> new BadRequestException("User with username: "+ username+" Not Found")
+                () -> new BadRequestException("username: "+ username+"  non esiste")
+        );
+    }public User getByEmail(String email)throws BadRequestException{
+        return userRp.findByEmail(email).orElseThrow(
+                () -> new BadRequestException("l'email: "+ email +" non esiste ")
         );
     }
 
@@ -96,7 +100,7 @@ public class UserService {
         User user = getByUsername(username);
 
         if (encoder.matches(updatePasswordDTO.oldPassword(), user.getPassword())) {
-            throw new UnauthorizedException("Old passowrd isn't correct. Impossible to update");
+            throw new UnauthorizedException("La Vecchia password non è corretta. Impossibile aggiornare");
         }
         user.setPassword(encoder.encode(updatePasswordDTO.newPassword()));
         user.setConfirmPassword(encoder.encode(updatePasswordDTO.newConfirmPassword()));
@@ -185,7 +189,7 @@ public class UserService {
             );
         } catch (DataIntegrityViolationException e) {
             if (userRp.getAllUsernames().contains(u.getUsername()) || userRp.getAllEmails().contains(u.getEmail()))
-                throw new BadRequestException("The username and/or password you've set already exist. Unable to update.");
+                throw new BadRequestException("Il nome utente e/o la password che hai impostato esistono già. Impossibile aggiornare");
             throw new InternalServerErrorException("Data integrity violation error: " + e.getMessage());
         }
     }
@@ -193,13 +197,13 @@ public class UserService {
 
     private void matchPassowrd(String password, String confirmPassowrd) throws BadRequestException {
         if (encoder.matches(password, confirmPassowrd)) {
-            throw new BadRequestException("Passwords don't match");
+            throw new BadRequestException("Le password non coincidono");
         }
     }
     private int calculateAge(LocalDate dateOfBirth)  {
         LocalDate now = LocalDate.now();
         if (dateOfBirth == null) {
-            throw new IllegalArgumentException("Invalid date of birth");
+            throw new IllegalArgumentException("Data di nascita non valida");
         }
 
         Period period = Period.between(dateOfBirth, now);
@@ -211,7 +215,7 @@ public class UserService {
             years--;
         }
         if (years < 14) {
-            throw new RuntimeException("You are still too young to sign up for the platform");
+            throw new RuntimeException("Sei ancora troppo piccolo per giocare questo torneo");
         }
 
         return years;

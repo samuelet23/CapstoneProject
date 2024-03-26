@@ -45,7 +45,11 @@ export class NavComponent {
     });
 
     this.isGoogleUser = !!sessionStorage.getItem('googleUser');
-
+    const userGoogle = sessionStorage.getItem('googleUser');
+    if (userGoogle) {
+      const user = JSON.parse(userGoogle)
+      this.username = user.given_name.replace(/\s/g, '')
+    }
 
   }
 

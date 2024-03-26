@@ -1,0 +1,65 @@
+.tournament-card {
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.tournament-card .tournament-details {
+  flex: 2;
+  padding-right: 20px;
+}
+.tournament-card .tournament-details .tournament-name,
+.tournament-card .tournament-details .tournament-level,
+.tournament-card .tournament-details .tournament-start-date,
+.tournament-card .tournament-details .tournament-place,
+.tournament-card .tournament-details .tournament-court-name,
+.tournament-card .tournament-details .tournament-teams,
+.tournament-card .tournament-details .tournament-referees {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+.tournament-card .tournament-details .tournament-teams,
+.tournament-card .tournament-details .tournament-referees {
+  margin-top: 20px;
+}
+.tournament-card .tournament-details h4 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 10px;
+}
+.tournament-card .tournament-details p {
+  margin: 5px 0;
+}
+.tournament-card .tournament-details p span {
+  margin-left: 5px;
+  font-weight: bold;
+}
+.tournament-card .tournament-cover {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.tournament-card .tournament-cover img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.message-container {
+  max-width: 500px;
+  margin: 120px auto;
+}
+
+.message {
+  font-size: 30px;
+  background: red;
+  padding: 11px;
+  border-radius: 15px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}/*# sourceMappingURL=all-tournaments.component.css.map */

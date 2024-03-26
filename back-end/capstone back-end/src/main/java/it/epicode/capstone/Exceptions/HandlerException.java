@@ -1,5 +1,6 @@
 package it.epicode.capstone.Exceptions;
 
+import jakarta.mail.MessagingException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -71,6 +72,11 @@ public class HandlerException {
     public ErrorResponse noTournamentAvailableHandler(NoTournamentsAvailableException e) {
         return new ErrorResponse(HttpStatus.BAD_REQUEST,
                 "ERROR:", "no tournament available after this date: " + e.getMessage());
+    }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MessagingException.class)
+    public ErrorResponse messagingHandler(MessagingException e) {
+        return new ErrorResponse(HttpStatus.BAD_REQUEST,"ERROR:", e.getMessage());
     }
 
 

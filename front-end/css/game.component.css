@@ -1,0 +1,107 @@
+.partita-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+.team-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.team-logo {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  margin-bottom: 10px;
+}
+
+.vs-text {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0 20px;
+}
+
+.name-player {
+  margin-right: 15px;
+  text-decoration: underline;
+  text-transform: uppercase;
+}
+
+.player-home {
+  color: green;
+}
+
+.sigla-home {
+  background-color: green;
+}
+
+.player-away {
+  color: orange;
+}
+
+.sigla-away {
+  background-color: orange;
+}
+
+.sigla {
+  padding: 7px 10px;
+  border-radius: 4px;
+  font-size: 15px;
+  color: white;
+  font-weight: bold;
+}
+
+.points {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.container-img {
+  width: 200px;
+  margin: 0 auto;
+}
+
+.img {
+  width: 200px;
+  height: 200px;
+}
+
+.winner-logo {
+  width: 200px;
+  height: 200px;
+}
+
+.captain-info {
+  font-style: italic;
+  color: #666;
+}
+
+.player-info {
+  margin-bottom: 10px;
+}
+
+.congrats-message {
+  color: #007bff;
+}
+
+@media screen and (max-width: 970px) {
+  .col-lg-5, .col-md-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+@media screen and (max-width: 768px) {
+  .col-lg-5, .col-md-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .col-lg-1 {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+  }
+}/*# sourceMappingURL=game.component.css.map */
