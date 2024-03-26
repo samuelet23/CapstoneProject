@@ -3,12 +3,14 @@ package it.epicode.capstone.Services;
 import it.epicode.capstone.Exceptions.BadRequestException;
 import it.epicode.capstone.Exceptions.InternalServerErrorException;
 import it.epicode.capstone.Exceptions.UnauthorizedException;
+import it.epicode.capstone.Models.DTO.ResetPassword;
 import it.epicode.capstone.Models.DTO.UserDTO;
 import it.epicode.capstone.Models.Entities.User;
 import it.epicode.capstone.Models.Enums.Role;
 import it.epicode.capstone.Models.ResponsesDTO.AccessTokenRes;
 import it.epicode.capstone.Repositories.UserRepository;
 import it.epicode.capstone.Security.JwtTools;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +27,10 @@ public class AuthService {
     @Autowired
     private UserRepository userRep;
     @Autowired
+    private UserService userSv;
+    @Autowired
+    private MailService mailSv;
+    @Autowired
     private PasswordEncoder encoder;
     @Autowired
     private JwtTools jwtTools;
@@ -38,17 +44,7 @@ public class AuthService {
 
     public User register(UserDTO userDTO) throws BadRequestException, InternalServerErrorException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        User u = new User(
-                userDTO.name(),
-                userDTO.surname(),
-                LocalDate.parse(userDTO.dateOfBirth(), formatter),
-                Role.valueOf(userDTO.role()),
-                userDTO.username(),
-                userDTO.email(),
-                encoder.encode(userDTO.password()),
-                encoder.encode(userDTO.confirmPassword())
-        );
-
+           User u = userSv.create(userDTO);
         if (encoder.matches(userDTO.password(), userDTO.confirmPassword())) {
             throw new BadRequestException("Le password non coincidono");
         }
@@ -92,6 +88,16 @@ public class AuthService {
     }
 
 
+    public String forgotPassword(String email) throws BadRequestException, MessagingException {
+       User u = userRep.findByEmail(email).orElseThrow(() -> new BadRequestException("Email: "+email+" inesistente"));
+        mailSv.sendSetPasswordEmail(email);
+        return "Controlla la tua email per reimpostare la password del tuo account.";
+    }
 
-
+    public String setPassword(String email, ResetPassword resetPassword) throws BadRequestException {
+        User u = userRep.findByEmail(email).orElseThrow(() -> new BadRequestException("Email: "+email+" inesistente"));
+        u.setPassword(encoder.encode(resetPassword.newPassword()));
+        userRep.save(u);
+        return "La nuova password è stata reimpostata correttamente";
+    }
 }

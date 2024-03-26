@@ -1,0 +1,26 @@
+.team-card .card-header img {
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+.team-card .card-header img:hover {
+  transform: scale(1.05);
+}
+.team-card .card-header h5 {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #333;
+}
+.team-card .card-body ul {
+  list-style-type: none;
+  padding: 0;
+}
+.team-card .card-body ul li {
+  margin-bottom: 10px;
+}
+.team-card .card-body ul li p {
+  margin: 0;
+}
+.team-card .card-body ul li:last-child {
+  margin-bottom: 0;
+}/*# sourceMappingURL=existing.component.css.map */

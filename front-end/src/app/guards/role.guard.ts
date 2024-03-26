@@ -17,6 +17,8 @@ export class RoleGuard implements CanActivate, CanActivateChild {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
       return this.auth.getUserRole$().pipe(
         map(role => {
+          console.log(role);
+
           if (role === 'MANAGER' ) {
             return true;
           } else if (role === 'COORDINATOR' && this.isCoordinatorRoute(state.url)) {

@@ -96,7 +96,7 @@ public class UserService {
         User user = getByUsername(username);
 
         if (encoder.matches(updatePasswordDTO.oldPassword(), user.getPassword())) {
-            throw new UnauthorizedException("Old passowrd isn't correct. Impossible to update");
+            throw new UnauthorizedException("La Vecchia password non è corretta. Impossibile aggiornare");
         }
         user.setPassword(encoder.encode(updatePasswordDTO.newPassword()));
         user.setConfirmPassword(encoder.encode(updatePasswordDTO.newConfirmPassword()));

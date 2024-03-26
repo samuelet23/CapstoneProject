@@ -1,0 +1,14 @@
+.player-container {
+  margin-bottom: 20px;
+}
+.player-container .form-group {
+  margin-bottom: 10px;
+}
+.player-container .error-message {
+  color: red;
+}
+
+.avvertenza {
+  font-weight: bold;
+  text-decoration: underline;
+}/*# sourceMappingURL=created.component.css.map */

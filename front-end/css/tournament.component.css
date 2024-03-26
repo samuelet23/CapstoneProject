@@ -1,0 +1,69 @@
+.height {
+  margin: 0 auto;
+  max-width: 317px;
+}
+
+.height2 {
+  height: 55vh;
+}
+
+.bg {
+  background-color: rgb(48, 44, 44);
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 2px solid orange;
+  width: 350px;
+}
+
+.container-mini-nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.logo-container {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-top: 100%;
+}
+
+.logo-container img {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height: auto;
+}
+
+.container-iscrivi {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.dropdown-menu {
+  position: absolute;
+  background-color: #fff;
+  min-width: 160px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.dropdown-item {
+  padding: 0.5rem 1rem;
+  clear: both;
+  font-weight: 400;
+  color: #212529;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: #ffa500;
+}/*# sourceMappingURL=tournament.component.css.map */

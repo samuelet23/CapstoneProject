@@ -1,0 +1,11 @@
+.container.create {
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.container.create .description {
+  font-size: 18px;
+  margin-bottom: 20px;
+}/*# sourceMappingURL=home.component.css.map */

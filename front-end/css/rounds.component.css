@@ -1,0 +1,81 @@
+.bg {
+  background-color: rgb(48, 44, 44);
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 2px solid orange;
+  width: 350px;
+}
+
+.winner-card {
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #f8f9fa;
+}
+.winner-card h2 {
+  color: #007bff;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.winner-card .winner-logo {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+.winner-card .lead {
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+.winner-card .player-details h5 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.winner-card .player-details p {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.rounds {
+  text-decoration: none;
+  color: #333;
+  padding: 10px 15px;
+}
+
+.rounds:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #ffa500;
+}
+
+.rounds {
+  text-decoration: none;
+  color: #333;
+  padding: 10px 15px;
+}
+
+.rounds:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #ffa500;
+}
+
+.flex {
+  margin: 10px 0;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+
+@media screen and (max-width: 1270px) {
+  .flex {
+    align-items: center;
+    justify-content: center;
+    flex-direction: column-reverse;
+  }
+}/*# sourceMappingURL=rounds.component.css.map */
