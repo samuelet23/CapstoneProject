@@ -16,52 +16,39 @@ export class NavComponent {
   active: boolean = false;
   isSticky: boolean = false;
 
-
   username: string = '';
-  user!:User;
-  isManager: boolean =false;
+  isManager: boolean = false;
   isCoordinator: boolean = false;
   isLoggedIn: boolean = false;
-
+  isGoogleUser: boolean = false;
   constructor() {
-    const userData = localStorage.getItem('utente');
-    if (userData) {
-      const user = JSON.parse(userData);
-      this.username = user.username;
-      this.getUserByUsername(this.username)
-      this.user = user
-    }
 
   }
 
   ngOnInit() {
-    this.authSv.getUserRole$().subscribe(role =>{
-      if (role === "MANAGER") {
-        return this.isManager = true;
+
+    this.authSv.getUserRole$().subscribe((role) => {
+      if (role === 'MANAGER') {
+        return (this.isManager = true);
       }
-      if (role === "COORDINATOR") {
-        return this.isCoordinator = true;
+      if (role === 'COORDINATOR') {
+        return (this.isCoordinator = true);
       }
-      return false
-    })
-this.authSv.isLoggedIn$.subscribe(loggedIn => {
-  this.isLoggedIn = loggedIn
-  if (!loggedIn) {
-    this.isManager = false;
-    this.isCoordinator = false;
-  }
-})
+      return false;
+    });
+    this.authSv.isLoggedIn$.subscribe((loggedIn) => {
+      this.isLoggedIn = loggedIn;
+      if (!loggedIn) {
+        this.isManager = false;
+        this.isCoordinator = false;
+      }
+    });
+
+    this.isGoogleUser = !!sessionStorage.getItem('googleUser');
+
 
   }
 
-
-getUserByUsername(username:string){
-  this.userSv.getUserByUsername(username).subscribe((user)=>{
-    console.log(user);
-
-    this.user = user
-  })
-}
 
   protected toggleNav() {
     this.active = !this.active;

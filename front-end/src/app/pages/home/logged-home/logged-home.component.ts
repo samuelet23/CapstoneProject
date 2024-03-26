@@ -13,4 +13,16 @@ private route  = inject(ActivatedRoute)
 
 
 username:string|null =  this.route.snapshot.paramMap.get('username')
+
+ngOnInit(){
+  if (!this.username) {
+
+    const googleUser = sessionStorage.getItem("googleUser");
+    if (googleUser) {
+      const user = JSON.parse(googleUser);
+      this.username = user.name;
+    }
+  }
 }
+}
+

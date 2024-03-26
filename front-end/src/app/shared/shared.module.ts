@@ -12,6 +12,7 @@ import { AllTournamentsComponent } from '../pages/tournament/all-tournaments/all
 import { RefereesComponent } from '../components/referees/referees.component';
 import { HomeSearchComponent } from '../components/home-search/home-search.component';
 import { ClassificaComponent } from '../pages/tournament/classifica/classifica.component';
+import { GoogleLoginComponent } from '../components/google-login/google-login.component';
 
 
 
@@ -23,6 +24,8 @@ import { ClassificaComponent } from '../pages/tournament/classifica/classifica.c
     SpinnerComponent,
     RefereesComponent,
     HomeSearchComponent,
+    GoogleLoginComponent,
+
   ],
   imports: [
     CommonModule,
@@ -40,6 +43,8 @@ import { ClassificaComponent } from '../pages/tournament/classifica/classifica.c
     SpinnerComponent,
     RefereesComponent,
     HomeSearchComponent,
+    GoogleLoginComponent,
+
   ]
 })
 export class SharedModule { }

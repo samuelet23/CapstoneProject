@@ -28,9 +28,7 @@
           <button type="submit" class="btn " [disabled]="form.invalid">
             Accedi
           </button>
-          <div id="google-btn">
-
-          </div>
+          <app-google-login></app-google-login>
           <div *ngIf="isLoading" class="overlay">
             <div class="spinner" role="status">
               <span class="app-spinner"></span>

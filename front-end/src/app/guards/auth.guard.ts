@@ -18,6 +18,7 @@ export class AuthGuard {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
       return this.auth.isLoggedIn$.pipe(map(isLoggedIn => {
         if(!isLoggedIn) this.router.navigate(['/auth/login']);
+            console.log(isLoggedIn);
 
         return isLoggedIn
       }))

@@ -9,6 +9,7 @@ export interface AccessTokenRes {
 export interface UserToken{
   dateOfBirth?: string;
   name?: string;
+  logoProfile?:string
   role?: string;
   surname?: string;
   username?: string;

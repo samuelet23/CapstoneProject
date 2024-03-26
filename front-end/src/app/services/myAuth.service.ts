@@ -18,11 +18,11 @@ export class myAuthService {
 
   userProfile!: UserToken;
   userLogged!: AccessTokenRes;
+  private userProfileSubject = new BehaviorSubject<UserToken | null>(null);
+  userProfile$ = this.userProfileSubject.asObservable();
 
   private roleSubject = new BehaviorSubject<string>('');
   role$ = this.roleSubject.asObservable();
-
-
 
   private authSubject = new BehaviorSubject<null | AccessTokenRes>(null);
   user$ = this.authSubject.asObservable();
@@ -42,12 +42,11 @@ export class myAuthService {
       tap((data:AccessTokenRes)=>{
           this.isLoggedInSubject.next(true);
           this.authSubject.next(data)
+          this.userProfileSubject.next(data.user)
           this.userLogged = data
           localStorage.setItem('string token', JSON.stringify(data.accessToken));
           localStorage.setItem('utente', JSON.stringify(data));
           this.autologout(data);
-          this.userProfile = data.user;
-          console.log(data);
 
       })
 
@@ -67,6 +66,16 @@ export class myAuthService {
         this.roleSubject.next("USER");
       }
 
+  }
+
+  handleGoogleLogin(response: any) {
+    if (response) {
+      const payload = this.decodeToken(response.credential);
+      sessionStorage.setItem('googleUser', JSON.stringify(payload));
+      // this.setUserRole("USER")
+      this.checkGoogleLoginStatus();
+      this.router.navigate(['/'])
+    }
   }
 
 getUserRole$(): Observable<string> {
@@ -148,14 +157,7 @@ getUserRole$(): Observable<string> {
     return JSON.parse(atob(token.split('.')[1]));
   }
 
-  handleGoogleLogin(response: any) {
-    if (response) {
-      const payload = this.decodeToken(response.credential);
-      sessionStorage.setItem('googleUser', JSON.stringify(payload));
-      this.router.navigate(['/'])
-      this.checkGoogleLoginStatus();
-    }
-  }
+
 
   logoutGoogle() {
     sessionStorage.removeItem('googleUser');
