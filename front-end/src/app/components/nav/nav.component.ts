@@ -19,6 +19,7 @@ export class NavComponent {
   username: string = '';
   isManager: boolean = false;
   isCoordinator: boolean = false;
+  isUser: boolean = false;
   isLoggedIn: boolean = false;
   isGoogleUser: boolean = false;
   constructor() {
@@ -27,12 +28,21 @@ export class NavComponent {
 
   ngOnInit() {
 
+    const userLs= localStorage.getItem('utente')
+    if (userLs) {
+      const user = JSON.parse(userLs)
+      this.username = user.username
+    }
+
     this.authSv.getUserRole$().subscribe((role) => {
       if (role === 'MANAGER') {
         return (this.isManager = true);
       }
-      if (role === 'COORDINATOR') {
+      else if (role === 'COORDINATOR') {
         return (this.isCoordinator = true);
+      }
+      else if (role === 'USER') {
+        return (this.isUser = true);
       }
       return false;
     });
@@ -48,7 +58,7 @@ export class NavComponent {
     const userGoogle = sessionStorage.getItem('googleUser');
     if (userGoogle) {
       const user = JSON.parse(userGoogle)
-      this.username = user.given_name.replace(/\s/g, '')
+      this.username = user.name.replace(/\s/g, '')
     }
 
   }

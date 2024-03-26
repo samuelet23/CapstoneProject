@@ -45,6 +45,9 @@
 </div>
 
 <div *ngFor="let tournament of tournaments" class="tournament-card p-3 m-3">
+  <div class="absolute pointer">
+    <i class="bi" [ngClass]="{'bi-heart-fill': isTournamentInFavorites(tournament.name), 'bi-heart': !isTournamentInFavorites(tournament.name)}" (click)="toggleFavorite(tournament.name)"></i>
+  </div>
   <div class="tournament-details">
     <p class="tournament-name">Nome Torneo: <span>{{ tournament.name }}</span></p>
     <p class="tournament-level">Livello: <span>{{ tournament.level }}</span></p>

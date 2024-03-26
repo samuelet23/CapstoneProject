@@ -6,8 +6,10 @@ import it.epicode.capstone.Exceptions.UnauthorizedException;
 import it.epicode.capstone.Models.DTO.UpdatePasswordDTO;
 import it.epicode.capstone.Models.DTO.UserDTO;
 import it.epicode.capstone.Models.DTO.UserUpdateDTO;
+import it.epicode.capstone.Models.Entities.Tournament;
 import it.epicode.capstone.Models.Entities.User;
 import it.epicode.capstone.Models.Enums.Role;
+import it.epicode.capstone.Models.ResponsesDTO.ConfirmRes;
 import it.epicode.capstone.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -27,6 +29,8 @@ public class UserService {
 
     @Autowired
     private UserRepository userRp;
+    @Autowired
+    private TournamentService tournamentSv;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -53,6 +57,31 @@ public class UserService {
         );
     }
 
+
+    public User addToFavorite(String username, String nameTournament)throws BadRequestException{
+        User u = getByUsername(username);
+        Tournament t = tournamentSv.getByName(nameTournament);
+        List<Tournament> favoriteTournaments = u.getFavoriteTournaments();
+        if (!favoriteTournaments.contains(t)) {
+            favoriteTournaments.add(t);
+            return userRp.save(u);
+        }
+            throw new BadRequestException("Il torneo è già nei preferiti");
+
+    }
+    public User removeToFavorite(String username, String nameTournament)throws BadRequestException{
+        User u = getByUsername(username);
+        Tournament t = tournamentSv.getByName(nameTournament);
+        List<Tournament> favoriteTournaments = u.getFavoriteTournaments();
+        if (favoriteTournaments.contains(t)) {
+            favoriteTournaments.remove(t);
+            return userRp.save(u);
+        }
+            throw new BadRequestException("Il torneo non è nei preferiti");
+
+    }
+
+
     public User create (UserDTO user) throws BadRequestException, InternalServerErrorException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         User u = new User();
@@ -77,9 +106,9 @@ public class UserService {
             );
         } catch (DataIntegrityViolationException e) {
             if (userRp.getAllEmails().contains(u.getEmail()))
-                throw new BadRequestException("Email Already Exists, impossible to create");
+                throw new BadRequestException("Email già esistente, impossibile da creare");
             if (userRp.getAllUsernames().contains(u.getUsername()))
-                throw new BadRequestException("Username Already Exists, impossible to create");
+                throw new BadRequestException("Username già esistente, impossibile da creare");
             throw new InternalServerErrorException("Data integrity violation error: " + e.getMessage());
         }
         return u;

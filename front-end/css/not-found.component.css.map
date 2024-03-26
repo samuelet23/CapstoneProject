@@ -1,1 +1,1 @@
-{"version":3,"sourceRoot":"","sources":[],"names":[],"mappings":"","file":"not-found.component.css"}
+{"version":3,"sourceRoot":"","sources":["../src/app/pages/not-found/not-found.component.scss"],"names":[],"mappings":"AAAA;EACE;EACA;EACA;EACA;EACA;EACA;;;AAGF;EACE;EACA;EACA;EACA;EACA;;;AAEF;EACE;EACA;EACA;EACA;EACA;EACA;;;AAGF;EACE;IACE;IACA","file":"not-found.component.css"}

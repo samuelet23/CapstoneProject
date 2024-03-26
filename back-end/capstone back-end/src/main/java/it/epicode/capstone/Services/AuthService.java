@@ -62,20 +62,6 @@ public class AuthService {
         throw new InternalServerErrorException("Data Integrity Violation: " + e.getMessage());
         }
     }
-    public void registerUser(UserDTO userDTO) throws BadRequestException, InternalServerErrorException {
-        User u =register(userDTO);
-        u.setRole(Role.USER);
-    }
-    public void registerCoordinator(UserDTO userDTO) throws BadRequestException, InternalServerErrorException {
-        User u =register(userDTO);
-        u.setRole(Role.COORDINATOR);
-    }
-    public void registerManager(UserDTO userDTO) throws BadRequestException, InternalServerErrorException {
-        User u =register(userDTO);
-        u.setRole(Role.MANAGER);
-    }
-
-
 
 
     public AccessTokenRes login(String username, String password) throws BadRequestException, UnauthorizedException {

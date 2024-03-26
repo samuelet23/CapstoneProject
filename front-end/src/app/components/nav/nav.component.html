@@ -2,9 +2,7 @@
 <nav class="navbar  bg-primary" [ngClass]="{'sticky': isSticky}">
   <div class="container-fluid">
     <div class=" logo-container pointer"  >
-      <img src='../../../assets/logo .png' routerLink="/" alt="" class="logo" *ngIf="!isLoggedIn">
-    <img src='../../../assets/logo profile.png' routerLink="/{{username}}" alt="" class="logo" *ngIf="isLoggedIn">
-      <!-- adding user img  -->
+      <img src='../../../assets/logo .png' routerLink="/" alt="" class="logo" >
     </div>
     <button class="navbar-toggler" type="button" (click)="toggleNav()" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -17,8 +15,10 @@
       <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" routerLink="/"  (click)="toggleNav()" *ngIf="!isLoggedIn">Cerca torneo in città diversa.</a>
-            <a class="nav-link active" aria-current="page" routerLink="/{{username}}"  (click)="toggleNav()" *ngIf="isLoggedIn">Cerca torneo in città diversa.</a>
+            <a class="nav-link active" aria-current="page" routerLink="/"  (click)="toggleNav()" >Cerca torneo in città diversa.</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" routerLink="/{{username}}/favorite-tournaments"  (click)="toggleNav()" *ngIf="isUser || isGoogleUser" >Tornei Preferiti</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" routerLink="auth/login" *ngIf="!isLoggedIn" (click)="toggleNav()">Login</a>

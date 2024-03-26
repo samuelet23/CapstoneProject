@@ -1,0 +1,33 @@
+<div *ngIf="isLoading" class="overlay">
+  <div class="spinner" role="status">
+    <span class="app-spinner"></span>
+  </div>
+</div>
+<div *ngIf="favoriteTournaments.length == 0" class="height">
+  <p> Non hai aggiunto nessun torneo ai preferiti</p>
+  <button routerLink="/tournament/get/all" class="btn btn-success">AGGIUNGINE UNO ADESSO</button>
+</div>
+<div *ngIf="favoriteTournaments.length > 0">
+  <div *ngFor="let tournament of favoriteTournaments" class="tournament-card">
+    <div class="card">
+      <div class="container-img">
+        <img [src]="tournament.coverUrl || '../../../assets/logo tournament.png'" class="card-img-top" alt="Cover Image">
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{ tournament.name }}</h5>
+        <p class="card-text">Livello: {{ tournament.level }}</p>
+        <p class="card-text">Luogo: {{ tournament.place }}</p>
+        <p class="card-text">Data di inizio: {{ tournament.startDate }}</p>
+        <p class="card-text">Arbitri:</p>
+        <ul class="list-group">
+          <li *ngFor="let referee of tournament.referees" class="list-group-item">{{ referee.name }}</li>
+        </ul>
+        <button *ngIf="tournament.state === 'STARTED'" type="button" class="btn btn-primary">Guarda l'andamento</button>
+        <button *ngIf="tournament.state === 'SCHEDULED'" type="button" class="btn btn-success">Ancora deve iniziare</button>
+        <button *ngIf="tournament.state === 'FINISHED'" type="button" class="btn btn-info">Scopri l'MVP e il vincitore</button>
+
+        <button class="btn btn-danger" (click)="remove(tournament.name)">Rimuovi dai Preferiti</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import { GrantedAuthority } from '../models/granted-authority';
+import { Tournament } from './tournament';
 export interface User {
   age: number;
   authorities?: Array<GrantedAuthority>;
@@ -8,6 +9,7 @@ export interface User {
   dateOfBirth: string;
   email: string;
   id?: string;
+  favoriteTournaments?:Tournament[]
   logoProfile?:string;
   name: string;
   role: 'USER' | 'COORDINATOR' | 'MANAGER';
