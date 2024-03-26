@@ -189,7 +189,7 @@ public class UserService {
             );
         } catch (DataIntegrityViolationException e) {
             if (userRp.getAllUsernames().contains(u.getUsername()) || userRp.getAllEmails().contains(u.getEmail()))
-                throw new BadRequestException("The username and/or password you've set already exist. Unable to update.");
+                throw new BadRequestException("Il nome utente e/o la password che hai impostato esistono già. Impossibile aggiornare");
             throw new InternalServerErrorException("Data integrity violation error: " + e.getMessage());
         }
     }
@@ -197,13 +197,13 @@ public class UserService {
 
     private void matchPassowrd(String password, String confirmPassowrd) throws BadRequestException {
         if (encoder.matches(password, confirmPassowrd)) {
-            throw new BadRequestException("Passwords don't match");
+            throw new BadRequestException("Le password non coincidono");
         }
     }
     private int calculateAge(LocalDate dateOfBirth)  {
         LocalDate now = LocalDate.now();
         if (dateOfBirth == null) {
-            throw new IllegalArgumentException("Invalid date of birth");
+            throw new IllegalArgumentException("Data di nascita non valida");
         }
 
         Period period = Period.between(dateOfBirth, now);
@@ -215,7 +215,7 @@ public class UserService {
             years--;
         }
         if (years < 14) {
-            throw new RuntimeException("You are still too young to sign up for the platform");
+            throw new RuntimeException("Sei ancora troppo piccolo per giocare questo torneo");
         }
 
         return years;

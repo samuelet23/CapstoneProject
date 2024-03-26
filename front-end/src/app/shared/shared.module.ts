@@ -14,6 +14,7 @@ import { HomeSearchComponent } from '../components/home-search/home-search.compo
 import { ClassificaComponent } from '../pages/tournament/classifica/classifica.component';
 import { GoogleLoginComponent } from '../components/google-login/google-login.component';
 import { ForgotPasswordComponent } from '../components/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from '../components/reset-password/reset-password.component';
 
 
 
@@ -26,8 +27,8 @@ import { ForgotPasswordComponent } from '../components/forgot-password/forgot-pa
     RefereesComponent,
     HomeSearchComponent,
     GoogleLoginComponent,
-    ForgotPasswordComponent
-
+    ForgotPasswordComponent,
+    ResetPasswordComponent,
   ],
   imports: [
     CommonModule,
@@ -46,7 +47,8 @@ import { ForgotPasswordComponent } from '../components/forgot-password/forgot-pa
     RefereesComponent,
     HomeSearchComponent,
     GoogleLoginComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    ResetPasswordComponent,
 
   ]
 })

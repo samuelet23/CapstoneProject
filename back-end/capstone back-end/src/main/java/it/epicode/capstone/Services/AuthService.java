@@ -100,8 +100,16 @@ public class AuthService {
     public ConfirmRes setPassword(String email, ResetPassword resetPassword) throws BadRequestException {
         User u = userRep.findByEmail(email).orElseThrow(() -> new BadRequestException("Email: "+email+" inesistente"));
         u.setPassword(encoder.encode(resetPassword.newPassword()));
+        u.setConfirmPassword(encoder.encode(resetPassword.confirmNewPassword()));
+        matchPassowrd(u.getPassword(), u.getConfirmPassword());
         userRep.save(u);
         return new ConfirmRes("La nuova password è stata reimpostata correttamente",
                 HttpStatus.OK);
+    }
+
+    private void matchPassowrd(String password, String confirmPassowrd) throws BadRequestException {
+        if (encoder.matches(password, confirmPassowrd)) {
+            throw new BadRequestException("Le passowrd non coincidono");
+        }
     }
 }
