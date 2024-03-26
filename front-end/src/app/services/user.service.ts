@@ -24,6 +24,9 @@ export class UserService {
   getUserByUsername(username:string):Observable<User>{
     return this.http.get<User>(`${this.url}/open/user/get/byUsername/${username}`)
   }
+  getUserByEmail(email:string):Observable<User>{
+    return this.http.get<User>(`${this.url}/open/user/get/byEmail/${email}`)
+  }
   uploadLogoProfile(username:string, file: File):Observable<UploadConfirm>{
     const img: FormData = new FormData();
     img.append('file', file)

@@ -40,12 +40,16 @@ public class UserService {
 
     public User getById(UUID id)throws BadRequestException{
         return userRp.findById(id).orElseThrow(
-                () -> new BadRequestException("User with id: "+ id+" Not Found")
+                () -> new BadRequestException("id : "+ id+" non esiste")
         );
     }
     public User getByUsername(String username)throws BadRequestException{
         return userRp.findByUsername(username).orElseThrow(
-                () -> new BadRequestException("User with username: "+ username+" Not Found")
+                () -> new BadRequestException("username: "+ username+"  non esiste")
+        );
+    }public User getByEmail(String email)throws BadRequestException{
+        return userRp.findByEmail(email).orElseThrow(
+                () -> new BadRequestException("l'email: "+ email +" non esiste ")
         );
     }
 

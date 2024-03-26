@@ -13,6 +13,7 @@ import it.epicode.capstone.Models.DTO.ResetPassword;
 import it.epicode.capstone.Models.DTO.UserDTO;
 import it.epicode.capstone.Models.Entities.User;
 import it.epicode.capstone.Models.ResponsesDTO.AccessTokenRes;
+import it.epicode.capstone.Models.ResponsesDTO.ConfirmRes;
 import it.epicode.capstone.Services.AuthService;
 import it.epicode.capstone.Services.UserService;
 import jakarta.mail.MessagingException;
@@ -59,11 +60,11 @@ public class AuthController {
     }
 
     @PutMapping("/forgot-password")
-    public String forgotPassword(@RequestParam String email) throws MessagingException, BadRequestException {
+    public ConfirmRes forgotPassword(@RequestParam String email) throws MessagingException, BadRequestException {
         return authService.forgotPassword(email);
     }
     @PutMapping("/set-password")
-    public String setPassword(@RequestParam String email, @RequestBody @Validated ResetPassword resetPassword, BindingResult bindingResult) throws BadRequestException {
+    public ConfirmRes setPassword(@RequestParam String email, @RequestBody @Validated ResetPassword resetPassword, BindingResult bindingResult) throws BadRequestException {
         HandlerException.badRequestException(bindingResult);
         return authService.setPassword(email,resetPassword);
     }

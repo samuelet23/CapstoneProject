@@ -8,11 +8,13 @@ import it.epicode.capstone.Models.DTO.UserDTO;
 import it.epicode.capstone.Models.Entities.User;
 import it.epicode.capstone.Models.Enums.Role;
 import it.epicode.capstone.Models.ResponsesDTO.AccessTokenRes;
+import it.epicode.capstone.Models.ResponsesDTO.ConfirmRes;
 import it.epicode.capstone.Repositories.UserRepository;
 import it.epicode.capstone.Security.JwtTools;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -88,16 +90,18 @@ public class AuthService {
     }
 
 
-    public String forgotPassword(String email) throws BadRequestException, MessagingException {
+    public ConfirmRes forgotPassword(String email) throws BadRequestException, MessagingException {
        User u = userRep.findByEmail(email).orElseThrow(() -> new BadRequestException("Email: "+email+" inesistente"));
         mailSv.sendSetPasswordEmail(email);
-        return "Controlla la tua email per reimpostare la password del tuo account.";
+        return new ConfirmRes("Controlla la tua email per reimpostare la password del tuo account.",
+                    HttpStatus.OK);
     }
 
-    public String setPassword(String email, ResetPassword resetPassword) throws BadRequestException {
+    public ConfirmRes setPassword(String email, ResetPassword resetPassword) throws BadRequestException {
         User u = userRep.findByEmail(email).orElseThrow(() -> new BadRequestException("Email: "+email+" inesistente"));
         u.setPassword(encoder.encode(resetPassword.newPassword()));
         userRep.save(u);
-        return "La nuova password è stata reimpostata correttamente";
+        return new ConfirmRes("La nuova password è stata reimpostata correttamente",
+                HttpStatus.OK);
     }
 }

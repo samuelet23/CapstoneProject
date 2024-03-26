@@ -13,6 +13,7 @@ import { RefereesComponent } from '../components/referees/referees.component';
 import { HomeSearchComponent } from '../components/home-search/home-search.component';
 import { ClassificaComponent } from '../pages/tournament/classifica/classifica.component';
 import { GoogleLoginComponent } from '../components/google-login/google-login.component';
+import { ForgotPasswordComponent } from '../components/forgot-password/forgot-password.component';
 
 
 
@@ -25,6 +26,7 @@ import { GoogleLoginComponent } from '../components/google-login/google-login.co
     RefereesComponent,
     HomeSearchComponent,
     GoogleLoginComponent,
+    ForgotPasswordComponent
 
   ],
   imports: [
@@ -44,6 +46,7 @@ import { GoogleLoginComponent } from '../components/google-login/google-login.co
     RefereesComponent,
     HomeSearchComponent,
     GoogleLoginComponent,
+    ForgotPasswordComponent
 
   ]
 })

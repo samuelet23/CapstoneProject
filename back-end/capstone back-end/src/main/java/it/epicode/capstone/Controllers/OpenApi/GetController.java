@@ -464,13 +464,13 @@ public class GetController {
         return userSv.getAll();
     }
 
-    @GetMapping("/user/get/byId/{id}")
+    @GetMapping("/user/get/byEmail/{email}")
     @Operation(
-            description = "Retrieve a user by their unique identifier.",
-            summary = "Get a user by ID"
+            description = "Retrieve a user by their email.",
+            summary = "Get a user by email"
     )
-    public User getUserById(@PathVariable UUID id)throws BadRequestException {
-        return userSv.getById(id);
+    public User getUserByEmail(@PathVariable String email)throws BadRequestException {
+        return userSv.getByEmail(email);
     }
 
     @GetMapping("/user/get/byUsername/{username}")
