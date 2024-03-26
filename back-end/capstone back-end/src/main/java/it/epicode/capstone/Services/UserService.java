@@ -69,6 +69,17 @@ public class UserService {
             throw new BadRequestException("Il torneo è già nei preferiti");
 
     }
+    public User removeToFavorite(String username, String nameTournament)throws BadRequestException{
+        User u = getByUsername(username);
+        Tournament t = tournamentSv.getByName(nameTournament);
+        List<Tournament> favoriteTournaments = u.getFavoriteTournaments();
+        if (favoriteTournaments.contains(t)) {
+            favoriteTournaments.remove(t);
+            return userRp.save(u);
+        }
+            throw new BadRequestException("Il torneo non è nei preferiti");
+
+    }
 
 
     public User create (UserDTO user) throws BadRequestException, InternalServerErrorException {
@@ -95,9 +106,9 @@ public class UserService {
             );
         } catch (DataIntegrityViolationException e) {
             if (userRp.getAllEmails().contains(u.getEmail()))
-                throw new BadRequestException("Email Already Exists, impossible to create");
+                throw new BadRequestException("Email già esistente, impossibile da creare");
             if (userRp.getAllUsernames().contains(u.getUsername()))
-                throw new BadRequestException("Username Already Exists, impossible to create");
+                throw new BadRequestException("Username già esistente, impossibile da creare");
             throw new InternalServerErrorException("Data integrity violation error: " + e.getMessage());
         }
         return u;

@@ -19,6 +19,7 @@ export class NavComponent {
   username: string = '';
   isManager: boolean = false;
   isCoordinator: boolean = false;
+  isUser: boolean = false;
   isLoggedIn: boolean = false;
   isGoogleUser: boolean = false;
   constructor() {
@@ -37,8 +38,11 @@ export class NavComponent {
       if (role === 'MANAGER') {
         return (this.isManager = true);
       }
-      if (role === 'COORDINATOR') {
+      else if (role === 'COORDINATOR') {
         return (this.isCoordinator = true);
+      }
+      else if (role === 'USER') {
+        return (this.isUser = true);
       }
       return false;
     });

@@ -19,7 +19,7 @@ import { RoundsComponent } from '../../components/rounds/rounds.component';
     AllTournamentsComponent,
     CreateComponent,
     ProvinceTournamentComponent,
-    RoundsComponent
+    RoundsComponent,
   ],
   imports: [
     CommonModule,

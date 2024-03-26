@@ -18,6 +18,9 @@
             <a class="nav-link active" aria-current="page" routerLink="/"  (click)="toggleNav()" >Cerca torneo in città diversa.</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link active" aria-current="page" routerLink="/{{username}}/favorite-tournaments"  (click)="toggleNav()" *ngIf="isUser || isGoogleUser" >Tornei Preferiti</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" routerLink="auth/login" *ngIf="!isLoggedIn" (click)="toggleNav()">Login</a>
           </li>
           <li class="nav-item">

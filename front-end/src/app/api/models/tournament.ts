@@ -13,4 +13,5 @@ export interface Tournament {
   referees?: Array<Referee>;
   startDate?: string;
   teams?: Array<Team>;
+  isFavorite?:boolean;
 }

@@ -1,13 +1,15 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { TournamentService } from '../../../services/tournament.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Province, Tournament } from '../../../api/models';
+import { Province, Tournament, User } from '../../../api/models';
 import Swal from 'sweetalert2';
 import { FilterService } from '../../../services/filter.service';
 import { map } from 'rxjs';
 import { PlaceService } from '../../../services/place.service';
 import { Location } from '@angular/common';
 import { myAuthService } from '../../../services/myAuth.service';
+import { UserService } from '../../../services/user.service';
+import { FavoriteService } from '../../../services/favorite.service';
 
 @Component({
   selector: 'app-all-tournaments',
@@ -19,6 +21,8 @@ export class AllTournamentsComponent implements OnInit {
 private location  = inject(Location)
 private auth  = inject(myAuthService)
 private placeSv = inject(PlaceService)
+private userSv = inject(UserService)
+private favoriteSv = inject(FavoriteService)
 private filterSv = inject(FilterService);
 
 tournamentName: string = '';
@@ -26,22 +30,31 @@ cityName:string = ''
 startDate: string = '';
 tournamentState: string = '';
 tournamentLevel: string = '';
-
+user!:User
 
 isLoading: boolean = false
 isWithReferee:boolean = true
-
+isUser:boolean = false;
 isManagerOrCoordinator:boolean = false;
 
 tournaments:Tournament[] =[]
+favoriteTournaments: string[] = [];
 provinces: Province[] = [];
 
 ngOnInit(): void {
-
+  const userLs = localStorage.getItem('utente')
+  if (userLs) {
+    const user = JSON.parse(userLs)
+    this.user = user
+  }
 this.auth.getUserRole$().subscribe(role =>{
 
   if (role === "MANAGER" || role === "COORDINATOR" ){
     this.isManagerOrCoordinator = true;
+    return;
+  }
+  else if (role === "USER" ){
+    this.isUser = true;
     return;
   }
 
@@ -66,7 +79,9 @@ this.getAllProvince()
       Swal.fire("Errore interno nel cercare tutti i tornei")
     })
 
-
+    this.favoriteSv.favoriteTournaments$.subscribe(favorites => {
+      this.favoriteTournaments = favorites;
+    });
 }
 
 goBack(){
@@ -191,6 +206,31 @@ filterTournaments() {
     });
   }
 }
+
+
+
+
+toggleFavorite(tournamentName: string | undefined) {
+  if (tournamentName) {
+    if (this.isTournamentInFavorites(tournamentName)) {
+      this.favoriteSv.removeFromFavorites(tournamentName, this.user);
+    } else {
+      this.favoriteSv.addToFavorites(tournamentName, this.user);
+    }
+  }
+}
+
+
+isTournamentInFavorites(tournamentName: string | undefined): boolean {
+  if (tournamentName) {
+    console.log('Checking if tournament is in favorites:', tournamentName);
+    const isInFavorites = this.favoriteTournaments.includes(tournamentName);
+    console.log('Is in favorites:', isInFavorites);
+    return isInFavorites;
+  }
+  return false;
+}
+
 
 
 }

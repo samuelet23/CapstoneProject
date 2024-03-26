@@ -15,6 +15,7 @@ import { ClassificaComponent } from '../pages/tournament/classifica/classifica.c
 import { GoogleLoginComponent } from '../components/google-login/google-login.component';
 import { ForgotPasswordComponent } from '../components/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from '../components/reset-password/reset-password.component';
+import { FavoritesComponent } from '../components/favorites/favorites.component';
 
 
 
@@ -29,6 +30,7 @@ import { ResetPasswordComponent } from '../components/reset-password/reset-passw
     GoogleLoginComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
+    FavoritesComponent,
   ],
   imports: [
     CommonModule,
@@ -49,7 +51,7 @@ import { ResetPasswordComponent } from '../components/reset-password/reset-passw
     GoogleLoginComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
-
+    FavoritesComponent,
   ]
 })
 export class SharedModule { }
