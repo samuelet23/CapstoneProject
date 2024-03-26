@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
               text: 'Login avvenuto con successo',
               icon: 'success',
             }).then(() => {
-              this.router.navigate(['/' + this.form.value.username]);
+              this.router.navigate(['/']);
               this.isLoading = false;
             });
             this.isLoading = false;

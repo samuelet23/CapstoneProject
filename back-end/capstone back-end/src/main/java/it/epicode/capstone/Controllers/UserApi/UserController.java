@@ -192,6 +192,16 @@ public class UserController {
                 "User: "+username+" è stato eliminato correttamente"
         );
     }
+    @PatchMapping("/{username}/addToFavorite/{tournament-name}")
+    @Operation(
+            description = "Adds a tournament to the user's favorite list.",
+            summary = "Added to favorite list"
+    )
+    @PreAuthorize("hasAuthority('USER')")
+    public User addToFavorite(@PathVariable("username") String username,@PathVariable("tournament-name") String tournamentName)throws BadRequestException{
+        return userSv.addToFavorite(username, tournamentName);
+    }
+
 
 
     private void checkUserAuthorization(String targetUsername) throws UnauthorizedException {

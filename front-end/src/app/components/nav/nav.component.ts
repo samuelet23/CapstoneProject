@@ -27,6 +27,12 @@ export class NavComponent {
 
   ngOnInit() {
 
+    const userLs= localStorage.getItem('utente')
+    if (userLs) {
+      const user = JSON.parse(userLs)
+      this.username = user.username
+    }
+
     this.authSv.getUserRole$().subscribe((role) => {
       if (role === 'MANAGER') {
         return (this.isManager = true);
@@ -48,7 +54,7 @@ export class NavComponent {
     const userGoogle = sessionStorage.getItem('googleUser');
     if (userGoogle) {
       const user = JSON.parse(userGoogle)
-      this.username = user.given_name.replace(/\s/g, '')
+      this.username = user.name.replace(/\s/g, '')
     }
 
   }

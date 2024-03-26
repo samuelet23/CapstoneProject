@@ -43,6 +43,14 @@ public class User extends Person implements UserDetails {
 
     private Timestamp createdAt;
 
+    @ManyToMany
+    @JoinTable(
+            name = "user_favorite_tournament",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "tournament_id")
+    )
+    private List<Tournament> favoriteTournaments;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 

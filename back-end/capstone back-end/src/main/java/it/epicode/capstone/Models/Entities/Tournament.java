@@ -6,10 +6,7 @@ import it.epicode.capstone.Models.Entities.SuperClass.Competition;
 import it.epicode.capstone.Models.Enums.Round;
 import it.epicode.capstone.Models.Enums.TournamentLevel;
 import it.epicode.capstone.Models.Enums.TournamentState;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,6 +31,10 @@ public class Tournament extends Competition {
 
     @Enumerated(EnumType.STRING)
     private TournamentState state;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "favoriteTournaments")
+    private List<User> usersAddedOnFavorite;
 
 
     public Tournament(LocalDate startDate, String coverUrl, String name, List<Referee> referees, Set<Team> teams, List<Game> games, Place place, List<Player> players) {
